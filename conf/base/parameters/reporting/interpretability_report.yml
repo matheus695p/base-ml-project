@@ -1,0 +1,49 @@
+_interpretability_report: &_interpretability_report
+  n_jobs: 6
+  environment: ${env}
+  template_path: notebooks/reporting/interpretability_report.ipynb
+  namespace: ""
+  report_name: interpretability_report
+  kernel: python3
+  timeout: 90000
+  remove_code: True
+
+xgboost.interpretability_report:
+  <<: *_interpretability_report
+  namespace: xgboost
+
+bayesian_gaussian_mixture.interpretability_report:
+  <<: *_interpretability_report
+  namespace: bayesian_gaussian_mixture
+
+decision_tree.interpretability_report:
+  <<: *_interpretability_report
+  namespace: decision_tree
+
+gradient_boosting_machines.interpretability_report:
+  <<: *_interpretability_report
+  namespace: gradient_boosting_machines
+
+knn.interpretability_report:
+  <<: *_interpretability_report
+  namespace: knn
+
+neural_network.interpretability_report:
+  <<: *_interpretability_report
+  namespace: neural_network
+
+perceptron.interpretability_report:
+  <<: *_interpretability_report
+  namespace: perceptron
+
+quadratic_discriminant_analysis.interpretability_report:
+  <<: *_interpretability_report
+  namespace: quadratic_discriminant_analysis
+
+random_forest.interpretability_report:
+  <<: *_interpretability_report
+  namespace: random_forest
+
+svm.interpretability_report:
+  <<: *_interpretability_report
+  namespace: svm

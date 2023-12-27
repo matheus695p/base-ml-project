@@ -51,6 +51,19 @@ def _create_pipeline(namespace: str) -> Pipeline:
                 name="hypertune_report",
                 tags=["hypertune_report"],
             ),
+            node(
+                func=create_html_report,
+                inputs=[
+                    "params:interpretability_report",
+                    "hypertune_report",
+                ],
+                outputs=[
+                    "interpretability_report",
+                    "interpretability_notebook_error_report",
+                ],
+                name="interpretability_report",
+                tags=["interpretability_report"],
+            ),
         ]
     )
 
@@ -69,6 +82,8 @@ def _create_pipeline(namespace: str) -> Pipeline:
             "train_dataset": f"{namespace}.train_dataset",
             "hypertune_report": f"{namespace}.hypertune_report",
             "hypertune_notebook_error_report": f"{namespace}.hypertune_notebook_error_report",
+            "interpretability_report": f"{namespace}.interpretability_report",
+            "interpretability_notebook_error_report": f"{namespace}.interpretability_notebook_error_report",
         },
         parameters={},
     )

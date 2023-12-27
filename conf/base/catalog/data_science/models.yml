@@ -53,5 +53,16 @@
   layer: 08_reporting
   artifact_path: hypertune/report/{{ model_name }}
 
+{{ model_name }}.interpretability_report:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: text.TextDataSet
+    filepath: ${base_path}/08_reporting/{{ model_name }}/html_reports/interpretability_report_{{ model_name }}.html
+    fs_args:
+      open_args_save:
+        encoding: "utf-8"
+    versioned: true
+  layer: 08_reporting
+  artifact_path: interpretability_report/{{ model_name }}
 
 {% endfor %}
