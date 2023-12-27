@@ -1,0 +1,6 @@
+# All pipelines
+base_path: data # When running locally
+
+GLOBAL_SEED: 42
+# environment
+env: base

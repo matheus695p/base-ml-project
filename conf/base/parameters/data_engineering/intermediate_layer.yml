@@ -1,0 +1,15 @@
+intermediate_transform:
+  target: survived
+  outlier_params:
+    iqr_alpha: 2.5
+    q1_quantile: 0.25
+    q3_quantile: 0.75
+
+  drop_columns:
+    - name
+    # - passenger_ticket
+  categorical_features:
+    - passenger_sex
+    - passenger_ticket
+    - passenger_cabin
+    - passenger_embarked_port

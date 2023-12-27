@@ -1,0 +1,15 @@
+
+feature_transform:
+  target: survived
+
+  mapping_transform:
+
+  encoding_transform:
+    # columns to perform one hot encoder
+    one_hot_encoder:
+      - passenger_cabin_level
+      - passenger_embarked_port
+      - passenger_sex
+    # columns to perform similarity based encoder
+    # labels are assigned considering similarity between strings
+    similarity_based_encoder:

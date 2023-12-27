@@ -1,0 +1,10 @@
+###
+# This file checks if the code base within the project conforms to a coding style (PEP8), has any programming errors and
+# if cyclomatic complexity is present. To read more, see https://flake8.pycqa.org/en/latest/user/configuration.html
+###
+
+[flake8]
+max-line-length = 100
+select = C,E,F,W,B,B950
+ignore = E501,W503,E203,F821,E231,E800,E402
+extend-exclude = build,dist,conf.py

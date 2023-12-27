@@ -1,0 +1,40 @@
+raw_transform:
+    target: Survived
+    index: passenger_id
+    schemas:
+      PassengerId:
+        dtype: int64
+        name: passenger_id
+      Survived:
+        dtype: int64
+        name: survived
+      Pclass:
+        dtype: int64
+        name: passenger_class
+      Name:
+        dtype: object
+        name: name
+      Sex:
+        dtype: object
+        name: passenger_sex
+      Age:
+        dtype: float64
+        name: passenger_age
+      Parch:
+        dtype: int64
+        name: passenger_parch
+      Ticket:
+        dtype: object
+        name: passenger_ticket
+      Fare:
+        dtype: float64
+        name: passenger_fare
+      Cabin:
+        dtype: object
+        name: passenger_cabin
+      Embarked:
+        dtype: object
+        name: passenger_embarked_port
+      SibSp:
+        dtype: int64
+        name: passenger_siblings

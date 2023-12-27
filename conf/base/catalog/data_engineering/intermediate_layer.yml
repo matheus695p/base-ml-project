@@ -1,0 +1,9 @@
+int_titanic_train:
+  type: pandas.ParquetDataset
+  filepath: ${base_path}/02_intermediate/titanic_train.parquet
+  layer: 02_intermediate
+
+int_titanic_test:
+  type: pandas.ParquetDataset
+  filepath: ${base_path}/02_intermediate/titanic_test.parquet
+  layer: 02_intermediate

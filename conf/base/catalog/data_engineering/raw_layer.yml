@@ -1,0 +1,19 @@
+origin_titanic_train:
+  type: pandas.CSVDataSet
+  filepath: ${base_path}/01_raw/titanic_train.csv
+  layer: 01_raw
+
+origin_titanic_test:
+  type: pandas.CSVDataSet
+  filepath: ${base_path}/01_raw/titanic_test.csv
+  layer: 01_raw
+
+raw_titanic_train:
+  type: pandas.ParquetDataset
+  filepath: ${base_path}/01_raw/raw/titanic_train.parquet
+  layer: 01_raw
+
+raw_titanic_test:
+  type: pandas.ParquetDataset
+  filepath: ${base_path}/01_raw/raw/titanic_test.parquet
+  layer: 01_raw
