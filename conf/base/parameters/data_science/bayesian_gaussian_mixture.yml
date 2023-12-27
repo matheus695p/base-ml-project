@@ -113,7 +113,7 @@ bayesian_gaussian_mixture.model_artifact:
 
     # model
     model:
-      class: sklearn.naive_bayes.BayesianGaussianMixture
+      class: sklearn.mixture.BayesianGaussianMixture
       kwargs:
         weight_concentration_prior_type: 'trial.suggest_categorical("bayesian__weight_concentration_prior_type", ["dirichlet_process", "dirichlet_distribution"])'
         n_components: 'trial.suggest_int("bayesian__n_components", 1, 10)'

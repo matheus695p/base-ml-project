@@ -29,7 +29,6 @@ def register_pipelines() -> tp.Dict[str, Pipeline]:
         "decision_tree",
         "bayesian_gaussian_mixture",
         "logistic_regression",
-        "gaussian_naive_bayes",
         "gradient_boosting_machines",
         "knn",
         "neural_network",
