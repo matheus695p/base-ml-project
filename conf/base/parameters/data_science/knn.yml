@@ -1,0 +1,120 @@
+knn.model_artifact:
+  scoring_metrics:
+    - accuracy
+    - balanced_accuracy
+    - f1
+    - f1_micro
+    - f1_macro
+    - f1_weighted
+    - precision
+    - precision_micro
+    - precision_macro
+    - precision_weighted
+    - recall
+    - recall_micro
+    - recall_macro
+    - recall_weighted
+    - roc_auc
+    - roc_auc_ovr
+    - roc_auc_ovo
+    - roc_auc_ovr_weighted
+    - roc_auc_ovo_weighted
+
+  optuna:
+    kwargs_study:
+      direction: maximize
+      study_name: "knn"
+      load_if_exists: False
+
+    # how many trials should optimize
+    kwargs_optimize:
+      n_trials: 10
+
+    # sampler
+    sampler:
+      class: optuna.samplers.TPESampler
+      kwargs:
+        n_startup_trials: 0
+        constant_liar: True
+        seed: ${GLOBAL_SEED}
+
+    # pruner
+    pruner:
+      class: optuna.pruners.SuccessiveHalvingPruner
+      kwargs: {}
+
+  # how reward function is
+  # cross val strategy
+  cv_strategy:
+    class: sklearn.model_selection.KFold
+    kwargs:
+      n_splits: 5
+
+  # cross val score
+  cv_score:
+    class: sklearn.model_selection.cross_val_score
+    kwargs:
+      estimator:
+      X: # leave as None
+      y: # leave as None
+      scoring: "f1_weighted"
+      cv: # leave as None
+      n_jobs: -1
+
+  target: "survived"
+  features:
+    - passenger_class
+    - passenger_age
+    - passenger_siblings
+    - passenger_parch
+    - passenger_fare
+    - passenger_ticket_number
+    - passenger_ticket_unknown_base
+    - passenger_cabin_number
+    - passenger_number_of_family_onboard
+    - passenger_is_single
+    - passenger_has_significant_other
+    - passenger_has_childs
+    - passenger_cabin_level_a
+    - passenger_cabin_level_b
+    - passenger_cabin_level_c
+    - passenger_cabin_level_d
+    - passenger_cabin_level_e
+    - passenger_cabin_level_f
+    - passenger_cabin_level_g
+    - passenger_cabin_level_t
+    - passenger_cabin_level_unknown
+    - passenger_embarked_port_c
+    - passenger_embarked_port_q
+    - passenger_embarked_port_s
+    - passenger_embarked_port_unknown
+    - passenger_sex_female
+
+  pipeline:
+    # Order of pipeline must be preserved in order to build model
+    # data imputer is optimized during cross validation
+    imputer:
+      class: project.packages.modelling.models.unsupervised.imputer.ColumnsPreserverImputer
+      kwargs:
+        imputer_params:
+          class: sklearn.impute.KNNImputer
+          kwargs:
+            n_neighbors: 'trial.suggest_int("knn_imputer__n_neighbors", 2, 20, step=1)'
+            weights: 'trial.suggest_categorical("knn_imputer__weights", ["distance", "uniform"])'
+
+    # scaler
+    scaler:
+      class: project.packages.modelling.transformers.scaler.ColumnsPreserverScaler
+      kwargs:
+        scaler_params:
+          # class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer", "sklearn.preprocessing.MinMaxScaler", "sklearn.preprocessing.StandardScaler", "sklearn.preprocessing.PowerTransformer", "sklearn.preprocessing.QuantileTransformer", "sklearn.preprocessing.RobustScaler"])'
+          class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer",])'
+          kwargs: {}
+
+    # model
+    model:
+      class: sklearn.neighbors.KNeighborsClassifier
+      kwargs:
+        n_neighbors: 'trial.suggest_int("knn__n_neighbors", 1, 20)'
+        weights: 'trial.suggest_categorical("knn__weights", ["uniform", "distance"])'
+        algorithm: 'trial.suggest_categorical("knn__algorithm", ["auto", "ball_tree", "kd_tree", "brute"])'
