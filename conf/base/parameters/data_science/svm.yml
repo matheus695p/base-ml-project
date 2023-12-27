@@ -107,8 +107,8 @@ svm.model_artifact:
       class: project.packages.modelling.transformers.scaler.ColumnsPreserverScaler
       kwargs:
         scaler_params:
-          # class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer", "sklearn.preprocessing.MinMaxScaler", "sklearn.preprocessing.StandardScaler", "sklearn.preprocessing.PowerTransformer", "sklearn.preprocessing.QuantileTransformer", "sklearn.preprocessing.RobustScaler"])'
-          class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer",])'
+          class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer", "sklearn.preprocessing.MinMaxScaler", "sklearn.preprocessing.StandardScaler", "sklearn.preprocessing.PowerTransformer", "sklearn.preprocessing.QuantileTransformer", "sklearn.preprocessing.RobustScaler"])'
+          # class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer",])'
           kwargs: {}
 
     # model
