@@ -47,3 +47,7 @@ random_forest.interpretability_report:
 svm.interpretability_report:
   <<: *_interpretability_report
   namespace: svm
+
+logistic_regression.interpretability_report:
+  <<: *_interpretability_report
+  namespace: svm

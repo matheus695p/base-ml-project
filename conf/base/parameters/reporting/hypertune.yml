@@ -47,3 +47,7 @@ random_forest.hypertune_report:
 svm.hypertune_report:
   <<: *_hypertune_report
   namespace: svm
+
+logistic_regression.hypertune_report:
+  <<: *_hypertune_report
+  namespace: svm
