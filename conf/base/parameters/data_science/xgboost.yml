@@ -28,7 +28,7 @@ xgboost.model_artifact:
 
     # how many trials should optimize
     kwargs_optimize:
-      n_trials: 600
+      n_trials: 300
 
     # sampler
     sampler:

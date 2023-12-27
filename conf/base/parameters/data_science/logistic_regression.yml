@@ -28,7 +28,7 @@ logistic_regression.model_artifact:
 
     # how many trials should optimize
     kwargs_optimize:
-      n_trials: 10
+      n_trials: 100
 
     # sampler
     sampler:
