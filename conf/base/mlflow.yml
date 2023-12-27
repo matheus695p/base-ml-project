@@ -34,7 +34,7 @@ tracking:
     pipelines: []
 
   experiment:
-    name: titanic
+    name: model_optimization
     restore_if_deleted: True  # if the experiment`name` was previously deleted experiment, should we restore it?
 
   run:
