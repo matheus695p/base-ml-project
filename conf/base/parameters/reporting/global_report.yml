@@ -1,0 +1,9 @@
+global_modelling_report:
+  n_jobs: 6
+  environment: ${env}
+  template_path: notebooks/reporting/global_report.ipynb
+  namespace: ""
+  report_name: hypertune_report
+  kernel: python3
+  timeout: 90000
+  remove_code: True

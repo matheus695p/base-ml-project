@@ -11,7 +11,9 @@ from project.pipelines.data_engineering import (
     feature_layer,
 )
 from project.pipelines.data_science import supervised
+from project.pipelines import global_reporting
 
+from .namespaces import NAMESPACES
 
 warnings.filterwarnings("ignore")
 
@@ -23,20 +25,6 @@ def register_pipelines() -> tp.Dict[str, Pipeline]:
         A mapping from pipeline names to ``Pipeline`` objects.
     """
     # namespaces definition
-    model_namespaces = [
-        "xgboost",
-        "random_forest",
-        "decision_tree",
-        "bayesian_gaussian_mixture",
-        "logistic_regression",
-        "gradient_boosting_machines",
-        "knn",
-        "neural_network",
-        "perceptron",
-        "quadratic_discriminant_analysis",
-        # "svm",
-    ]
-
     # data engineering pipelines
     raw_pipe = raw_layer.create_pipeline()
     intermediate_pipe = intermediate_layer.create_pipeline()
@@ -50,8 +38,10 @@ def register_pipelines() -> tp.Dict[str, Pipeline]:
     # data engineering general
     data_engineering_pipes = data_ingestion_pipes + feature_pipe
 
+    # global reporting
+    global_reporting_pipe = global_reporting.create_pipeline()
     # data science
-    models_pipe = supervised.create_pipeline(namespaces=model_namespaces)
+    models_pipe = supervised.create_pipeline(namespaces=NAMESPACES) + global_reporting_pipe
 
     # find all pipelines
     pipelines = find_pipelines()
@@ -66,5 +56,6 @@ def register_pipelines() -> tp.Dict[str, Pipeline]:
     pipelines["data_engineering"] = data_engineering_pipes
     # data science
     pipelines["data_science"] = models_pipe
+    pipelines["global_reporting"] = global_reporting_pipe
 
     return pipelines

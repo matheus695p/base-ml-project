@@ -66,3 +66,16 @@
   artifact_path: interpretability_report/{{ model_name }}
 
 {% endfor %}
+
+
+global_optimization_report:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: text.TextDataSet
+    filepath: ${base_path}/08_reporting/html_reports/global_optimization_report.html
+    fs_args:
+      open_args_save:
+        encoding: "utf-8"
+    versioned: true
+  layer: 08_reporting
+  artifact_path: model_optimization_report
