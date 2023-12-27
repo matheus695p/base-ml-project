@@ -28,7 +28,7 @@ xgboost.model_artifact:
 
     # how many trials should optimize
     kwargs_optimize:
-      n_trials: 10
+      n_trials: 600
 
     # sampler
     sampler:
@@ -118,7 +118,7 @@ xgboost.model_artifact:
         n_estimators: 'trial.suggest_int("xgboost__n_estimators", 10, 500, step=5)'
         learning_rate: 'trial.suggest_float("xgboost__learning_rate", 0.0001, 1)'
         min_child_weight: 'trial.suggest_int("xgboost__min_child_weight", 1, 500, step=5)'
-        max_depth: 'trial.suggest_int("xgboost__max_depth", 1, 6)'
+        max_depth: 'trial.suggest_int("xgboost__max_depth", 1, 8)'
         subsample: 'trial.suggest_float("xgboost__subsample", 0.5, 1)'
         reg_lambda: 'trial.suggest_float("xgboost__reg_lambda", 0, 5)'
         reg_alpha: 'trial.suggest_float("xgboost__reg_alpha", 0, 1)'

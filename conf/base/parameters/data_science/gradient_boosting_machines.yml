@@ -28,7 +28,7 @@ gradient_boosting_machines.model_artifact:
 
     # how many trials should optimize
     kwargs_optimize:
-      n_trials: 10
+      n_trials: 600
 
     # sampler
     sampler:
@@ -117,7 +117,7 @@ gradient_boosting_machines.model_artifact:
       kwargs:
         n_estimators: 'trial.suggest_int("gradient_boosting__n_estimators", 10, 500, step=5)'
         learning_rate: 'trial.suggest_float("gradient_boosting__learning_rate", 0.001, 1)'
-        max_depth: 'trial.suggest_int("gradient_boosting__max_depth", 1, 20)'
+        max_depth: 'trial.suggest_int("gradient_boosting__max_depth", 1, 8)'
         min_samples_split: 'trial.suggest_float("gradient_boosting__min_samples_split", 0.1, 1)'
         min_samples_leaf: 'trial.suggest_float("gradient_boosting__min_samples_leaf", 0.1, 0.5)'
         random_state: ${GLOBAL_SEED}

@@ -1,0 +1,49 @@
+_hypertune_report: &_hypertune_report
+  n_jobs: 6
+  environment: ${env}
+  template_path: notebooks/reporting/hypertune_report.ipynb
+  namespace: ""
+  report_name: hypertune_report
+  kernel: python3
+  timeout: 90000
+  remove_code: True
+
+xgboost.hypertune_report:
+  <<: *_hypertune_report
+  namespace: xgboost
+
+bayesian_gaussian_mixture.hypertune_report:
+  <<: *_hypertune_report
+  namespace: bayesian_gaussian_mixture
+
+decision_tree.hypertune_report:
+  <<: *_hypertune_report
+  namespace: decision_tree
+
+gradient_boosting_machines.hypertune_report:
+  <<: *_hypertune_report
+  namespace: gradient_boosting_machines
+
+knn.hypertune_report:
+  <<: *_hypertune_report
+  namespace: knn
+
+neural_network.hypertune_report:
+  <<: *_hypertune_report
+  namespace: neural_network
+
+perceptron.hypertune_report:
+  <<: *_hypertune_report
+  namespace: perceptron
+
+quadratic_discriminant_analysis.hypertune_report:
+  <<: *_hypertune_report
+  namespace: quadratic_discriminant_analysis
+
+random_forest.hypertune_report:
+  <<: *_hypertune_report
+  namespace: random_forest
+
+svm.hypertune_report:
+  <<: *_hypertune_report
+  namespace: svm

@@ -3,7 +3,7 @@
 from kedro.pipeline import Pipeline, node, pipeline
 
 
-# from project.reporting.html_report import create_html_report
+from project.packages.reporting.html_report import create_html_report
 
 from .nodes import (
     model_hypertune,
@@ -38,6 +38,19 @@ def _create_pipeline(namespace: str) -> Pipeline:
                 },
                 name="hypertune_model",
             ),
+            node(
+                func=create_html_report,
+                inputs=[
+                    "params:hypertune_report",
+                    "model_artifact",
+                ],
+                outputs=[
+                    "hypertune_report",
+                    "hypertune_notebook_error_report",
+                ],
+                name="hypertune_report",
+                tags=["hypertune_report"],
+            ),
         ]
     )
 
@@ -54,6 +67,8 @@ def _create_pipeline(namespace: str) -> Pipeline:
             "cross_validation_metrics": f"{namespace}.cross_validation_metrics",
             "model_artifact": f"{namespace}.model_artifact",
             "train_dataset": f"{namespace}.train_dataset",
+            "hypertune_report": f"{namespace}.hypertune_report",
+            "hypertune_notebook_error_report": f"{namespace}.hypertune_notebook_error_report",
         },
         parameters={},
     )

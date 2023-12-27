@@ -28,7 +28,7 @@ random_forest.model_artifact:
 
     # how many trials should optimize
     kwargs_optimize:
-      n_trials: 10
+      n_trials: 100
 
     # sampler
     sampler:
@@ -116,7 +116,7 @@ random_forest.model_artifact:
       class: sklearn.ensemble.RandomForestClassifier
       kwargs:
         n_estimators: 'trial.suggest_int("random_forest__n_estimators", 10, 500, step=5)'
-        max_depth: 'trial.suggest_int("random_forest__max_depth", 1, 20)'
+        max_depth: 'trial.suggest_int("random_forest__max_depth", 1, 8)'
         min_samples_split: 'trial.suggest_float("random_forest__min_samples_split", 0.1, 1)'
         min_samples_leaf: 'trial.suggest_float("random_forest__min_samples_leaf", 0.1, 0.5)'
         random_state: ${GLOBAL_SEED}

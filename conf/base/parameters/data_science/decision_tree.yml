@@ -28,7 +28,7 @@ decision_tree.model_artifact:
 
     # how many trials should optimize
     kwargs_optimize:
-      n_trials: 10
+      n_trials: 600
 
     # sampler
     sampler:
@@ -115,7 +115,7 @@ decision_tree.model_artifact:
     model:
       class: sklearn.tree.DecisionTreeClassifier
       kwargs:
-        max_depth: 'trial.suggest_int("decision_tree__max_depth", 1, 20)'
+        max_depth: 'trial.suggest_int("decision_tree__max_depth", 1, 8)'
         min_samples_split: 'trial.suggest_float("decision_tree__min_samples_split", 0.1, 1)'
         min_samples_leaf: 'trial.suggest_float("decision_tree__min_samples_leaf", 0.1, 0.5)'
         random_state: ${GLOBAL_SEED}

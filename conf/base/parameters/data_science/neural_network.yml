@@ -28,7 +28,7 @@ neural_network.model_artifact:
 
     # how many trials should optimize
     kwargs_optimize:
-      n_trials: 10
+      n_trials: 600
 
     # sampler
     sampler:
@@ -117,6 +117,12 @@ neural_network.model_artifact:
       kwargs:
         hidden_layer_sizes: 'trial.suggest_int("mlp__hidden_layer_sizes", 1, 100, log=True)'
         activation: 'trial.suggest_categorical("mlp__activation", ["identity", "logistic", "tanh", "relu"])'
-        alpha: 'trial.suggest_float("mlp__alpha", 0.0001, 1)'
-        max_iter: 'trial.suggest_int("mlp__max_iter", 100, 1000)'
+        alpha: 'trial.suggest_float("mlp__alpha", 1e-6, 1e-2, log=True)'
+        max_iter: 'trial.suggest_int("mlp__max_iter", 100, 2000)'
+        learning_rate_init: 'trial.suggest_float("mlp__learning_rate_init", 0.0001, 0.1)'
+        solver: 'trial.suggest_categorical("mlp__solver", ["lbfgs", "sgd", "adam"])'
+        batch_size: 'trial.suggest_int("mlp__batch_size", 32, 256, log=True)'
+        tol: 'trial.suggest_float("mlp__tol", 1e-6, 1e-2, log=True)'
+        early_stopping: 'trial.suggest_categorical("mlp__early_stopping", [True, False])'
+        validation_fraction: 'trial.suggest_float("mlp__validation_fraction", 0.1, 0.4)'
         random_state: ${GLOBAL_SEED}

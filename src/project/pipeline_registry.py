@@ -34,7 +34,7 @@ def register_pipelines() -> tp.Dict[str, Pipeline]:
         "neural_network",
         "perceptron",
         "quadratic_discriminant_analysis",
-        "svm",
+        # "svm",
     ]
 
     # data engineering pipelines
