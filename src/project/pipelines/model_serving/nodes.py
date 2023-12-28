@@ -5,6 +5,10 @@ import mlflow.pyfunc
 from sklearn.pipeline import Pipeline
 import pickle
 import pandas as pd
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 def registry_best_model_to_mlflow(params: tp.Dict, *models: tp.List[Pipeline]) -> Pipeline:
@@ -50,6 +54,9 @@ def get_best_model(params: tp.Dict, models: tp.List[Pipeline]) -> Pipeline:
     metrics = metrics.sort_values("recent_scores", ascending=False)
     best_model_name = metrics.index[0]
     best_model = models_dict[best_model_name]
+
+    logger.info(f"Best model for these iteration {best_model_name}")
+
     return best_model
 
 
@@ -84,5 +91,8 @@ def registry_model(params: tp.Dict, model: Pipeline) -> Pipeline:
     with open(model_path, "rb") as model_file:
         loaded_model = pickle.load(model_file)
     mlflow.end_run()
+
+    name = loaded_model.model[-1].__class__.__name__
+    logger.info(f"Best model in mlflow production: {name}")
 
     return loaded_model
