@@ -1,0 +1,24 @@
+model_serving:
+  # Specify the registered model name and version
+  model_name: production_model
+  metric_cols:
+    - metrics.precision
+    - metrics.recall_weighted
+    - metrics.f1
+    - metrics.precision_micro
+    - metrics.f1_weighted
+    - metrics.roc_auc
+    - metrics.f1_macro
+    - metrics.roc_auc_ovo_weighted
+    - metrics.precision_weighted
+    - metrics.balanced_accuracy
+    - metrics.recall_macro
+    - metrics.recall
+    - metrics.best_value_f1_weighted
+    - metrics.accuracy
+    - metrics.roc_auc_ovr_weighted
+    - metrics.f1_micro
+    - metrics.roc_auc_ovr
+    - metrics.roc_auc_ovo
+    - metrics.recall_micro
+    - metrics.precision_macro

@@ -79,3 +79,13 @@ global_optimization_report:
     versioned: true
   layer: 08_reporting
   artifact_path: model_optimization_report
+
+
+production_model:
+    type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+    data_set:
+        type: kedro_mlflow.io.models.MlflowModelSaverDataSet
+        flavor: mlflow.sklearn
+        filepath: ${base_path}/06_models/production_model/{{ model_name }}
+    layer: 06_models
+    artifact_path: production_model

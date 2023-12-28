@@ -12,6 +12,7 @@ from project.pipelines.data_engineering import (
 )
 from project.pipelines.data_science import supervised
 from project.pipelines import global_reporting
+from project.pipelines import model_serving
 
 from .namespaces import NAMESPACES
 
@@ -40,8 +41,14 @@ def register_pipelines() -> tp.Dict[str, Pipeline]:
 
     # global reporting
     global_reporting_pipe = global_reporting.create_pipeline()
+    # model serving pipeline
+    model_serving_pipe = model_serving.create_pipeline()
     # data science
-    models_pipe = supervised.create_pipeline(namespaces=NAMESPACES) + global_reporting_pipe
+    models_pipe = (
+        supervised.create_pipeline(namespaces=NAMESPACES)
+        + global_reporting_pipe
+        + model_serving_pipe
+    )
 
     # find all pipelines
     pipelines = find_pipelines()

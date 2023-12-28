@@ -57,7 +57,7 @@ class BaseSklearnCompatibleModel(BaseEstimator):
         return pipeline
 
     def predict(self, X: pd.DataFrame):
-        raise self.model.predict(X)
+        return self.model.predict(X)
 
     def hypertune_cross_validated_model(
         self,
