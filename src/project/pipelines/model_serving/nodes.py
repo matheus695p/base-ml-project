@@ -1,12 +1,12 @@
-import mlflow
-import mlflow.sklearn
-import typing as tp
-import mlflow.pyfunc
-from sklearn.pipeline import Pipeline
-import pickle
-import pandas as pd
 import logging
+import pickle
+import typing as tp
 
+import mlflow
+import mlflow.pyfunc
+import mlflow.sklearn
+import pandas as pd
+from sklearn.pipeline import Pipeline
 
 logger = logging.getLogger(__name__)
 

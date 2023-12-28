@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.base import BaseEstimator, ClusterMixin
-from sklearn.preprocessing import MinMaxScaler
 from sklearn.neighbors import BallTree
+from sklearn.preprocessing import MinMaxScaler
 
 
 class BallTreeIndexer(BaseEstimator, ClusterMixin):

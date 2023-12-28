@@ -1,8 +1,10 @@
 """Primary pipeline - Data Processing."""
 
 from kedro.pipeline import Pipeline, node, pipeline
-from .nodes import registry_best_model_to_mlflow
+
 from project.namespaces import NAMESPACES as model_namespaces
+
+from .nodes import registry_best_model_to_mlflow
 
 model_artifacts = [f"{namespace}.model_artifact" for namespace in model_namespaces]
 

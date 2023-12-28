@@ -1,7 +1,9 @@
 """Intermediate layer nodes."""
 
 import typing as tp
+
 import pandas as pd
+
 from project.packages.preprocessing.transformers.primary import PrimaryDataProcessor
 
 

@@ -1,16 +1,16 @@
 """Feature Preprocessor class."""
 
-import typing as tp
-import pandas as pd
-
 import logging
+import typing as tp
+
+import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.preprocessing import OneHotEncoder
 
 from ..features.titanic import (
-    _parse_passenger_ticket,
-    _parse_passenger_cabin,
     _extract_cabin_number,
+    _parse_passenger_cabin,
+    _parse_passenger_ticket,
 )
 
 logger = logging.getLogger(__name__)

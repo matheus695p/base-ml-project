@@ -1,18 +1,17 @@
-import optuna
 import logging
 import typing as tp
-import pandas as pd
 from copy import deepcopy
+
+import optuna
+import pandas as pd
 from sklearn.base import BaseEstimator
 from sklearn.pipeline import Pipeline
 
-from ...transformers.columns_selector import ColumnsSelector
+from project.packages.python_utils.load.object_injection import load_object
 from project.packages.python_utils.typing.tensors import Matrix, Tensor
-from project.packages.python_utils.load.object_injection import (
-    load_object,
-)
-from ...reproducibility.set_seed import seed_file
 
+from ...reproducibility.set_seed import seed_file
+from ...transformers.columns_selector import ColumnsSelector
 
 seed_file()
 

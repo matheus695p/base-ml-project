@@ -2,12 +2,9 @@
 
 from kedro.pipeline import Pipeline, node, pipeline
 
-
 from project.packages.reporting.html_report import create_html_report
 
-from .nodes import (
-    model_hypertune,
-)
+from .nodes import model_hypertune
 
 
 def create_pipeline(**kwargs) -> Pipeline:

@@ -1,9 +1,11 @@
 """Primary Preprocessor class."""
 
-import typing as tp
-import pandas as pd
 import logging
+import typing as tp
+
+import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
+
 from ..clean.clean_strings import _unidecode_strings
 
 logger = logging.getLogger(__name__)

@@ -4,10 +4,8 @@ import typing as tp
 
 import pandas as pd
 from sklearn.utils.validation import check_is_fitted
-from project.packages.modelling.models.supervised.sklearn import (
-    ClassifierSklearnCompatibleModel,
-)
 
+from project.packages.modelling.models.supervised.sklearn import ClassifierSklearnCompatibleModel
 
 logger = logging.getLogger(__name__)
 

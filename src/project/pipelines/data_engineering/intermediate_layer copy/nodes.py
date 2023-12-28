@@ -1,10 +1,10 @@
 """Intermediate layer nodes."""
 
 import typing as tp
+
 import pandas as pd
-from project.packages.preprocessing.transformers.intermediate import (
-    IntermediateDataProcessor,
-)
+
+from project.packages.preprocessing.transformers.intermediate import IntermediateDataProcessor
 
 
 def intermediate_data_process(

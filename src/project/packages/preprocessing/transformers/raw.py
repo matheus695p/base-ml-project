@@ -1,10 +1,10 @@
 """Raw Preprocessor class."""
 
-import typing as tp
-import pandas as pd
 import logging
-from sklearn.base import BaseEstimator, TransformerMixin
+import typing as tp
 
+import pandas as pd
+from sklearn.base import BaseEstimator, TransformerMixin
 
 logger = logging.getLogger(__name__)
 

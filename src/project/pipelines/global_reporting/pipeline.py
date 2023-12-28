@@ -1,8 +1,9 @@
 """Primary pipeline - Data Processing."""
 
 from kedro.pipeline import Pipeline, node, pipeline
-from project.packages.reporting.html_report import create_html_report
+
 from project.namespaces import NAMESPACES as model_namespaces
+from project.packages.reporting.html_report import create_html_report
 
 model_artifacts = [f"{namespace}.model_artifact" for namespace in model_namespaces]
 

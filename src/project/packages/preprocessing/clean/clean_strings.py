@@ -1,6 +1,7 @@
 """These contains functions for cleaning data in pandas."""
 
 import logging
+
 from unidecode import unidecode
 
 logger = logging.getLogger(__name__)

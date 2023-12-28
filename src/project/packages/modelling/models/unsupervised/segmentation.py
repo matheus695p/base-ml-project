@@ -1,20 +1,18 @@
 import logging
 import typing as tp
+
 import numpy as np
 import pandas as pd
 import plotly.express as px
 from scipy.spatial.distance import euclidean
 from sklearn.base import BaseEstimator, ClusterMixin, TransformerMixin
 from sklearn.cluster import KMeans
-from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.pipeline import Pipeline
+
+from project.packages.python_utils.load.object_injection import load_estimator, load_object
 
 from ...transformers.columns_selector import ColumnsSelector
-from project.packages.python_utils.load.object_injection import (
-    load_object,
-    load_estimator,
-)
-
 
 logger = logging.getLogger(__name__)
 

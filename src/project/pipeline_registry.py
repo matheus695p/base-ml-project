@@ -1,18 +1,18 @@
 """Project pipelines."""
-import warnings
 import typing as tp
+import warnings
+
 from kedro.framework.project import find_pipelines
 from kedro.pipeline import Pipeline
 
+from project.pipelines import global_reporting, model_serving
 from project.pipelines.data_engineering import (
-    raw_layer,
+    feature_layer,
     intermediate_layer,
     primary_layer,
-    feature_layer,
+    raw_layer,
 )
 from project.pipelines.data_science import supervised
-from project.pipelines import global_reporting
-from project.pipelines import model_serving
 
 from .namespaces import NAMESPACES
 

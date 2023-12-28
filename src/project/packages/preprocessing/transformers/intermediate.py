@@ -1,11 +1,11 @@
 """Intermediate Preprocessor class."""
 
+import logging
 import typing as tp
+
 import numpy as np
 import pandas as pd
-import logging
 from sklearn.base import BaseEstimator, TransformerMixin
-
 
 logger = logging.getLogger(__name__)
 
