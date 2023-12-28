@@ -1,0 +1,16 @@
+# Here you can define all your data sets by using simple YAML syntax.
+#
+# Documentation for this file format can be found in "The Data Catalog"
+# Link: https://docs.kedro.org/en/stable/data/data_catalog.html
+
+{% for layer in ['raw', 'int', 'prm', 'feat', ] %}
+
+{{ layer }}_preprocessor:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+      type: pickle.PickleDataSet
+      filepath: ${base_path}/05_model_input/{{ layer }}/transformer.pkl
+  layer: 05_model_input
+  artifact_path: data_engineering/transformers/{{ layer }}
+
+{% endfor %}

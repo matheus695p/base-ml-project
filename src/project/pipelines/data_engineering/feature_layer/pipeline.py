@@ -18,6 +18,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 outputs={
                     "train": "feat_titanic_train",
                     "test": "feat_titanic_test",
+                    "preprocessor": "feat_preprocessor",
                 },
                 name="feature_data_process",
             ),

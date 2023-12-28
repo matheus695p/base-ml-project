@@ -18,6 +18,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 outputs={
                     "train": "int_titanic_train",
                     "test": "int_titanic_test",
+                    "preprocessor": "int_preprocessor",
                 },
                 name="intermediate_data_process",
             ),

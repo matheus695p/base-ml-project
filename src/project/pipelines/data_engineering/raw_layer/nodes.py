@@ -17,4 +17,5 @@ def raw_data_process(
     return {
         "train": df_train,
         "test": df_test,
+        "preprocessor": preprocessor,
     }
