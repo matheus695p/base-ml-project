@@ -5,7 +5,7 @@ from kedro.pipeline import Pipeline, node, pipeline
 from project.namespaces import NAMESPACES as model_namespaces
 from project.packages.reporting.html_report import create_html_report
 
-model_artifacts = [f"{namespace}.model_artifact" for namespace in model_namespaces]
+model_artifacts = [f"{namespace}.interpretability_report" for namespace in model_namespaces]
 
 
 def create_pipeline(**kwargs) -> Pipeline:

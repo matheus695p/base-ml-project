@@ -11,7 +11,9 @@ from sklearn.pipeline import Pipeline
 logger = logging.getLogger(__name__)
 
 
-def registry_best_model_to_mlflow(params: tp.Dict, *models: tp.List[Pipeline]) -> Pipeline:
+def registry_best_model_to_mlflow(
+    params: tp.Dict, report: str, *models: tp.List[Pipeline]
+) -> Pipeline:
     models = list(models)
     model = get_best_model(params, models)
     best_model = registry_model(params, model)
