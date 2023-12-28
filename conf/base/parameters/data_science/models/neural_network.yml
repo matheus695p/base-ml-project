@@ -1,4 +1,4 @@
-svm.model_artifact:
+neural_network.model_artifact:
   scoring_metrics:
     - accuracy
     - balanced_accuracy
@@ -23,12 +23,12 @@ svm.model_artifact:
   optuna:
     kwargs_study:
       direction: maximize
-      study_name: "svm"
+      study_name: "neural_network"
       load_if_exists: False
 
     # how many trials should optimize
     kwargs_optimize:
-      n_trials: 10
+      n_trials: 300
 
     # sampler
     sampler:
@@ -73,7 +73,6 @@ svm.model_artifact:
     - passenger_cabin_number
     - passenger_number_of_family_onboard
     - passenger_is_single
-    - passenger_has_significant_other
     - passenger_has_childs
     - passenger_cabin_level_a
     - passenger_cabin_level_b
@@ -113,10 +112,16 @@ svm.model_artifact:
 
     # model
     model:
-      class: sklearn.svm.SVC
+      class: sklearn.neural_network.MLPClassifier
       kwargs:
-        C: 'trial.suggest_float("svm__C", 0.001, 100)'
-        kernel: 'trial.suggest_categorical("svm__kernel", ["linear", "poly", "rbf", "sigmoid"])'
-        degree: 'trial.suggest_int("svm__degree", 1, 10)'
-        gamma: 'trial.suggest_float("svm__gamma", 0.0001, 1)'
+        hidden_layer_sizes: 'trial.suggest_int("mlp__hidden_layer_sizes", 1, 100, log=True)'
+        activation: 'trial.suggest_categorical("mlp__activation", ["identity", "logistic", "tanh", "relu"])'
+        alpha: 'trial.suggest_float("mlp__alpha", 1e-6, 1e-2, log=True)'
+        max_iter: 'trial.suggest_int("mlp__max_iter", 100, 2000)'
+        learning_rate_init: 'trial.suggest_float("mlp__learning_rate_init", 0.0001, 0.1)'
+        solver: 'trial.suggest_categorical("mlp__solver", ["lbfgs", "sgd", "adam"])'
+        batch_size: 'trial.suggest_int("mlp__batch_size", 32, 256, log=True)'
+        tol: 'trial.suggest_float("mlp__tol", 1e-6, 1e-2, log=True)'
+        early_stopping: 'trial.suggest_categorical("mlp__early_stopping", [True, False])'
+        validation_fraction: 'trial.suggest_float("mlp__validation_fraction", 0.1, 0.4)'
         random_state: ${GLOBAL_SEED}

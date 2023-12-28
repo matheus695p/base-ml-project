@@ -1,4 +1,4 @@
-neural_network.model_artifact:
+knn.model_artifact:
   scoring_metrics:
     - accuracy
     - balanced_accuracy
@@ -23,12 +23,12 @@ neural_network.model_artifact:
   optuna:
     kwargs_study:
       direction: maximize
-      study_name: "neural_network"
+      study_name: "knn"
       load_if_exists: False
 
     # how many trials should optimize
     kwargs_optimize:
-      n_trials: 300
+      n_trials: 100
 
     # sampler
     sampler:
@@ -73,7 +73,6 @@ neural_network.model_artifact:
     - passenger_cabin_number
     - passenger_number_of_family_onboard
     - passenger_is_single
-    - passenger_has_significant_other
     - passenger_has_childs
     - passenger_cabin_level_a
     - passenger_cabin_level_b
@@ -107,22 +106,14 @@ neural_network.model_artifact:
       class: project.packages.modelling.transformers.scaler.ColumnsPreserverScaler
       kwargs:
         scaler_params:
-          class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer", "sklearn.preprocessing.MinMaxScaler", "sklearn.preprocessing.StandardScaler", "sklearn.preprocessing.PowerTransformer", "sklearn.preprocessing.QuantileTransformer", "sklearn.preprocessing.RobustScaler"])'
+          class: 'trial.suggest_categorical("scaler__transformer", ["sklearn.preprocessing.MinMaxScaler", "sklearn.preprocessing.StandardScaler",])'
           # class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer",])'
           kwargs: {}
 
     # model
     model:
-      class: sklearn.neural_network.MLPClassifier
+      class: sklearn.neighbors.KNeighborsClassifier
       kwargs:
-        hidden_layer_sizes: 'trial.suggest_int("mlp__hidden_layer_sizes", 1, 100, log=True)'
-        activation: 'trial.suggest_categorical("mlp__activation", ["identity", "logistic", "tanh", "relu"])'
-        alpha: 'trial.suggest_float("mlp__alpha", 1e-6, 1e-2, log=True)'
-        max_iter: 'trial.suggest_int("mlp__max_iter", 100, 2000)'
-        learning_rate_init: 'trial.suggest_float("mlp__learning_rate_init", 0.0001, 0.1)'
-        solver: 'trial.suggest_categorical("mlp__solver", ["lbfgs", "sgd", "adam"])'
-        batch_size: 'trial.suggest_int("mlp__batch_size", 32, 256, log=True)'
-        tol: 'trial.suggest_float("mlp__tol", 1e-6, 1e-2, log=True)'
-        early_stopping: 'trial.suggest_categorical("mlp__early_stopping", [True, False])'
-        validation_fraction: 'trial.suggest_float("mlp__validation_fraction", 0.1, 0.4)'
-        random_state: ${GLOBAL_SEED}
+        n_neighbors: 'trial.suggest_int("knn__n_neighbors", 1, 20)'
+        weights: 'trial.suggest_categorical("knn__weights", ["uniform", "distance"])'
+        algorithm: 'trial.suggest_categorical("knn__algorithm", ["auto", "ball_tree", "kd_tree", "brute"])'

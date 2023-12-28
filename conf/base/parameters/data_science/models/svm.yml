@@ -1,4 +1,4 @@
-random_forest.model_artifact:
+svm.model_artifact:
   scoring_metrics:
     - accuracy
     - balanced_accuracy
@@ -23,12 +23,12 @@ random_forest.model_artifact:
   optuna:
     kwargs_study:
       direction: maximize
-      study_name: "random_forest"
+      study_name: "svm"
       load_if_exists: False
 
     # how many trials should optimize
     kwargs_optimize:
-      n_trials: 100
+      n_trials: 10
 
     # sampler
     sampler:
@@ -73,7 +73,6 @@ random_forest.model_artifact:
     - passenger_cabin_number
     - passenger_number_of_family_onboard
     - passenger_is_single
-    - passenger_has_significant_other
     - passenger_has_childs
     - passenger_cabin_level_a
     - passenger_cabin_level_b
@@ -107,16 +106,16 @@ random_forest.model_artifact:
       class: project.packages.modelling.transformers.scaler.ColumnsPreserverScaler
       kwargs:
         scaler_params:
-          # class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer", "sklearn.preprocessing.MinMaxScaler", "sklearn.preprocessing.StandardScaler", "sklearn.preprocessing.PowerTransformer", "sklearn.preprocessing.QuantileTransformer", "sklearn.preprocessing.RobustScaler"])'
-          class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer",])'
+          class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer", "sklearn.preprocessing.MinMaxScaler", "sklearn.preprocessing.StandardScaler", "sklearn.preprocessing.PowerTransformer", "sklearn.preprocessing.QuantileTransformer", "sklearn.preprocessing.RobustScaler"])'
+          # class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer",])'
           kwargs: {}
 
     # model
     model:
-      class: sklearn.ensemble.RandomForestClassifier
+      class: sklearn.svm.SVC
       kwargs:
-        n_estimators: 'trial.suggest_int("random_forest__n_estimators", 10, 500, step=5)'
-        max_depth: 'trial.suggest_int("random_forest__max_depth", 1, 8)'
-        min_samples_split: 'trial.suggest_float("random_forest__min_samples_split", 0.1, 1)'
-        min_samples_leaf: 'trial.suggest_float("random_forest__min_samples_leaf", 0.1, 0.5)'
+        C: 'trial.suggest_float("svm__C", 0.001, 100)'
+        kernel: 'trial.suggest_categorical("svm__kernel", ["linear", "poly", "rbf", "sigmoid"])'
+        degree: 'trial.suggest_int("svm__degree", 1, 10)'
+        gamma: 'trial.suggest_float("svm__gamma", 0.0001, 1)'
         random_state: ${GLOBAL_SEED}

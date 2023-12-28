@@ -1,4 +1,4 @@
-xgboost.model_artifact:
+bayesian_gaussian_mixture.model_artifact:
   scoring_metrics:
     - accuracy
     - balanced_accuracy
@@ -23,12 +23,12 @@ xgboost.model_artifact:
   optuna:
     kwargs_study:
       direction: maximize
-      study_name: "xgboost"
+      study_name: "bayesian_gaussian_mixture"
       load_if_exists: False
 
     # how many trials should optimize
     kwargs_optimize:
-      n_trials: 300
+      n_trials: 10
 
     # sampler
     sampler:
@@ -73,7 +73,6 @@ xgboost.model_artifact:
     - passenger_cabin_number
     - passenger_number_of_family_onboard
     - passenger_is_single
-    - passenger_has_significant_other
     - passenger_has_childs
     - passenger_cabin_level_a
     - passenger_cabin_level_b
@@ -107,19 +106,14 @@ xgboost.model_artifact:
       class: project.packages.modelling.transformers.scaler.ColumnsPreserverScaler
       kwargs:
         scaler_params:
-          # class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer", "sklearn.preprocessing.MinMaxScaler", "sklearn.preprocessing.StandardScaler", "sklearn.preprocessing.PowerTransformer", "sklearn.preprocessing.QuantileTransformer", "sklearn.preprocessing.RobustScaler"])'
-          class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer",])'
+          class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer", "sklearn.preprocessing.MinMaxScaler", "sklearn.preprocessing.StandardScaler", "sklearn.preprocessing.PowerTransformer", "sklearn.preprocessing.QuantileTransformer", "sklearn.preprocessing.RobustScaler"])'
+          # class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer",])'
           kwargs: {}
 
     # model
     model:
-      class: xgboost.XGBClassifier
+      class: sklearn.mixture.BayesianGaussianMixture
       kwargs:
-        n_estimators: 'trial.suggest_int("xgboost__n_estimators", 10, 500, step=5)'
-        learning_rate: 'trial.suggest_float("xgboost__learning_rate", 0.0001, 1)'
-        min_child_weight: 'trial.suggest_int("xgboost__min_child_weight", 1, 500, step=5)'
-        max_depth: 'trial.suggest_int("xgboost__max_depth", 1, 8)'
-        subsample: 'trial.suggest_float("xgboost__subsample", 0.5, 1)'
-        reg_lambda: 'trial.suggest_float("xgboost__reg_lambda", 0, 5)'
-        reg_alpha: 'trial.suggest_float("xgboost__reg_alpha", 0, 1)'
+        weight_concentration_prior_type: 'trial.suggest_categorical("bayesian__weight_concentration_prior_type", ["dirichlet_process", "dirichlet_distribution"])'
+        n_components: 'trial.suggest_int("bayesian__n_components", 1, 10)'
         random_state: ${GLOBAL_SEED}

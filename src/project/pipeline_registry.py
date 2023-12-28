@@ -12,7 +12,7 @@ from project.pipelines.data_engineering import (
     primary_layer,
     raw_layer,
 )
-from project.pipelines.data_science import supervised
+from project.pipelines.data_science import model_predictive_control, supervised
 
 from .namespaces import NAMESPACES
 
@@ -43,9 +43,13 @@ def register_pipelines() -> tp.Dict[str, Pipeline]:
     global_reporting_pipe = global_reporting.create_pipeline()
     # model serving pipeline
     model_serving_pipe = model_serving.create_pipeline()
+
+    mpc_pipe = model_predictive_control.create_pipeline(namespaces=NAMESPACES)
+
     # data science
     models_pipe = (
         supervised.create_pipeline(namespaces=NAMESPACES)
+        + mpc_pipe
         + global_reporting_pipe
         + model_serving_pipe
     )
@@ -64,5 +68,6 @@ def register_pipelines() -> tp.Dict[str, Pipeline]:
     # data science
     pipelines["data_science"] = models_pipe
     pipelines["global_reporting"] = global_reporting_pipe
+    pipelines["model_predictive_control_explorer"] = mpc_pipe
 
     return pipelines

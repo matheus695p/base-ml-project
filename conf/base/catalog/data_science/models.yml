@@ -35,7 +35,7 @@
         flavor: mlflow.sklearn
         filepath: ${base_path}/06_models/{{ model_name }}
     layer: 06_models
-    artifact_path: models
+    artifact_path: models/predictive_model
 
 {{ model_name }}.cross_validation_metrics:
   type: kedro_mlflow.io.metrics.MlflowMetricsDataSet
@@ -64,6 +64,28 @@
     versioned: true
   layer: 08_reporting
   artifact_path: interpretability_report/{{ model_name }}
+
+{{ model_name }}.model_predictive_control_report:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: text.TextDataSet
+    filepath: ${base_path}/08_reporting/{{ model_name }}/html_reports/model_predictive_control_report_{{ model_name }}.html
+    fs_args:
+      open_args_save:
+        encoding: "utf-8"
+    versioned: true
+  layer: 08_reporting
+  artifact_path: model_predictive_control_report/{{ model_name }}
+
+
+{{ model_name }}.model_predictive_control_explorer:
+    type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+    data_set:
+        type: kedro_mlflow.io.models.MlflowModelSaverDataSet
+        flavor: mlflow.sklearn
+        filepath: ${base_path}/06_models/model_predictive_control_explorer/{{ model_name }}
+    layer: 06_models
+    artifact_path: models/model_predictive_control_explorer
 
 {% endfor %}
 

@@ -1,0 +1,43 @@
+_mpc: &_mpc
+  direction: maximize
+  n_trials: 600
+  constraints:
+    unnecessary_features:
+      - Name
+      - PassengerId
+      - Ticket
+      - Cabin
+
+
+xgboost.mpc:
+  <<: *_mpc
+
+bayesian_gaussian_mixture.mpc:
+  <<: *_mpc
+
+decision_tree.mpc:
+  <<: *_mpc
+
+gradient_boosting_machines.mpc:
+  <<: *_mpc
+
+knn.mpc:
+  <<: *_mpc
+
+neural_network.mpc:
+  <<: *_mpc
+
+perceptron.mpc:
+  <<: *_mpc
+
+quadratic_discriminant_analysis.mpc:
+  <<: *_mpc
+
+random_forest.mpc:
+  <<: *_mpc
+
+svm.mpc:
+  <<: *_mpc
+
+logistic_regression.mpc:
+  <<: *_mpc

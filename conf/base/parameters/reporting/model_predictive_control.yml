@@ -1,0 +1,53 @@
+_model_predictive_control: &_model_predictive_control
+  n_jobs: 6
+  environment: ${env}
+  template_path: notebooks/reporting/model_predictive_control_report.ipynb
+  namespace: ""
+  report_name: model_predictive_control_report
+  kernel: python3
+  timeout: 90000
+  remove_code: True
+
+xgboost.model_predictive_control_report:
+  <<: *_model_predictive_control
+  namespace: xgboost
+
+bayesian_gaussian_mixture.model_predictive_control_report:
+  <<: *_model_predictive_control
+  namespace: bayesian_gaussian_mixture
+
+decision_tree.model_predictive_control_report:
+  <<: *_model_predictive_control
+  namespace: decision_tree
+
+gradient_boosting_machines.model_predictive_control_report:
+  <<: *_model_predictive_control
+  namespace: gradient_boosting_machines
+
+knn.model_predictive_control_report:
+  <<: *_model_predictive_control
+  namespace: knn
+
+neural_network.model_predictive_control_report:
+  <<: *_model_predictive_control
+  namespace: neural_network
+
+perceptron.model_predictive_control_report:
+  <<: *_model_predictive_control
+  namespace: perceptron
+
+quadratic_discriminant_analysis.model_predictive_control_report:
+  <<: *_model_predictive_control
+  namespace: quadratic_discriminant_analysis
+
+random_forest.model_predictive_control_report:
+  <<: *_model_predictive_control
+  namespace: random_forest
+
+svm.model_predictive_control_report:
+  <<: *_model_predictive_control
+  namespace: svm
+
+logistic_regression.model_predictive_control_report:
+  <<: *_model_predictive_control
+  namespace: svm

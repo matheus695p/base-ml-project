@@ -1,4 +1,5 @@
 import logging
+
 import requests
 
 logger = logging.getLogger(__name__)
@@ -6,17 +7,17 @@ logger = logging.getLogger(__name__)
 # Define the JSON data you want to send in the request body
 request_data = {
     "Body": {
-        'PassengerId': 892,
-        'Pclass': 3,
-        'Name': 'Matheus Pinto Arratia',
-        'Sex': 'male',
-        'Age': 28.9,
-        'SibSp': 0,
-        'Parch': 0,
-        'Ticket': '40101',
-        'Fare': 7.8292,
-        'Cabin': None,
-        'Embarked': 'Q',
+        "PassengerId": 892,
+        "Pclass": 3,
+        "Name": "Matheus Pinto Arratia",
+        "Sex": "male",
+        "Age": 28.9,
+        "SibSp": 0,
+        "Parch": 0,
+        "Ticket": "40101",
+        "Fare": 7.8292,
+        "Cabin": None,
+        "Embarked": "Q",
     }
 }
 

@@ -1,4 +1,4 @@
-bayesian_gaussian_mixture.model_artifact:
+logistic_regression.model_artifact:
   scoring_metrics:
     - accuracy
     - balanced_accuracy
@@ -23,12 +23,12 @@ bayesian_gaussian_mixture.model_artifact:
   optuna:
     kwargs_study:
       direction: maximize
-      study_name: "bayesian_gaussian_mixture"
+      study_name: "logistic_regression"
       load_if_exists: False
 
     # how many trials should optimize
     kwargs_optimize:
-      n_trials: 10
+      n_trials: 100
 
     # sampler
     sampler:
@@ -73,7 +73,6 @@ bayesian_gaussian_mixture.model_artifact:
     - passenger_cabin_number
     - passenger_number_of_family_onboard
     - passenger_is_single
-    - passenger_has_significant_other
     - passenger_has_childs
     - passenger_cabin_level_a
     - passenger_cabin_level_b
@@ -107,14 +106,14 @@ bayesian_gaussian_mixture.model_artifact:
       class: project.packages.modelling.transformers.scaler.ColumnsPreserverScaler
       kwargs:
         scaler_params:
-          class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer", "sklearn.preprocessing.MinMaxScaler", "sklearn.preprocessing.StandardScaler", "sklearn.preprocessing.PowerTransformer", "sklearn.preprocessing.QuantileTransformer", "sklearn.preprocessing.RobustScaler"])'
+          class: 'trial.suggest_categorical("scaler__transformer", ["sklearn.preprocessing.MinMaxScaler", "sklearn.preprocessing.StandardScaler",])'
           # class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer",])'
           kwargs: {}
 
     # model
     model:
-      class: sklearn.mixture.BayesianGaussianMixture
+      class: sklearn.linear_model.LogisticRegression
       kwargs:
-        weight_concentration_prior_type: 'trial.suggest_categorical("bayesian__weight_concentration_prior_type", ["dirichlet_process", "dirichlet_distribution"])'
-        n_components: 'trial.suggest_int("bayesian__n_components", 1, 10)'
+        C: 'trial.suggest_float("logistic_regression__C", 0.001, 100)'
+        penalty: 'trial.suggest_categorical("logistic_regression__penalty", ["l1", "l2"])'
         random_state: ${GLOBAL_SEED}

@@ -1,4 +1,4 @@
-perceptron.model_artifact:
+quadratic_discriminant_analysis.model_artifact:
   scoring_metrics:
     - accuracy
     - balanced_accuracy
@@ -23,12 +23,12 @@ perceptron.model_artifact:
   optuna:
     kwargs_study:
       direction: maximize
-      study_name: "perceptron"
+      study_name: "quadratic_discriminant_analysis"
       load_if_exists: False
 
     # how many trials should optimize
     kwargs_optimize:
-      n_trials: 50
+      n_trials: 10
 
     # sampler
     sampler:
@@ -73,7 +73,6 @@ perceptron.model_artifact:
     - passenger_cabin_number
     - passenger_number_of_family_onboard
     - passenger_is_single
-    - passenger_has_significant_other
     - passenger_has_childs
     - passenger_cabin_level_a
     - passenger_cabin_level_b
@@ -113,9 +112,6 @@ perceptron.model_artifact:
 
     # model
     model:
-      class: sklearn.linear_model.Perceptron
+      class: sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis
       kwargs:
-        alpha: 'trial.suggest_float("perceptron__alpha", 0.0001, 1)'
-        max_iter: 'trial.suggest_int("perceptron__max_iter", 10, 1000)'
-        penalty: 'trial.suggest_categorical("perceptron__penalty", ["l1", "l2", "elasticnet"])'
-        random_state: ${GLOBAL_SEED}
+        reg_param: 'trial.suggest_float("qda__reg_param", 0, 1)'

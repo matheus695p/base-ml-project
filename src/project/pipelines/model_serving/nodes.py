@@ -25,7 +25,7 @@ def get_compile_metric_dataset(
 ):
     metrics = []
     for metric, value in cross_validation_metrics.items():
-        metrics.append([metric, value['value']])
+        metrics.append([metric, value["value"]])
     metrics = (
         pd.DataFrame(metrics, columns=["metric", "value"])
         .set_index("metric")

@@ -1,12 +1,14 @@
 import sys
 
 sys.path.append("src/")
-import pandas as pd
 from pathlib import Path
+
+import pandas as pd
+from flask import Flask, jsonify, request
 from kedro.framework.project import configure_project
 from kedro.framework.session import KedroSession
 from kedro.framework.startup import bootstrap_project
-from flask import Flask, request, jsonify
+
 from project.api.model_serving.api_package.args import get_command_line_arguments
 from project.api.model_serving.api_package.utils import cast_values_df
 

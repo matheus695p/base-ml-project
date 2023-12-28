@@ -14,7 +14,11 @@ def create_pipeline(**kwargs) -> Pipeline:
         [
             node(
                 func=registry_best_model_to_mlflow,
-                inputs=["params:model_serving", "global_optimization_report", *model_artifacts]
+                inputs=[
+                    "params:model_serving",
+                    "global_optimization_report",
+                    *model_artifacts,
+                ]
                 + model_artifacts,
                 outputs="production_model",
                 name="model_serving",
