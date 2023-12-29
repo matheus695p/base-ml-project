@@ -38,8 +38,21 @@ def _create_pipeline(namespace: str) -> Pipeline:
             node(
                 func=create_html_report,
                 inputs=[
-                    "params:hypertune_report",
+                    "params:model_performance_report",
                     "model_artifact",
+                ],
+                outputs=[
+                    "model_performance_report",
+                    "model_performance_error_report",
+                ],
+                name="model_performance_report",
+                tags=["model_performance_report"],
+            ),
+            node(
+                func=create_html_report,
+                inputs=[
+                    "params:hypertune_report",
+                    "model_performance_report",
                 ],
                 outputs=[
                     "hypertune_report",
@@ -77,6 +90,8 @@ def _create_pipeline(namespace: str) -> Pipeline:
             "cross_validation_metrics": f"{namespace}.cross_validation_metrics",
             "model_artifact": f"{namespace}.model_artifact",
             "train_dataset": f"{namespace}.train_dataset",
+            "model_performance_report": f"{namespace}.model_performance_report",
+            "model_performance_error_report": f"{namespace}.model_performance_error_report",
             "hypertune_report": f"{namespace}.hypertune_report",
             "hypertune_notebook_error_report": f"{namespace}.hypertune_notebook_error_report",
             "interpretability_report": f"{namespace}.interpretability_report",

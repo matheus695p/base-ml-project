@@ -1,0 +1,53 @@
+_model_performance_report: &_model_performance_report
+  n_jobs: 6
+  environment: ${env}
+  template_path: notebooks/reporting/model_performance_report.ipynb
+  namespace: ""
+  report_name: model_performance_report
+  kernel: python3
+  timeout: 90000
+  remove_code: True
+
+xgboost.model_performance_report:
+  <<: *_model_performance_report
+  namespace: xgboost
+
+bayesian_gaussian_mixture.model_performance_report:
+  <<: *_model_performance_report
+  namespace: bayesian_gaussian_mixture
+
+decision_tree.model_performance_report:
+  <<: *_model_performance_report
+  namespace: decision_tree
+
+gradient_boosting_machines.model_performance_report:
+  <<: *_model_performance_report
+  namespace: gradient_boosting_machines
+
+knn.model_performance_report:
+  <<: *_model_performance_report
+  namespace: knn
+
+neural_network.model_performance_report:
+  <<: *_model_performance_report
+  namespace: neural_network
+
+perceptron.model_performance_report:
+  <<: *_model_performance_report
+  namespace: perceptron
+
+quadratic_discriminant_analysis.model_performance_report:
+  <<: *_model_performance_report
+  namespace: quadratic_discriminant_analysis
+
+random_forest.model_performance_report:
+  <<: *_model_performance_report
+  namespace: random_forest
+
+svm.model_performance_report:
+  <<: *_model_performance_report
+  namespace: svm
+
+logistic_regression.model_performance_report:
+  <<: *_model_performance_report
+  namespace: svm

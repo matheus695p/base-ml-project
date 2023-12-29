@@ -54,6 +54,20 @@
   type: kedro_mlflow.io.metrics.MlflowMetricsDataSet
   layer: 07_model_output
 
+
+{{ model_name }}.model_performance_report:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: text.TextDataSet
+    filepath: ${base_path}/08_reporting/model_performance_report/{{ model_name }}/model_performance_report_{{ model_name }}.html
+    fs_args:
+      open_args_save:
+        encoding: "utf-8"
+    # versioned: true
+  layer: 08_reporting
+  artifact_path: model_performance_report/{{ model_name }}
+
+
 {{ model_name }}.hypertune_report:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
@@ -64,7 +78,7 @@
         encoding: "utf-8"
     # versioned: true
   layer: 08_reporting
-  artifact_path: hypertune/report/{{ model_name }}
+  artifact_path: hypertune_report/{{ model_name }}
 
 {{ model_name }}.interpretability_report:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet

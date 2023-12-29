@@ -4,7 +4,7 @@ from copy import deepcopy
 
 import optuna
 import pandas as pd
-from sklearn.base import BaseEstimator
+from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.pipeline import Pipeline
 
 from project.packages.python_utils.load.object_injection import load_object
@@ -43,6 +43,8 @@ class BaseSklearnCompatibleModel(BaseEstimator, MlflowTransformations):
         self.model = self.build_model_pipeline(self.best_params)
         self.model = self.model.fit(X, y)
         self.is_fitted = True
+        self.X_train = X
+        self.y_train = y
 
         return self
 
@@ -108,10 +110,12 @@ class BaseSklearnCompatibleModel(BaseEstimator, MlflowTransformations):
         best_trial = study.best_trial
         best_estimator_number = best_trial.number
         best_estimator_params = study.trials[best_estimator_number].user_attrs["estimator_params"]
+
+        # save best iteration using callback
         best_value = self.hypertune_cross_validation_objective_function(
             best_trial, callbacks=[self.save_best_model], **deepcopy(kwargs)
         )
-        logger.info(f"best_value: {best_value}")
+        logger.debug(f"best_value: {best_value}")
 
         # compute test scoring
         final_estimator = self.build_model_pipeline(best_estimator_params)
@@ -126,7 +130,7 @@ class BaseSklearnCompatibleModel(BaseEstimator, MlflowTransformations):
         logger.info(f"final estimator: {final_estimator}")
         logger.info(f"final estimator {scoring_metric}: {final_score}")
 
-        # mlflow logging metric transform
+        # mlflow logging metrics transform
         cross_validation_metrics = self.format_metrics_dict(self.scores)
 
         return {
@@ -249,7 +253,7 @@ class BaseSklearnCompatibleModel(BaseEstimator, MlflowTransformations):
         return d
 
 
-class BinaryClassifierSklearnPipeline(BaseSklearnCompatibleModel):
+class BinaryClassifierSklearnPipeline(BaseSklearnCompatibleModel, ClassifierMixin):
     def __init__(self, params: tp.Dict[str, str]) -> "BinaryClassifierSklearnPipeline":
         super().__init__(params)
 
