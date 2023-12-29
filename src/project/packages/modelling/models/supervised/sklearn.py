@@ -279,4 +279,10 @@ class BinaryClassifierSklearnPipeline(BaseSklearnCompatibleModel, ClassifierMixi
         """
         if y_score is not None:
             y_score = y_score[:, 1]
+            import numpy as np
+
+            if np.isnan(y_score).any():
+                y_score = np.nan_to_num(y_score, nan=0.0)
+                logger.warning("Nan values encountered filling with 0")
+
         return compute_binary_classification_metrics(y_true=y_true, y_pred=y_pred, y_score=y_score)
