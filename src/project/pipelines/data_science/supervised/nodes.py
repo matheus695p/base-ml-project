@@ -5,7 +5,7 @@ import typing as tp
 import pandas as pd
 from sklearn.utils.validation import check_is_fitted
 
-from project.packages.modelling.models.supervised.sklearn import ClassifierSklearnCompatibleModel
+from project.packages.modelling.models.supervised.sklearn import BinaryClassifierSklearnPipeline
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +47,7 @@ def model_hypertune(df: pd.DataFrame, params: tp.Dict[str, tp.Any]) -> tp.Dict[s
 
     X = df[features].astype(float)
     y = df[[target]].astype(float)
-    model = ClassifierSklearnCompatibleModel(params)
+    model = BinaryClassifierSklearnPipeline(params)
     model = model.fit(X, y)
     check_is_fitted(model.model)
 

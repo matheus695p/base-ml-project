@@ -286,8 +286,8 @@ class BaseSklearnCompatibleModel(BaseEstimator):
         return transformed_dict
 
 
-class ClassifierSklearnCompatibleModel(BaseSklearnCompatibleModel):
-    def __init__(self, params: tp.Dict[str, str]) -> "ClassifierSklearnCompatibleModel":
+class BinaryClassifierSklearnPipeline(BaseSklearnCompatibleModel):
+    def __init__(self, params: tp.Dict[str, str]) -> "BinaryClassifierSklearnPipeline":
         super().__init__(params)
 
     def predict_proba(self, X: pd.DataFrame) -> pd.DataFrame:
