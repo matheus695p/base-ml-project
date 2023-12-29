@@ -13,7 +13,7 @@ from project.packages.python_utils.typing.tensors import Matrix, Tensor
 from ...reproducibility.set_seed import seed_file
 from ...transformers.columns_selector import ColumnsSelector
 from ...evaluate.classification_metrics import compute_binary_classification_metrics
-
+from ..mlflow.metrics import MlflowTransformations
 
 seed_file()
 
@@ -21,7 +21,7 @@ seed_file()
 logger = logging.getLogger(__name__)
 
 
-class BaseSklearnCompatibleModel(BaseEstimator):
+class BaseSklearnCompatibleModel(BaseEstimator, MlflowTransformations):
     def __init__(self, params: tp.Dict[str, str]) -> "BaseSklearnCompatibleModel":
 
         self.params = params
@@ -127,7 +127,7 @@ class BaseSklearnCompatibleModel(BaseEstimator):
         logger.info(f"final estimator {scoring_metric}: {final_score}")
 
         # mlflow logging metric transform
-        cross_validation_metrics = self.transform_output_dict(self.scores)
+        cross_validation_metrics = self.format_metrics_dict(self.scores)
 
         return {
             "study": study,
@@ -247,43 +247,6 @@ class BaseSklearnCompatibleModel(BaseEstimator):
             elif isinstance(v, str) and "trial." in v:
                 d[k] = eval(v, {"trial": trial})
         return d
-
-    def transform_output_dict(
-        self, output_dict: tp.Dict[str, tp.Any]
-    ) -> tp.Dict[str, tp.Union[float, tp.List[float]]]:
-        """Transform an input dictionary of values into a dictionary of transformed values.
-
-        MLFlow metrics logger transformation.
-
-        This function takes an input dictionary where the values can be either
-        a single numeric value or a list of numeric values.
-        It transforms each value into a dictionary format with keys 'value' and 'step',
-        where 'value' is the original value, and 'step' is the position of the value
-        within the list (if applicable).
-
-        Args:
-            output_dict (Dict[str, Any]): A dictionary containing values to be transformed.
-
-        Returns:
-            Dict[str, Union[float, List[float]]]: A dictionary with the same keys as the input dictionary,
-            where each value is transformed into a dictionary with keys 'value' and 'step'.
-
-        Example:
-            >>> input_dict = {'a': 42, 'b': [1, 2, 3]}
-            >>> transform_output_dict(input_dict)
-            {'a': {'value': 42, 'step': 1}, 'b': [{'value': 1, 'step': 1}, {'value': 2, 'step': 2}, {'value': 3, 'step': 3}]}
-        """
-        transformed_dict = {}
-
-        for key, value in output_dict.items():
-            if isinstance(value, list):
-                transformed_value = [{"value": v, "step": i + 1} for i, v in enumerate(value)]
-            else:
-                transformed_value = {"value": value, "step": 1}
-
-            transformed_dict[key] = transformed_value
-
-        return transformed_dict
 
 
 class BinaryClassifierSklearnPipeline(BaseSklearnCompatibleModel):
