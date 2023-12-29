@@ -9,8 +9,6 @@ NAMESPACES = [
     "logistic_regression",
     "neural_network",
     "knn",
-    "perceptron",
     "quadratic_discriminant_analysis",
-    # "bayesian_gaussian_mixture",
     # "svm",
 ]

@@ -46,21 +46,23 @@ neural_network.model_artifact:
   # how reward function is
   # cross val strategy
   cv_strategy:
-    class: sklearn.model_selection.KFold
+    class: sklearn.model_selection.StratifiedKFold
     kwargs:
       n_splits: 5
       random_state: ${GLOBAL_SEED}
+      shuffle: True
 
   # cross val score
   cv_score:
-    class: sklearn.model_selection.cross_val_score
+    scoring: "f1_weighted"
+    class: sklearn.model_selection.cross_val_predict
     kwargs:
       estimator:
       X: # leave as None
       y: # leave as None
-      scoring: "f1_weighted"
       cv: # leave as None
       n_jobs: -1
+      method: predict
 
   target: "survived"
   features:

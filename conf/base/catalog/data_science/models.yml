@@ -3,7 +3,7 @@
 # Documentation for this file format can be found in "The Data Catalog"
 # Link: https://docs.kedro.org/en/stable/data/data_catalog.html
 
-{% for model_name in ['xgboost', 'random_forest', 'decision_tree', 'bayesian_gaussian_mixture', 'logistic_regression', 'gradient_boosting_machines', 'knn', 'neural_network', 'perceptron', 'quadratic_discriminant_analysis', 'svm', ] %}
+{% for model_name in ['xgboost', 'random_forest', 'decision_tree', 'logistic_regression', 'gradient_boosting_machines', 'knn', 'neural_network', 'quadratic_discriminant_analysis', 'svm', ] %}
 
 {{ model_name }}.train_dataset:
     type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet

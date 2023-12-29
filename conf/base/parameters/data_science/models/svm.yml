@@ -46,21 +46,23 @@ svm.model_artifact:
   # how reward function is
   # cross val strategy
   cv_strategy:
-    class: sklearn.model_selection.KFold
+    class: sklearn.model_selection.StratifiedKFold
     kwargs:
       n_splits: 5
       random_state: ${GLOBAL_SEED}
+      shuffle: True
 
   # cross val score
   cv_score:
-    class: sklearn.model_selection.cross_val_score
+    scoring: "f1_weighted"
+    class: sklearn.model_selection.cross_val_predict
     kwargs:
       estimator:
       X: # leave as None
       y: # leave as None
-      scoring: "f1_weighted"
       cv: # leave as None
       n_jobs: -1
+      method: predict
 
   target: "survived"
   features:
@@ -107,7 +109,7 @@ svm.model_artifact:
       class: project.packages.modelling.transformers.scaler.ColumnsPreserverScaler
       kwargs:
         scaler_params:
-          class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer", "sklearn.preprocessing.MinMaxScaler", "sklearn.preprocessing.StandardScaler", "sklearn.preprocessing.PowerTransformer", "sklearn.preprocessing.QuantileTransformer", "sklearn.preprocessing.RobustScaler"])'
+          class: 'trial.suggest_categorical("scaler__transformer", ["sklearn.preprocessing.PowerTransformer", "sklearn.preprocessing.QuantileTransformer", "sklearn.preprocessing.RobustScaler"])'
           # class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer",])'
           kwargs: {}
 
@@ -115,8 +117,8 @@ svm.model_artifact:
     model:
       class: sklearn.svm.SVC
       kwargs:
-        C: 'trial.suggest_float("svm__C", 0.001, 100)'
-        kernel: 'trial.suggest_categorical("svm__kernel", ["linear", "poly", "rbf", "sigmoid"])'
-        degree: 'trial.suggest_int("svm__degree", 1, 10)'
+        C: 'trial.suggest_float("svm__C", 0.001, 10)'
+        kernel: 'trial.suggest_categorical("svm__kernel", ["linear", "poly", "rbf"])'
+        degree: 'trial.suggest_int("svm__degree", 5, 10)'
         gamma: 'trial.suggest_float("svm__gamma", 0.0001, 1)'
         random_state: ${GLOBAL_SEED}
