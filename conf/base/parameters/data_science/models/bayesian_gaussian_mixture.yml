@@ -80,14 +80,14 @@ bayesian_gaussian_mixture.model_artifact:
     - passenger_cabin_level_c
     - passenger_cabin_level_d
     - passenger_cabin_level_e
-    - passenger_cabin_level_f
-    - passenger_cabin_level_g
-    - passenger_cabin_level_t
+    # - passenger_cabin_level_f
+    # - passenger_cabin_level_g
+    # - passenger_cabin_level_t
     - passenger_cabin_level_unknown
     - passenger_embarked_port_c
     - passenger_embarked_port_q
     - passenger_embarked_port_s
-    - passenger_embarked_port_unknown
+    # - passenger_embarked_port_unknown
     - passenger_sex_female
 
   pipeline:
