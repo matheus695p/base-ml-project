@@ -1,9 +1,6 @@
 
 feature_transform:
   target: survived
-
-  mapping_transform:
-
   encoding_transform:
     # columns to perform one hot encoder
     one_hot_encoder:
@@ -13,3 +10,53 @@ feature_transform:
     # columns to perform similarity based encoder
     # labels are assigned considering similarity between strings
     similarity_based_encoder:
+
+  clustering_features:
+    imputer:
+      class: project.packages.modelling.models.unsupervised.imputer.ColumnsPreserverImputer
+      kwargs:
+        imputer_params:
+          class: sklearn.impute.KNNImputer
+          kwargs:
+            n_neighbors: 10
+            weights: "distance"
+    scaler:
+      class: project.packages.modelling.transformers.scaler.ColumnsPreserverScaler
+      kwargs:
+        scaler_params:
+          class: sklearn.preprocessing.MinMaxScaler
+          kwargs: {}
+    model:
+      class: project.packages.modelling.models.unsupervised.segmentation.KMeansElbowSelector
+      kwargs:
+        min_clusters: 1
+        max_clusters: 15
+
+    features:
+      passenger_cabin_cluster_feature:
+      - passenger_cabin_level_a
+      - passenger_cabin_level_b
+      - passenger_cabin_level_c
+      - passenger_cabin_level_d
+      - passenger_cabin_level_e
+      - passenger_cabin_level_f
+      - passenger_cabin_level_g
+      - passenger_cabin_level_t
+      - passenger_cabin_level_unknown
+      passenger_embarked_port_cluster_feature:
+      - passenger_embarked_port_c
+      - passenger_embarked_port_q
+      - passenger_embarked_port_s
+      - passenger_embarked_port_unknown
+      passenger_ticket_number_cluster_feature:
+      - passenger_ticket_number
+      - passenger_ticket_unknown_base
+      passenger_family_cluster_feature:
+      - passenger_siblings
+      - passenger_parch
+      - passenger_cabin_number
+      - passenger_number_of_family_onboard
+      passenger_social_status_cluster_feature:
+      - passenger_class
+      - passenger_age
+      - passenger_sex_female

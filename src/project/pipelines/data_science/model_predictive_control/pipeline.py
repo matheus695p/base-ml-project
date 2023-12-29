@@ -17,7 +17,7 @@ def create_pipeline(**kwargs) -> Pipeline:
 
 
 def _create_pipeline(namespace: str) -> Pipeline:
-    preprocessors = [f"{layer}_preprocessor" for layer in ["raw", "int", "prm", "feat"]]
+    preprocessors = [f"{layer}_preprocessor" for layer in ["raw", "int", "prm", "feat", "cluster"]]
     model_pipe = Pipeline(
         [
             node(

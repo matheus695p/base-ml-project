@@ -26,7 +26,8 @@ def load_kedro_resources():
 
     return {
         "preprocessors": [
-            catalog.load(f"{layer}_preprocessor") for layer in ["raw", "int", "prm", "feat"]
+            catalog.load(f"{layer}_preprocessor")
+            for layer in ["raw", "int", "prm", "feat", "cluster"]
         ],
         "model": catalog.load("production_model"),
         "data_schemas": catalog.load("params:raw_transform")["schemas"],

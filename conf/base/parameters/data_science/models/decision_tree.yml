@@ -91,6 +91,12 @@ decision_tree.model_artifact:
     - passenger_embarked_port_s
     # - passenger_embarked_port_unknown
     - passenger_sex_female
+    - passenger_cabin_cluster_feature
+    - passenger_embarked_port_cluster_feature
+    - passenger_ticket_number_cluster_feature
+    - passenger_family_cluster_feature
+    - passenger_social_status_cluster_feature
+
 
   pipeline:
     # Order of pipeline must be preserved in order to build model

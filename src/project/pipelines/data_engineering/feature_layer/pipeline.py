@@ -2,7 +2,7 @@
 
 from kedro.pipeline import Pipeline, node, pipeline
 
-from .nodes import feature_data_process
+from .nodes import feature_data_process, clustering_feature_process
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -16,9 +16,23 @@ def create_pipeline(**kwargs) -> Pipeline:
                     "params": "params:feature_transform",
                 },
                 outputs={
+                    "train": "pre_feat_titanic_train",
+                    "test": "pre_feat_titanic_test",
+                    "preprocessor": "feat_preprocessor",
+                },
+                name="pre_feature_data_process",
+            ),
+            node(
+                func=clustering_feature_process,
+                inputs={
+                    "df_train": "pre_feat_titanic_train",
+                    "df_test": "pre_feat_titanic_test",
+                    "params": "params:feature_transform.clustering_features",
+                },
+                outputs={
                     "train": "feat_titanic_train",
                     "test": "feat_titanic_test",
-                    "preprocessor": "feat_preprocessor",
+                    "preprocessor": "cluster_preprocessor",
                 },
                 name="feature_data_process",
             ),

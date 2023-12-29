@@ -3,7 +3,7 @@
 # Documentation for this file format can be found in "The Data Catalog"
 # Link: https://docs.kedro.org/en/stable/data/data_catalog.html
 
-{% for layer in ['raw', 'int', 'prm', 'feat', ] %}
+{% for layer in ['raw', 'int', 'prm', 'feat', 'cluster'] %}
 
 {{ layer }}_preprocessor:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
