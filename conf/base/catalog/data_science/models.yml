@@ -33,7 +33,7 @@
     data_set:
         type: kedro_mlflow.io.models.MlflowModelSaverDataSet
         flavor: mlflow.sklearn
-        filepath: ${base_path}/06_models/{{ model_name }}
+        filepath: ${base_path}/06_models/models/{{ model_name }}
     layer: 06_models
     artifact_path: models/predictive_model
 

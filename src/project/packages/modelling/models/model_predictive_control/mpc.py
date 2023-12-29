@@ -103,7 +103,10 @@ class ModelPredictiveControlExplorer(BaseEstimator):
         for preprocessor in self.preprocessors:
             data = preprocessor.transform(data)
 
-        proba_prediction = self.model.predict_proba(data)[0][1]
+        try:
+            proba_prediction = self.model.predict_proba(data)[0][1]
+        except Exception:
+            proba_prediction = self.model.predict(data)
         return proba_prediction
 
     def optimize(self, direction="maximize", n_trials=1000):

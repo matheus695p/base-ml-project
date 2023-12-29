@@ -317,5 +317,7 @@ class ClassifierSklearnCompatibleModel(BaseSklearnCompatibleModel):
         # Use the predict_proba method of the fitted model
         if hasattr(self.model, "predict_proba"):
             return self.model.predict_proba(X)
+        elif hasattr(self.model, "predict"):
+            return self.model.predict(X)
         else:
             raise AttributeError("The fitted model does not have a 'predict_proba' method.")
