@@ -9,27 +9,10 @@
     type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
     data_set:
         type: pandas.ParquetDataset
-        filepath: ${base_path}/05_model_input/{{ model_name }}/train_dataset/train_dataset.parquet
+        filepath: ${base_path}/05_model_input/train_dataset/{{ model_name }}/train_dataset.parquet
         # versioned: true
     layer: 05_model_input
     artifact_path: train_datasets/{{ model_name }}
-
-{{ model_name }}.study:
-    type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-    data_set:
-        type: pickle.PickleDataSet
-        filepath: ${base_path}/06_models/{{ model_name }}/hypertune/study.pkl
-        # versioned: true
-    layer: 06_models
-    artifact_path: hypertune/study/{{ model_name }}
-
-
-{{ model_name }}.best_trial_params:
-    type: kedro_mlflow.io.models.MlflowModelSaverDataSet
-    flavor: mlflow.sklearn
-    filepath: ${base_path}/06_models/{{ model_name }}/hypertune/best_trial_params
-    layer: 06_models
-
 
 {{ model_name }}.model_artifact:
     type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
@@ -41,6 +24,31 @@
     layer: 06_models
     artifact_path: models/predictive_model
 
+{{ model_name }}.model_predictive_control_explorer:
+    type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+    data_set:
+        type: kedro_mlflow.io.models.MlflowModelSaverDataSet
+        flavor: mlflow.sklearn
+        filepath: ${base_path}/06_models/model_predictive_control_explorer/{{ model_name }}
+        # versioned: true
+    layer: 06_models
+    artifact_path: models/model_predictive_control_explorer
+
+
+{{ model_name }}.study:
+    type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+    data_set:
+        type: pickle.PickleDataSet
+        filepath: ${base_path}/07_model_output/hypertune/{{ model_name }}/study.pkl
+        # versioned: true
+    layer: 07_model_output
+    artifact_path: hypertune/study/{{ model_name }}
+
+{{ model_name }}.best_trial_params:
+    type: kedro_mlflow.io.models.MlflowModelSaverDataSet
+    flavor: mlflow.sklearn
+    filepath: ${base_path}/07_model_output/hypertune/{{ model_name }}/best_trial_params
+    layer: 07_model_output
 
 {{ model_name }}.cross_validation_metrics:
   type: kedro_mlflow.io.metrics.MlflowMetricsDataSet
@@ -50,7 +58,7 @@
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: text.TextDataSet
-    filepath: ${base_path}/08_reporting/{{ model_name }}/html_reports/hypertune_report_{{ model_name }}.html
+    filepath: ${base_path}/08_reporting/hypertune_report/{{ model_name }}/hypertune_report_{{ model_name }}.html
     fs_args:
       open_args_save:
         encoding: "utf-8"
@@ -62,7 +70,7 @@
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: text.TextDataSet
-    filepath: ${base_path}/08_reporting/{{ model_name }}/html_reports/interpretability_report_{{ model_name }}.html
+    filepath: ${base_path}/08_reporting/interpretability_report/{{ model_name }}/interpretability_report_{{ model_name }}.html
     fs_args:
       open_args_save:
         encoding: "utf-8"
@@ -74,7 +82,7 @@
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: text.TextDataSet
-    filepath: ${base_path}/08_reporting/{{ model_name }}/html_reports/model_predictive_control_report_{{ model_name }}.html
+    filepath: ${base_path}/08_reporting/model_predictive_control_report/{{ model_name }}/model_predictive_control_report_{{ model_name }}.html
     fs_args:
       open_args_save:
         encoding: "utf-8"
@@ -83,16 +91,6 @@
   artifact_path: model_predictive_control_report/{{ model_name }}
 
 
-{{ model_name }}.model_predictive_control_explorer:
-    type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-    data_set:
-        type: kedro_mlflow.io.models.MlflowModelSaverDataSet
-        flavor: mlflow.sklearn
-        filepath: ${base_path}/06_models/model_predictive_control_explorer/{{ model_name }}
-    layer: 06_models
-    artifact_path: models/model_predictive_control_explorer
-    # versioned: true
-
 {% endfor %}
 
 
@@ -100,13 +98,13 @@ global_optimization_report:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: text.TextDataSet
-    filepath: ${base_path}/08_reporting/html_reports/global_optimization_report.html
+    filepath: ${base_path}/08_reporting/global_optimization_report/global_optimization_report.html
     fs_args:
       open_args_save:
         encoding: "utf-8"
     # versioned: true
   layer: 08_reporting
-  artifact_path: model_optimization_report
+  artifact_path: global_model_optimization_report
 
 
 production_model:
@@ -114,7 +112,7 @@ production_model:
     data_set:
         type: kedro_mlflow.io.models.MlflowModelSaverDataSet
         flavor: mlflow.sklearn
-        filepath: ${base_path}/06_models/production_model/{{ model_name }}
+        filepath: ${base_path}/06_models/production_model
     layer: 06_models
     # versioned: true
     artifact_path: production_model

@@ -12,6 +12,8 @@ from project.packages.python_utils.typing.tensors import Matrix, Tensor
 
 from ...reproducibility.set_seed import seed_file
 from ...transformers.columns_selector import ColumnsSelector
+from ...evaluate.classification_metrics import compute_binary_classification_metrics
+
 
 seed_file()
 
@@ -112,63 +114,26 @@ class BaseSklearnCompatibleModel(BaseEstimator):
         logger.info(f"best_value: {best_value}")
 
         # compute test scoring
-        cross_validation_metrics = self._compute_test_cross_validation_metrics(
-            X, y, best_estimator_params, best_value, self.scoring_metrics
+        final_estimator = self.build_model_pipeline(best_estimator_params)
+
+        final_score = self.cross_validate_estimator(
+            final_estimator,
+            X,
+            y,
+            deepcopy(best_estimator_params),
         )
+        scoring_metric = best_estimator_params.get("cv_score", {}).get("scoring", "")
+        logger.info(f"final estimator: {final_estimator}")
+        logger.info(f"final estimator {scoring_metric}: {final_score}")
 
         # mlflow logging metric transform
-        cross_validation_metrics = self.transform_output_dict(cross_validation_metrics)
+        cross_validation_metrics = self.transform_output_dict(self.scores)
 
         return {
             "study": study,
             "best_trial_params": best_estimator_params,
             "cross_validation_metrics": cross_validation_metrics,
         }
-
-    def _compute_test_cross_validation_metrics(
-        self,
-        X: pd.DataFrame,
-        y: pd.DataFrame,
-        best_estimator_params: tp.Dict[str, tp.Any],
-        best_value: float,
-        scoring_metrics: tp.List[str],
-    ) -> tp.Dict[str, float]:
-        """
-        The function computes cross-validation metrics
-        for a given dataset using the best estimator parameters.
-
-        Args:
-            X (pd.DataFrame): X is a pandas DataFrame containing the input features for the model.
-            y (pd.DataFrame): The parameter `y` is a pandas DataFrame that represents the target variable or
-                the dependent variable in your dataset. It contains the values that you are trying to predict or
-                model.
-            best_estimator_params (tp.Dict[str, tp.Any]): The `best_estimator_params` parameter is a
-                dictionary that contains the parameters of the best estimator model. It typically includes
-                information such as the model artifact (serialized model object), cross-validation score, and other
-                relevant parameters.
-            best_value: The parameter `best_value` is the best value obtained for the specified metric during
-                the cross-validation process. It is used to store the best value for the metric in the returned
-                dictionary.
-
-        Returns:
-            (tp.Dict[str, str]) a dictionary containing the best value for the specified metric, as well as
-            the scores for various other metrics obtained through cross-validation.
-        """
-        metric = best_estimator_params["cv_score"]["kwargs"]["scoring"]
-        best_value_metric = {"best_value_" + metric: best_value}
-        test_params = deepcopy(best_estimator_params)
-        for metric in scoring_metrics:
-            logger.debug(f"Computing metric {metric}")
-            estimator = self.build_model_pipeline(best_estimator_params)
-            test_params["cv_score"]["kwargs"]["scoring"] = metric
-            score = self.cross_validate_estimator(
-                estimator,
-                X,
-                y,
-                deepcopy(test_params),
-            )
-            best_value_metric[metric] = score
-        return best_value_metric
 
     def cross_validate_estimator(
         self,
@@ -203,9 +168,21 @@ class BaseSklearnCompatibleModel(BaseEstimator):
         cv_score_params["kwargs"]["y"] = y[y.columns[0]].ravel()
         cv_score_params["kwargs"]["estimator"] = estimator
         cv_score_params["kwargs"]["cv"] = cv_strategy
-        scores = load_object(cv_score_params)
-        mean_score = scores.mean()
-        return mean_score
+
+        scoring_metric = cv_score_params.get("scoring")
+        y_pred = load_object(cv_score_params)
+        y_score = None
+
+        if hasattr(estimator, "predict_proba"):
+            cv_score_params["kwargs"]["method"] = "predict_proba"
+            y_score = load_object(cv_score_params)
+        scores = self.evaluate(y_true=y, y_pred=y_pred, y_score=y_score)
+
+        # assign attributes
+        self.y_pred = pd.DataFrame(y_pred, index=y.index, columns=["prediction"])
+        self.y_score = pd.DataFrame(y_score, index=y.index)
+        self.scores = scores
+        return scores[scoring_metric]
 
     def save_best_model(self, study: optuna.Study, trial: optuna.trial):
         """Callback to save best model params."""
@@ -321,3 +298,18 @@ class ClassifierSklearnCompatibleModel(BaseSklearnCompatibleModel):
             return self.model.predict(X)
         else:
             raise AttributeError("The fitted model does not have a 'predict_proba' method.")
+
+    def evaluate(self, y_true, y_pred, y_score=None):
+        """Evaluate the model performance.
+
+        Args:
+            y_true (pd.DataFrame): The true labels.
+            y_pred (pd.DataFrame): The predicted labels.
+            y_score (pd.DataFrame, optional): The predicted scores of probabilities. Defaults to None.
+
+        Returns:
+            pd.DataFrame: A DataFrame containing the evaluation metrics.
+        """
+        if y_score is not None:
+            y_score = y_score[:, 1]
+        return compute_binary_classification_metrics(y_true=y_true, y_pred=y_pred, y_score=y_score)

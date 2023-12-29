@@ -49,6 +49,7 @@ bayesian_gaussian_mixture.model_artifact:
     class: sklearn.model_selection.KFold
     kwargs:
       n_splits: 5
+      random_state: ${GLOBAL_SEED}
 
   # cross val score
   cv_score:
