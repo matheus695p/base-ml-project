@@ -54,6 +54,7 @@ def _create_pipeline(namespace: str) -> Pipeline:
         "int_preprocessor": "int_preprocessor",
         "prm_preprocessor": "prm_preprocessor",
         "feat_preprocessor": "feat_preprocessor",
+        "cluster_preprocessor": "cluster_preprocessor",
     }
     parameters = {
         "params:raw_transform.schemas": "params:raw_transform.schemas",
