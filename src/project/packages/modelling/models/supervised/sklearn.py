@@ -4,6 +4,7 @@ from copy import deepcopy
 
 import optuna
 import pandas as pd
+import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.pipeline import Pipeline
 
@@ -279,7 +280,6 @@ class BinaryClassifierSklearnPipeline(BaseSklearnCompatibleModel, ClassifierMixi
         """
         if y_score is not None:
             y_score = y_score[:, 1]
-            import numpy as np
 
             if np.isnan(y_score).any():
                 y_score = np.nan_to_num(y_score, nan=0.0)
