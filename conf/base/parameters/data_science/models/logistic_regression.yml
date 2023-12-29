@@ -124,5 +124,5 @@ logistic_regression.model_artifact:
       class: sklearn.linear_model.LogisticRegression
       kwargs:
         C: 'trial.suggest_float("logistic_regression__C", 0.001, 100)'
-        penalty: 'trial.suggest_categorical("logistic_regression__penalty", ["l1", "l2"])'
+        penalty: 'trial.suggest_categorical("logistic_regression__penalty", ["l2",])'
         random_state: ${GLOBAL_SEED}
