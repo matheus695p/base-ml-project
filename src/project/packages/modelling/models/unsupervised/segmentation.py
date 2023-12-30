@@ -1,5 +1,4 @@
 import logging
-import typing as tp
 
 import numpy as np
 import pandas as pd
@@ -8,11 +7,6 @@ from scipy.spatial.distance import euclidean
 from sklearn.base import BaseEstimator, ClusterMixin, TransformerMixin
 from sklearn.cluster import KMeans
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.pipeline import Pipeline
-
-from project.packages.python_utils.load.object_injection import load_estimator, load_object
-
-from ...transformers.columns_selector import ColumnsSelector
 
 logger = logging.getLogger(__name__)
 
@@ -65,11 +59,11 @@ class KMeansElbowSelector(BaseEstimator, TransformerMixin, ClusterMixin):
         self.is_fitted = False
         self.model_args = {"init": "k-means++", "random_state": 42}
 
-    def fit(self, X, y=None):
+    def fit(self, X: pd.DataFrame, y: pd.DataFrame = None):
         wcss = []  # Within-cluster sum of squares
         graph = []
         for i in range(self.min_clusters, self.max_clusters + 1):
-            logger.info(f"Performing clusters with {i} clusters")
+            logger.debug(f"Performing clusters with {i} clusters")
             model = KMeans(n_clusters=i, **self.model_args)
             model.fit(X)
             wcss.append(model.inertia_)
@@ -92,7 +86,7 @@ class KMeansElbowSelector(BaseEstimator, TransformerMixin, ClusterMixin):
 
         return self
 
-    def predict(self, X):
+    def predict(self, X: pd.DataFrame):
         # Assign cluster labels to the input data
         cluster_labels = self.model.predict(X)
         return cluster_labels
@@ -118,7 +112,7 @@ class KMeansElbowSelector(BaseEstimator, TransformerMixin, ClusterMixin):
         logger.info(f"Centroids dictionary -> {self.centroid_indexes}")
         return self
 
-    def get_feature_imp_wcss_min(self):
+    def get_feature_imp_wcss_min(self) -> pd.DataFrame:
         labels = self.model.n_clusters
         centroids = self.model.cluster_centers_
 
@@ -167,14 +161,14 @@ class KMeansElbowSelector(BaseEstimator, TransformerMixin, ClusterMixin):
             data = self.wcss_feature_importances_[[cluster_id]]
             data = data.sort_values(by=cluster_id, ascending=False)
             top_predictors = list(data.head(10).index)
-            logger.info(
+            logger.debug(
                 f"Method: WCSS importance | Top 10 predictors for cluster {cluster_id}: {top_predictors}"
             )
-            logger.info("\n\n")
+            logger.debug("\n\n")
 
         return self.wcss_feature_importances_
 
-    def get_feature_imp_unsup2sup(self):
+    def get_feature_imp_unsup2sup(self) -> pd.DataFrame:
         if isinstance(self.train_data, pd.DataFrame):
             self.ordered_feature_names = self.train_data.columns
         else:
@@ -236,10 +230,10 @@ class KMeansElbowSelector(BaseEstimator, TransformerMixin, ClusterMixin):
             data = self.unsupervised_feature_importance_[[cluster_id]]
             data = data.sort_values(by=cluster_id, ascending=False)
             top_predictors = list(data.head(10).index)
-            logger.info(
+            logger.debug(
                 f"Method: Unsupervised importance | Top 10 predictors for cluster {cluster_id}: {top_predictors}"
             )
-            logger.info("\n\n")
+            logger.debug("\n\n")
 
         return self.unsupervised_feature_importance_
 
@@ -280,50 +274,3 @@ class KMeansElbowSelector(BaseEstimator, TransformerMixin, ClusterMixin):
             raise ValueError(
                 "The model has not been fitted yet. You should fit before getting inertia plot."
             )
-
-
-def build_clustering_pipeline(
-    params: tp.Dict[str, tp.Union[tp.Dict[str, tp.Any], BaseEstimator, TransformerMixin]]
-) -> Pipeline:
-    """
-    Build a scikit-learn pipeline for clustering using the specified parameters.
-
-    This function constructs a scikit-learn pipeline for clustering based on the
-    input parameters provided. The pipeline includes feature selection,
-    feature scaling, and the clustering model.
-
-    Args:
-        params (Dict[str, Union[Dict[str, Any], BaseEstimator, TransformerMixin]]):
-            A dictionary containing parameters for building the clustering pipeline.
-            It should include the following keys:
-            - 'features': A list of feature names or indices to be selected for clustering.
-            - 'cluster': A dictionary with the following keys:
-                - 'scaler': A scikit-learn compatible feature scaling method.
-                - 'model': A scikit-learn compatible clustering model.
-
-    Returns:
-        Pipeline:
-            A scikit-learn pipeline that includes feature selection, feature scaling,
-            and clustering.
-
-    Example:
-        >>> params = {
-        ...     "features": ["feature1", "feature2"],
-        ...     "cluster": {
-        ...         "scaler": StandardScaler(),
-        ...         "model": KMeans(n_clusters=3)
-        ...     }
-        ... }
-        >>> pipeline = build_clustering_pipeline(params)
-        >>> isinstance(pipeline, Pipeline)
-        True
-    """
-    features = params["features"]
-    pipeline = Pipeline(
-        [
-            ("selector", ColumnsSelector(features)),
-            ("seg_scaler", load_object(params["cluster"]["scaler"])),
-            ("cluster", load_estimator(params["cluster"]["model"])),
-        ]
-    )
-    return pipeline
