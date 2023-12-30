@@ -14,7 +14,6 @@ model_serving:
     - metrics.balanced_accuracy
     - metrics.recall_macro
     - metrics.recall
-    - metrics.best_value_f1_weighted
     - metrics.accuracy
     - metrics.roc_auc_ovr_weighted
     - metrics.f1_micro

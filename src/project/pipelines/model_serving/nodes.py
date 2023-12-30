@@ -52,6 +52,7 @@ def get_best_model(params: tp.Dict, models: tp.List[Pipeline]) -> Pipeline:
 
     metrics = pd.concat(dfs_metrics, axis=0).reset_index(drop=True).set_index("model")
     metric_col_names = [col.split(".")[1] for col in metric_cols]
+
     metrics["recent_scores"] = metrics[metric_col_names].mean(axis=1)
     metrics = metrics.sort_values("recent_scores", ascending=False)
     best_model_name = metrics.index[0]

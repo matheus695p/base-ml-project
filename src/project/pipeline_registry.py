@@ -69,5 +69,6 @@ def register_pipelines() -> tp.Dict[str, Pipeline]:
     pipelines["data_science"] = models_pipe
     pipelines["global_reporting"] = global_reporting_pipe
     pipelines["model_predictive_control_explorer"] = mpc_pipe
+    pipelines["model_serving"] = model_serving_pipe
 
     return pipelines
