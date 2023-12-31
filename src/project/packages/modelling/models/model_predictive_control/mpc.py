@@ -40,35 +40,43 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
     }
 
     def __init__(
-        self, model: Pipeline, params: tp.Dict[str, str]
+        self, model: Pipeline, optimizer_params: tp.Dict[str, str]
     ) -> "ModelPredictiveControlOptimizer":
-        # model params
+        # model optimizer_params
         self.model = model
-        self.params = params
-        self.predict_method = params.get("predict_method", "predict")
+        self.optimizer_params = optimizer_params
+        self.predict_method = optimizer_params.get("predict_method", "predict")
 
         # feature to optimize
         self.features = model.model[0].columns
-        self.control_features = params.get("control_features", [])
+        self.control_features = optimizer_params.get("control_features", [])
         self.context_features = [
             feat for feat in self.features if feat not in self.control_features
         ]
 
-        # optimization params
-        self.boundaries = params.get("boundaries", [])
-        self.data_types = params.get("data_types", {})
-        self.direction = params.get("direction", "minimize")
-        self.n_trials = params.get("n_trials", 1000)
-        self.constraints = params.get("constraints", [])
+        # optimization optimizer_params
+        self.boundaries = optimizer_params.get("boundaries", [])
+        self.data_types = optimizer_params.get("data_types", {})
+        self.direction = optimizer_params.get("direction", "minimize")
+        self.n_trials = optimizer_params.get("n_trials", 1000)
+        self.constraints = optimizer_params.get("constraints", [])
 
-        # objective threshold params
-        self.DEFAULT_THRESHOLD_PRUNER_PARAMS["kwargs"]["lower"] = params.get(
+        # objective threshold optimizer_params
+        self.DEFAULT_THRESHOLD_PRUNER_PARAMS["kwargs"]["lower"] = optimizer_params.get(
             "objective_value_boundaries", [-np.inf, np.inf]
         )[0]
-        self.DEFAULT_THRESHOLD_PRUNER_PARAMS["kwargs"]["upper"] = params.get(
+        self.DEFAULT_THRESHOLD_PRUNER_PARAMS["kwargs"]["upper"] = optimizer_params.get(
             "objective_value_boundaries", [-np.inf, np.inf]
         )[1]
 
+        # preprocessing transformers
+        # preprocessing transformers include columns selector and
+        # nan values imputer, transformer is used to get the starting
+        # point of optimization
+        self.preprocessing_transformers = self.model.model[:2]
+
+        # trail numbers
+        self.verbose = optimizer_params.get("verbose", False)
         self.trial_counter = 0
 
     def optimize(self, X: tp.Union[Tensor, Matrix], y: Matrix = None) -> tp.Union[Tensor, Matrix]:
@@ -82,7 +90,9 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
             self.current_data = X[X.index == index]
             # set starting point during optimization
             self.starting_point = (
-                self.current_data[self.control_features].reset_index(drop=True).T.to_dict()[0]
+                self.preprocessing_transformers.transform(self.current_data)[self.control_features]
+                .reset_index(drop=True)
+                .T.to_dict()[0]
             )
             self._check_nan_values_on_starting_point()
 
@@ -105,16 +115,20 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
                 * 100,
                 1,
             )
-            self.uplift = round(self.current_data["uplift"].mean() * 100, 2)
-            msg = (
-                f"Optimized features: {self.current_study.best_params}" + "\n"
-                f"Uplift: {self.uplift} [%]" + "\n"
-                f"Study status: {self.percentage_of_complete_status}% of trials completed"
-            )
-            logger.info(msg)
-
+            # reset trial counter for next optimization step
             self.trial_counter = 0
             dfs.append(self.current_data)
+
+            if self.verbose:
+                X_optimized = pd.concat(dfs, axis=0)
+                self.uplift = round(self.current_data["uplift"].mean() * 100, 2)
+                self.global_uplift = round(X_optimized["uplift"].mean() * 100, 2)
+                msg = (
+                    f"Optimized features: {self.current_study.best_params}" + "\n"
+                    f"Uplift: {self.uplift} [%] / Global uplift: {self.global_uplift} [%]" + "\n"
+                    f"Study status: {self.percentage_of_complete_status}% of trials completed"
+                )
+                logger.info(msg)
 
         X_optimized = pd.concat(dfs, axis=0)
         self.X_optimized = X_optimized
@@ -170,22 +184,22 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
     def _get_trial_object(self, trial: optuna.Trial) -> tp.Dict[str, optuna.trial.Trial]:
         trial_object = {}
         for feat in self.control_features:
-            classification = self.data_types[feat]
+            param_data_type = self.data_types[feat]
             boundary = self._get_feature_boundary(feat)
 
-            if classification == "binary":
+            if param_data_type == "binary":
                 trial_param = trial.suggest_categorical(feat, [0, 1])
 
-            elif classification == "int":
+            elif param_data_type == "int":
 
                 trial_param = trial.suggest_int(feat, boundary[0], boundary[1])
 
-            elif classification == "float":
+            elif param_data_type == "float":
                 trial_param = trial.suggest_float(feat, boundary[0], boundary[1])
 
             else:
                 msg = (
-                    f"feature {feat} with data type as **{classification}** is not available as optuna trial param, "
+                    f"feature {feat} with data type as **{param_data_type}** is not available as optuna trial param, "
                     "please try with **object, binary, int or float** options"
                 )
                 raise KeyError(msg)
