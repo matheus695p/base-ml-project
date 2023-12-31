@@ -55,6 +55,7 @@ class BaseSklearnCompatibleModel(BaseEstimator, MlflowTransformations):
                 ("columns_selector", ColumnsSelector(columns=params["features"])),
                 ("imputer", load_object(params["pipeline"]["imputer"])),
                 ("scaler", load_object(params["pipeline"]["scaler"])),
+                ("feature_selector", load_object(params["pipeline"]["feature_selector"])),
                 ("model", load_object(params["pipeline"]["model"])),
             ],
         )
