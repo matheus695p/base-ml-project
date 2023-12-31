@@ -29,20 +29,23 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
         },
     }
 
-    DEFAULT_PRUNER_PARAMS = {
+    DEFAULT_BASE_PRUNER_PARAMS = {
         "class": "optuna.pruners.SuccessiveHalvingPruner",
         "kwargs": {},
+    }
+
+    DEFAULT_THRESHOLD_PRUNER_PARAMS = {
+        "class": "optuna.pruners.ThresholdPruner",
+        "kwargs": {"upper": np.inf, "lower": -np.inf},
     }
 
     def __init__(
         self, model: Pipeline, params: tp.Dict[str, str]
     ) -> "ModelPredictiveControlOptimizer":
+        # model params
         self.model = model
         self.params = params
         self.predict_method = params.get("predict_method", "predict")
-        self.direction = params.get("direction", "minimize")
-        self.n_trials = params.get("n_trials", 1000)
-        self.constraints = params.get("constraints", [])
 
         # feature to optimize
         self.features = model.model[0].columns
@@ -54,6 +57,18 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
         # optimization params
         self.boundaries = params.get("boundaries", [])
         self.data_types = params.get("data_types", {})
+        self.direction = params.get("direction", "minimize")
+        self.n_trials = params.get("n_trials", 1000)
+        self.constraints = params.get("constraints", [])
+
+        # objective threshold params
+        self.DEFAULT_THRESHOLD_PRUNER_PARAMS["kwargs"]["lower"] = params.get(
+            "objective_value_boundaries", [-np.inf, np.inf]
+        )[0]
+        self.DEFAULT_THRESHOLD_PRUNER_PARAMS["kwargs"]["upper"] = params.get(
+            "objective_value_boundaries", [-np.inf, np.inf]
+        )[1]
+
         self.trial_counter = 0
 
     def optimize(self, X: tp.Union[Tensor, Matrix], y: Matrix = None) -> tp.Union[Tensor, Matrix]:
@@ -93,7 +108,7 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
             self.uplift = round(self.current_data["uplift"].mean() * 100, 2)
             msg = (
                 f"Optimized features: {self.current_study.best_params}" + "\n"
-                f"Uplift: {self.uplift}" + "\n"
+                f"Uplift: {self.uplift} [%]" + "\n"
                 f"Study status: {self.percentage_of_complete_status}% of trials completed"
             )
             logger.info(msg)
@@ -186,7 +201,8 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
             pruner=MultiplePruners(
                 (
                     ExpressionConstraintsPruner(self.constraints),
-                    load_object(self.DEFAULT_PRUNER_PARAMS),
+                    load_object(self.DEFAULT_BASE_PRUNER_PARAMS),
+                    load_object(self.DEFAULT_THRESHOLD_PRUNER_PARAMS),
                 ),
             ),
         )
