@@ -11,7 +11,8 @@ from sklearn.pipeline import Pipeline
 from project.packages.python_utils.load.object_injection import load_object
 
 from ....python_utils.typing import Matrix, Tensor
-from .constraints import ExpressionConstraintsPruner
+from .constraints import MultiplePruners, ExpressionConstraintsPruner
+
 
 logger = logging.getLogger(__name__)
 optuna.logging.set_verbosity(optuna.logging.WARNING)
@@ -28,20 +29,29 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
         },
     }
 
+    DEFAULT_PRUNER_PARAMS = {
+        "class": "optuna.pruners.SuccessiveHalvingPruner",
+        "kwargs": {},
+    }
+
     def __init__(
         self, model: Pipeline, params: tp.Dict[str, str]
     ) -> "ModelPredictiveControlOptimizer":
         self.model = model
         self.params = params
-        self.direction = params["direction"]
+        self.predict_method = params.get("predict_method", "predict")
+        self.direction = params.get("direction", "minimize")
         self.n_trials = params.get("n_trials", 1000)
         self.constraints = params.get("constraints", [])
-        self.unnecessary_features = params.get("unnecessary_features", [])
+
+        # feature to optimize
         self.features = model.model[0].columns
         self.control_features = params.get("control_features", [])
         self.context_features = [
             feat for feat in self.features if feat not in self.control_features
         ]
+
+        # optimization params
         self.boundaries = params.get("boundaries", [])
         self.data_types = params.get("data_types", {})
         self.trial_counter = 0
@@ -50,8 +60,7 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
         self.object_columns = [
             col for col in list(X.select_dtypes(include=["object"]).columns) if col in self.features
         ]
-        X["prediction"] = self.model.predict(X)
-        X["proba_prediction"] = self.model.predict_proba(X)[:, 1]
+        X["prediction"] = self.inference(method_name=self.predict_method, data=X)
 
         dfs = []
         for index in X.index:
@@ -70,7 +79,7 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
             # save results
             self.current_data["optimized_value"] = self.current_optimized_value
             self.current_data["uplift"] = (
-                self.current_optimized_value - self.current_data["proba_prediction"]
+                self.current_optimized_value - self.current_data["prediction"]
             )
 
             # analyse study results
@@ -81,8 +90,13 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
                 * 100,
                 1,
             )
-
-            logger.info(f"Study status: {self.percentage_of_complete_status}% of trials completed")
+            self.uplift = round(self.current_data["uplift"].mean() * 100, 2)
+            msg = (
+                f"Optimized features: {self.current_study.best_params}" + "\n"
+                f"Uplift: {self.uplift}" + "\n"
+                f"Study status: {self.percentage_of_complete_status}% of trials completed"
+            )
+            logger.info(msg)
 
             self.trial_counter = 0
             dfs.append(self.current_data)
@@ -91,6 +105,20 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
         self.X_optimized = X_optimized
 
         return X_optimized
+
+    def inference(self, method_name: str, data: pd.DataFrame) -> float:
+        if hasattr(self.model, method_name) and callable(getattr(self.model, method_name)):
+            method = getattr(self.model.model, method_name)
+            result = method(data)
+
+            if method_name == "predict":
+                prediction = result
+            elif method_name == "predict_proba":
+                prediction = result[:, 1]
+            return prediction
+
+        else:
+            raise ValueError(f"Method {method_name} not found in model {self.model}")
 
     def _assign_optimized_features(self, current_study: optuna.Study) -> pd.DataFrame:
         best_controlers = current_study.best_params
@@ -101,7 +129,9 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
             self.context_features
             + self.control_features
             + list(best_controlers.keys())
-            + ["prediction", "proba_prediction"]
+            + [
+                "prediction",
+            ]
         ]
         return self.current_data
 
@@ -115,14 +145,18 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
                 )
                 self.starting_point[feat] = np.mean(self.boundaries[feat])
 
+    def _get_feature_boundary(self, feat: str) -> tp.Tuple[float, float]:
+        if self.trial_counter == 0:
+            boundary = (self.starting_point[feat], self.starting_point[feat])
+        else:
+            boundary = self.boundaries[feat]
+        return boundary
+
     def _get_trial_object(self, trial: optuna.Trial) -> tp.Dict[str, optuna.trial.Trial]:
         trial_object = {}
         for feat in self.control_features:
             classification = self.data_types[feat]
-            if self.trial_counter == 0:
-                boundary = (self.starting_point[feat], self.starting_point[feat])
-            else:
-                boundary = self.boundaries[feat]
+            boundary = self._get_feature_boundary(feat)
 
             if classification == "binary":
                 trial_param = trial.suggest_categorical(feat, [0, 1])
@@ -145,18 +179,20 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
 
         return trial_object
 
-    def _optimize(self, direction: str = "maximize", n_trials: int = 1000) -> optuna.Study:
+    def _optimize(self, direction: str = "minimize", n_trials: int = 1000) -> optuna.Study:
         study = optuna.create_study(
             direction=direction,
             sampler=load_object(self.DEFAULT_SAMPLER_PARAMS),
-            pruner=ExpressionConstraintsPruner(self.constraints),
+            pruner=MultiplePruners(
+                (
+                    ExpressionConstraintsPruner(self.constraints),
+                    load_object(self.DEFAULT_PRUNER_PARAMS),
+                ),
+            ),
         )
-        study.optimize(self.objective_function, n_trials=n_trials)
-        optimized_features = study.best_params
-        best_value = study.best_value
 
-        logger.info(f"Optimized features: {optimized_features}")
-        logger.info(f"Optimized value: {best_value}")
+        study.optimize(self.objective_function, n_trials=n_trials)
+
         return study
 
     def objective_function(self, trial: optuna.Study) -> float:
@@ -172,10 +208,7 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
         X_optimize = pd.concat([X_context, X_control], axis=1)
         X_optimize = X_optimize[self.features]
 
-        # TODO: add this to the predict method
-        # predict = self.model.predict(X_optimize)[0]
-
-        predict = self.model.predict_proba(X_optimize)[0][1]
+        predict = self.inference(method_name=self.predict_method, data=X_optimize)
 
         self.trial_counter += 1
         return predict

@@ -1,4 +1,5 @@
 import optuna
+import typing as tp
 
 
 class ExpressionConstraintsPruner(optuna.pruners.BasePruner):
@@ -32,7 +33,7 @@ class ExpressionConstraintsPruner(optuna.pruners.BasePruner):
         else:
             return True  # prune the trial if the constraints are not met.
 
-    def _prune(self, args):
+    def _prune(self, args: tp.Dict[str, float]) -> bool:
         for expr in self.constraints:
             for feature, value in args.items():
                 expr = expr.replace(feature, str(value))
@@ -40,3 +41,31 @@ class ExpressionConstraintsPruner(optuna.pruners.BasePruner):
             if not is_constraint_true:
                 return False  # prune the trial if any constraint is not met.
         return True  # don't prune the trial if all constraints are met.
+
+
+class MultiplePruners(optuna.pruners.BasePruner):
+    def __init__(
+        self,
+        pruners: tp.Iterable[optuna.pruners.BasePruner],
+        pruning_condition: str = "any",
+    ) -> None:
+
+        self._pruners = tuple(pruners)
+
+        self._pruning_condition_check_fn = None
+        if pruning_condition == "any":
+            self._pruning_condition_check_fn = any
+        elif pruning_condition == "all":
+            self._pruning_condition_check_fn = all
+        else:
+            raise ValueError(f"Invalid pruning ({pruning_condition}) condition passed!")
+        assert self._pruning_condition_check_fn is not None
+
+    def prune(
+        self,
+        study: optuna.study.Study,
+        trial: optuna.trial.FrozenTrial,
+    ) -> bool:
+        return self._pruning_condition_check_fn(
+            pruner.prune(study, trial) for pruner in self._pruners
+        )
