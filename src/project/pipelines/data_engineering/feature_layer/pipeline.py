@@ -2,7 +2,7 @@
 
 from kedro.pipeline import Pipeline, node, pipeline
 
-from .nodes import feature_data_process, clustering_feature_process
+from .nodes import clustering_feature_process, feature_data_process
 
 
 def create_pipeline(**kwargs) -> Pipeline:

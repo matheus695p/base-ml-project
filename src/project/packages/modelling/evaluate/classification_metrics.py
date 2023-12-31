@@ -1,15 +1,17 @@
 import typing as tp
+
 import numpy as np
-from ...python_utils.typing import Vector, Matrix
 from sklearn.metrics import (
     accuracy_score,
     balanced_accuracy_score,
     f1_score,
+    matthews_corrcoef,
     precision_score,
     recall_score,
     roc_auc_score,
-    matthews_corrcoef,
 )
+
+from ...python_utils.typing import Matrix, Vector
 
 
 def compute_binary_classification_metrics(
@@ -53,17 +55,17 @@ def compute_binary_classification_metrics(
         "accuracy": accuracy_score(y_true, y_pred),
         "balanced_accuracy": balanced_accuracy_score(y_true, y_pred),
         "f1": f1_score(y_true, y_pred),
-        "f1_micro": f1_score(y_true, y_pred, average='micro'),
-        "f1_macro": f1_score(y_true, y_pred, average='macro'),
-        "f1_weighted": f1_score(y_true, y_pred, average='weighted'),
+        "f1_micro": f1_score(y_true, y_pred, average="micro"),
+        "f1_macro": f1_score(y_true, y_pred, average="macro"),
+        "f1_weighted": f1_score(y_true, y_pred, average="weighted"),
         "precision": precision_score(y_true, y_pred),
-        "precision_micro": precision_score(y_true, y_pred, average='micro'),
-        "precision_macro": precision_score(y_true, y_pred, average='macro'),
-        "precision_weighted": precision_score(y_true, y_pred, average='weighted'),
+        "precision_micro": precision_score(y_true, y_pred, average="micro"),
+        "precision_macro": precision_score(y_true, y_pred, average="macro"),
+        "precision_weighted": precision_score(y_true, y_pred, average="weighted"),
         "recall": recall_score(y_true, y_pred),
-        "recall_micro": recall_score(y_true, y_pred, average='micro'),
-        "recall_macro": recall_score(y_true, y_pred, average='macro'),
-        "recall_weighted": recall_score(y_true, y_pred, average='weighted'),
+        "recall_micro": recall_score(y_true, y_pred, average="micro"),
+        "recall_macro": recall_score(y_true, y_pred, average="macro"),
+        "recall_weighted": recall_score(y_true, y_pred, average="weighted"),
         "matthews_corrcoef": matthews_corrcoef(y_true, y_pred),
     }
 
@@ -71,13 +73,13 @@ def compute_binary_classification_metrics(
     if y_score is not None:
         prob_scores = {
             "roc_auc": roc_auc_score(y_true, y_score),
-            "roc_auc_ovr": roc_auc_score(y_true, y_score, multi_class='ovr'),
-            "roc_auc_ovo": roc_auc_score(y_true, y_score, multi_class='ovo'),
+            "roc_auc_ovr": roc_auc_score(y_true, y_score, multi_class="ovr"),
+            "roc_auc_ovo": roc_auc_score(y_true, y_score, multi_class="ovo"),
             "roc_auc_ovr_weighted": roc_auc_score(
-                y_true, y_score, multi_class='ovr', average='weighted'
+                y_true, y_score, multi_class="ovr", average="weighted"
             ),
             "roc_auc_ovo_weighted": roc_auc_score(
-                y_true, y_score, multi_class='ovo', average='weighted'
+                y_true, y_score, multi_class="ovo", average="weighted"
             ),
         }
         metrics.update(prob_scores)

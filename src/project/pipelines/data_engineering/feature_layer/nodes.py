@@ -4,10 +4,10 @@ import typing as tp
 
 import pandas as pd
 
-from project.packages.preprocessing.transformers.feature import FeatureDataProcessor
 from project.packages.modelling.models.unsupervised.clustering_features import (
     KMeansClusteringFeatures,
 )
+from project.packages.preprocessing.transformers.feature import FeatureDataProcessor
 
 
 def feature_data_process(

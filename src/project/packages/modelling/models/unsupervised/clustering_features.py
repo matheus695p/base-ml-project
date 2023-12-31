@@ -1,10 +1,10 @@
 import logging
+
 from sklearn.base import BaseEstimator, ClusterMixin, TransformerMixin
 from sklearn.pipeline import Pipeline
 
-from project.packages.python_utils.load.object_injection import load_estimator, load_object
-
 from project.packages.modelling.transformers.columns_selector import ColumnsSelector
+from project.packages.python_utils.load.object_injection import load_estimator, load_object
 
 logger = logging.getLogger(__name__)
 
