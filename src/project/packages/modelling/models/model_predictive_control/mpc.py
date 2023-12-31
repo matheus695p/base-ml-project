@@ -158,7 +158,7 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
         self.object_columns = [
             col for col in list(X.select_dtypes(include=["object"]).columns) if col in self.features
         ]
-        X["prediction"] = self.inference(method_name=self.predict_method, data=X)
+        X["prediction"] = self.inference(data=X, method_name=self.predict_method)
 
         dfs = []
         for index in X.index:
@@ -210,7 +210,7 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
 
         return X_optimized
 
-    def inference(self, method_name: str, data: pd.DataFrame) -> float:
+    def inference(self, data: pd.DataFrame, method_name: str) -> float:
         """Perform inference using a specified method of the machine learning model.
 
         This method allows you to perform inference using a specific method of the machine
@@ -422,7 +422,7 @@ class ModelPredictiveControlOptimizer(BaseEstimator):
         X_optimize = pd.concat([X_context, X_control], axis=1)
         X_optimize = X_optimize[self.features]
 
-        predict = self.inference(method_name=self.predict_method, data=X_optimize)
+        predict = self.inference(data=X_optimize, method_name=self.predict_method)
 
         self.trial_counter += 1
         return predict
