@@ -7,6 +7,7 @@ from scipy.spatial.distance import euclidean
 from sklearn.base import BaseEstimator, ClusterMixin, TransformerMixin
 from sklearn.cluster import KMeans
 from sklearn.ensemble import RandomForestClassifier
+from ....python_utils.typing import Vector, Matrix
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +60,20 @@ class KMeansElbowSelector(BaseEstimator, TransformerMixin, ClusterMixin):
         self.is_fitted = False
         self.model_args = {"init": "k-means++", "random_state": 42}
 
-    def fit(self, X: pd.DataFrame, y: pd.DataFrame = None):
+    def fit(self, X: Matrix, y: Vector = None) -> "KMeansElbowSelector":
+        """Fit the KMeansElbowSelector to the input data.
+
+        This method fits the KMeansElbowSelector to the input data, identifies the optimal
+        number of clusters using the elbow method, and stores relevant attributes.
+
+        Args:
+            X (Matrix): The input feature matrix.
+            y (Vector, optional): The target variable. Defaults to None.
+
+        Returns:
+            KMeansElbowSelector: The fitted instance of the class.
+
+        """
         wcss = []  # Within-cluster sum of squares
         graph = []
         for i in range(self.min_clusters, self.max_clusters + 1):
@@ -86,12 +100,32 @@ class KMeansElbowSelector(BaseEstimator, TransformerMixin, ClusterMixin):
 
         return self
 
-    def predict(self, X: pd.DataFrame):
+    def predict(self, X: Matrix) -> Vector:
+        """Predict cluster labels for input data.
+
+        This method assigns cluster labels to the input data based on the fitted K-Means model.
+
+        Args:
+            X (Matrix): The input feature matrix.
+
+        Returns:
+            Vector: Cluster labels assigned to the input data.
+
+        """
         # Assign cluster labels to the input data
         cluster_labels = self.model.predict(X)
         return cluster_labels
 
     def _get_cluster_centroids_index(self):
+        """Get the index of data points nearest to cluster centroids.
+
+        This method calculates the data points in the training data that are closest to each
+        cluster's centroid and stores their indexes.
+
+        Returns:
+            KMeansElbowSelector: The instance of the class with centroid indexes.
+
+        """
         # Get the cluster centroids
         self.centroid_indexes = {}
         if isinstance(self.train_data, pd.DataFrame):
@@ -113,6 +147,15 @@ class KMeansElbowSelector(BaseEstimator, TransformerMixin, ClusterMixin):
         return self
 
     def get_feature_imp_wcss_min(self) -> pd.DataFrame:
+        """Get feature importances using the WCSS method.
+
+        This method calculates feature importances for each cluster using the WCSS method
+        and stores the results.
+
+        Returns:
+            pd.DataFrame: A DataFrame containing feature importances.
+
+        """
         labels = self.model.n_clusters
         centroids = self.model.cluster_centers_
 
@@ -169,6 +212,15 @@ class KMeansElbowSelector(BaseEstimator, TransformerMixin, ClusterMixin):
         return self.wcss_feature_importances_
 
     def get_feature_imp_unsup2sup(self) -> pd.DataFrame:
+        """Get feature importances using unsupervised-to-supervised conversion.
+
+        This method calculates feature importances for each cluster using an
+        unsupervised-to-supervised conversion approach and stores the results.
+
+        Returns:
+            pd.DataFrame: A DataFrame containing feature importances.
+
+        """
         if isinstance(self.train_data, pd.DataFrame):
             self.ordered_feature_names = self.train_data.columns
         else:
@@ -240,6 +292,15 @@ class KMeansElbowSelector(BaseEstimator, TransformerMixin, ClusterMixin):
     def find_optimal_num_clusters(
         self,
     ):
+        """Find the optimal number of clusters using the elbow method.
+
+        This method calculates the optimal number of clusters using the elbow method based
+        on the within-cluster sum of squares (WCSS).
+
+        Returns:
+            int: The optimal number of clusters.
+
+        """
         graph = pd.DataFrame(self.graph, columns=["number_of_clusters", "inertia"])
         # Calculate the first derivative of the change in wcss
         graph["change_in_wcss"] = graph["inertia"].diff()
@@ -253,7 +314,18 @@ class KMeansElbowSelector(BaseEstimator, TransformerMixin, ClusterMixin):
     def get_inertia_plot(
         self,
     ) -> px.line:
-        """Get inertia plot."""
+        """Get an inertia plot.
+
+        This method generates a plot of inertia values for different numbers of clusters
+        and highlights the optimal number of clusters selected using the elbow method.
+
+        Returns:
+            px.line: A Plotly line chart.
+
+        Raises:
+            ValueError: If the model has not been fitted yet.
+
+        """
         if self.is_fitted:
             title = f"k-Means Inertia Plot | Optimal number of cluster is {self.optimal_num_clusters} segments"
             graph = pd.DataFrame(self.graph, columns=["number_of_clusters", "inertia"])

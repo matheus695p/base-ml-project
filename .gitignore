@@ -169,3 +169,5 @@ venv.bak/
 
 
 mlruns/**
+
+src/project/apis/model_serving/cache/**

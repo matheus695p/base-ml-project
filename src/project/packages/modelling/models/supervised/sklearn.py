@@ -23,6 +23,23 @@ logger = logging.getLogger(__name__)
 
 
 class BaseSklearnCompatibleModel(BaseEstimator, MlflowTransformations):
+    """A base class for Sklearn-compatible machine learning models with hyperparameter tuning.
+
+    This class serves as a base for implementing Sklearn-compatible machine learning models
+    with hyperparameter tuning capabilities using Optuna and cross-validation.
+
+    Args:
+        params (Dict[str, str]): A dictionary containing model parameters.
+
+    Attributes:
+        params (Dict[str, str]): The model parameters.
+        is_fitted (bool): Indicates whether the model has been fitted.
+        target (str): The target variable.
+        features (List[str]): The list of feature names.
+        scoring_metrics (List[str]): The list of scoring metrics to use during hyperparameter tuning.
+
+    """
+
     def __init__(self, params: tp.Dict[str, str]) -> "BaseSklearnCompatibleModel":
 
         self.params = params
@@ -32,9 +49,29 @@ class BaseSklearnCompatibleModel(BaseEstimator, MlflowTransformations):
         self.scoring_metrics = params.get("scoring_metrics", [])
 
     def get_params(self, deep: bool = True) -> tp.Dict[str, str]:
+        """Get model parameters.
+
+        Args:
+            deep (bool, optional): Whether to return a deep copy of the parameters. Defaults to True.
+
+        Returns:
+            Dict[str, str]: The model parameters.
+        """
         return self.params
 
     def fit(self, X: pd.DataFrame, y: pd.DataFrame = None) -> "BaseSklearnCompatibleModel":
+        """Fit the model and perform hyperparameter tuning.
+
+        This method fits the model, performs hyperparameter tuning using Optuna and cross-validation,
+        and stores the best model.
+
+        Args:
+            X (pd.DataFrame): The input features.
+            y (pd.DataFrame, optional): The target variable. Defaults to None.
+
+        Returns:
+            BaseSklearnCompatibleModel: The fitted instance of the class.
+        """
         seed_file()
         self.hypertune_results = self.hypertune_cross_validated_model(
             X=X,
@@ -50,6 +87,14 @@ class BaseSklearnCompatibleModel(BaseEstimator, MlflowTransformations):
         return self
 
     def build_model_pipeline(self, params):
+        """Build a Scikit-learn pipeline for the model params.
+
+        Args:
+            params: The hyperparameters and pipeline configuration.
+
+        Returns:
+            Pipeline: The Scikit-learn pipeline for the model.
+        """
         pipeline = Pipeline(
             [
                 ("columns_selector", ColumnsSelector(columns=params["features"])),
@@ -62,6 +107,14 @@ class BaseSklearnCompatibleModel(BaseEstimator, MlflowTransformations):
         return pipeline
 
     def predict(self, X: pd.DataFrame):
+        """Make predictions using the fitted model.
+
+        Args:
+            X (pd.DataFrame): The input features for prediction.
+
+        Returns:
+            array-like: The model's predictions.
+        """
         return self.model.predict(X)
 
     def hypertune_cross_validated_model(
@@ -191,7 +244,12 @@ class BaseSklearnCompatibleModel(BaseEstimator, MlflowTransformations):
         return scores[scoring_metric]
 
     def save_best_model(self, study: optuna.Study, trial: optuna.trial):
-        """Callback to save best model params."""
+        """Callback to save the best model parameters.
+
+        Args:
+            study (optuna.Study): The Optuna study object.
+            trial (optuna.Trial): The current trial.
+        """
         if study.best_trial.number == trial.number:
             study.set_user_attr(key="estimator_params", value=trial.user_attrs["estimator_params"])
 
@@ -206,11 +264,11 @@ class BaseSklearnCompatibleModel(BaseEstimator, MlflowTransformations):
         cross validation result for a given trial model pipeline.
 
         Args:
-        trial (optuna.Trial): optuna.Trial
-        **kwargs (tp.Any): kwargs of parameters for cross validation.
+            trial (optuna.Trial): The current Optuna trial.
+            **kwargs: Additional keyword arguments.
 
         Returns:
-        Cross validation error.
+            float: The cross-validation score.
         """
         params = kwargs.get("params", {})
         X = kwargs.get("X")
@@ -240,12 +298,11 @@ class BaseSklearnCompatibleModel(BaseEstimator, MlflowTransformations):
         with "trial." with the corresponding value from the trial object.
 
         Args:
-        d (dict): dict
-        trial (optuna.Trial): optuna.Trial
+            d (dict): The dictionary containing parameters.
+            trial (optuna.Trial): The Optuna trial object.
 
         Returns:
-        A dictionary with the values of the dictionary d replaced with the values of the
-        optuna trial.
+            dict: The dictionary with injected trial parameters.
         """
         for k, v in d.items():
             if isinstance(v, dict):
@@ -256,17 +313,46 @@ class BaseSklearnCompatibleModel(BaseEstimator, MlflowTransformations):
 
 
 class BinaryClassifierSklearnPipeline(BaseSklearnCompatibleModel, ClassifierMixin):
+    """A class for binary classification Sklearn-compatible pipelines with hyperparameter tuning.
+
+    This class extends the `BaseSklearnCompatibleModel` class to create binary classification pipelines
+    with hyperparameter tuning capabilities using Optuna and cross-validation.
+
+    Args:
+        params (Dict[str, str]): A dictionary containing model parameters.
+
+    Attributes:
+        params (Dict[str, str]): The model parameters.
+
+    """
+
     def __init__(self, params: tp.Dict[str, str]) -> "BinaryClassifierSklearnPipeline":
         super().__init__(params)
 
     def predict_proba(self, X: pd.DataFrame) -> pd.DataFrame:
+        """Predict class probabilities for binary classification.
+
+        This method predicts class probabilities using the `predict_proba` method of the fitted model.
+
+        Args:
+            X (pd.DataFrame): The input features for prediction.
+
+        Returns:
+            pd.DataFrame: A DataFrame containing class probabilities.
+
+        Raises:
+            AttributeError: If the fitted model does not have a 'predict_proba' or 'predict' method.
+
+        """
         # Use the predict_proba method of the fitted model
         if hasattr(self.model, "predict_proba"):
             return self.model.predict_proba(X)
         elif hasattr(self.model, "predict"):
             return self.model.predict(X)
         else:
-            raise AttributeError("The fitted model does not have a 'predict_proba' method.")
+            raise AttributeError(
+                "The fitted model does not have a 'predict_proba' method or 'predict' method."
+            )
 
     def evaluate(self, y_true, y_pred, y_score=None):
         """Evaluate the model performance.

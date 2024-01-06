@@ -10,5 +10,4 @@ NAMESPACES = [
     "neural_network",
     "knn",
     "quadratic_discriminant_analysis",
-    # "svm",
 ]
