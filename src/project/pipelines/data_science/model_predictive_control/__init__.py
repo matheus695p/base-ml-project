@@ -1,6 +1,5 @@
 """
-This is a boilerplate pipeline 'model_segmentation'
-generated using Kedro 0.18.14
+'model predictive_control' Pipelines.
 """
 
 from .pipeline import create_pipeline

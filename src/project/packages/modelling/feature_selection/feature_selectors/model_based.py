@@ -17,13 +17,6 @@ class ModelBasedFeatureSelector(BaseEstimator, TransformerMixin):
 
     Args:
         model_based_params (dict): Parameters to be passed to the SelectFromModel constructor.
-
-    Example:
-        # Create an instance of the feature selector
-        feature_selector = ModelBasedFeatureSelector(model_based_params={"estimator": RandomForestClassifier(), "threshold": 0.2})
-
-        # Fit and transform the feature selector on the dataset
-        X_selected = feature_selector.fit_transform(X, y)
     """
 
     def __init__(self, model_based_params: tp.Dict[str, str]) -> "ModelBasedFeatureSelector":

@@ -57,7 +57,7 @@ class ColumnsSelector(BaseEstimator, TransformerMixin):
         Returns:
             self (ColumnsSelector): The fitted transformer.
         """
-        self._fitted = True
+        self.is_fitted = True
         return self
 
     def transform(self, X):

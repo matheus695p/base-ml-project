@@ -1,5 +1,5 @@
 """
-This is a boilerplate pipeline 'model_reporting'
+This is a boilerplate pipeline 'model_serving'
 generated using Kedro 0.18.14
 """
 

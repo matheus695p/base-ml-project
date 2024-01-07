@@ -1,4 +1,4 @@
-"""Model Segmentation pipeline."""
+"""Predictive modelling pipeline."""
 
 from kedro.pipeline import Pipeline, node, pipeline
 

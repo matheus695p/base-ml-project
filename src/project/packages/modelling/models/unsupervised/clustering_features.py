@@ -93,6 +93,7 @@ class KMeansClusteringFeatures(BaseEstimator, TransformerMixin, ClusterMixin):
             mappers[feature_name] = mapper
 
         self.mappers = mappers
+        self.is_fitted = True
         return self
 
     def transform(self, X: Matrix, y: Vector = None) -> Vector:

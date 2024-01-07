@@ -1,6 +1,5 @@
 """
-This is a boilerplate pipeline 'model_reporting'
-generated using Kedro 0.18.14
+'global reporting pipeline'
 """
 
 from .pipeline import create_pipeline

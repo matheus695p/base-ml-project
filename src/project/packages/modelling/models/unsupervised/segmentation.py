@@ -309,7 +309,7 @@ class KMeansElbowSelector(BaseEstimator, TransformerMixin, ClusterMixin):
         optimal_num_clusters_index = graph["second_derivative"].idxmax()
         # The optimal number of clusters can be obtained from the 'number_of_clusters' column
         optimal_num_clusters = graph.loc[optimal_num_clusters_index, "number_of_clusters"]
-        return optimal_num_clusters
+        return int(optimal_num_clusters)
 
     def get_inertia_plot(
         self,
