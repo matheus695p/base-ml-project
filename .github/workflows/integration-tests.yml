@@ -1,0 +1,27 @@
+name: Continuous Integration
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+jobs:
+  IntegrationTesting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.10.13'
+          cache: 'pip'
+      - name: Install graphviz's requirements
+        run: sudo apt-get install -y python3-dev graphviz libgraphviz-dev pkg-config
+      - name: Install requirements
+        run: pip install -r src/requirements.txt
+      - name: Run Data Engineering Pipelines
+        run: kedro run --pipeline data_engineering
+      - name: Run Data Science Pipeline for XGboost
+        run: kedro run --pipeline data_science --namespace xgboost
