@@ -171,3 +171,7 @@ venv.bak/
 mlruns/**
 
 src/project/apis/model_serving/cache/**
+
+
+!data/01_raw/titanic_train.csv
+!data/01_raw/titanic_test.csv

@@ -23,5 +23,5 @@ jobs:
         run: pip install -r src/requirements.txt
       - name: Run Data Engineering Pipelines
         run: kedro run --pipeline data_engineering
-      - name: Run Data Science Pipeline for XGboost
-        run: kedro run --pipeline data_science --namespace xgboost
+      - name: Run Data Science Pipeline for just a DT
+        run: kedro run --pipeline data_science --namespace decision_tree
