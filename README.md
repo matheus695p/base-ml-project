@@ -1,122 +1,53 @@
-# project
+![Build Status](https://www.repostatus.org/badges/latest/concept.svg)
+
+# Base Machine Learning Project based on Titanic Dataset
 
 ## Overview
 
-This is your new Kedro project, which was generated using `Kedro 0.18.14`.
+ML project using __Titanic Dataset__ as example.
 
-Take a look at the [Kedro documentation](https://docs.kedro.org/) to get started.
+## Challenge Requirements
 
-## Rules and guidelines
+### **Object-Oriented Programming (OOP)**
 
-In order to get the best out of the template:
 
-* Don't remove any lines from the `.gitignore` file we provide
-* Make sure your results can be reproduced by following a [data engineering convention](https://docs.kedro.org/en/stable/faq/faq.html#what-is-data-engineering-convention)
-* Don't commit data to your repository
-* Don't commit any credentials or your local configuration to your repository. Keep all your credentials and local configuration in `conf/local/`
+<div class="alert alert-info">
+<b></b>
 
-## How to install dependencies
+> The project's codebase adheres to Object-Oriented Programming (OOP) principles. It follows the scikit-learn Transformers and Estimators schema and object injection, facilitating modularity and extensibility. This design enables compatibility with any machine learning model that adheres to the scikit-learn schema. The project's codebase is thoughtfully organized to support seamless object injection.
 
-Declare any dependencies in `src/requirements.txt` for `pip` installation and `src/environment.yml` for `conda` installation.
+</div>
 
-To install them, run:
 
-```
-pip install -r src/requirements.txt
-```
+### **Command-Line Interface (CLI)**
 
-## How to run your Kedro pipeline
+<div class="alert alert-info">
+<b></b>
 
-You can run your Kedro project with:
+> The project includes a command-line interface (CLI) that allow users to interact with the code in a streamlined manner. This CLI is based and integrated with the Kedro pipeline framework, which segregates data engineering and data science responsibilities. Leveraging Kedro, the project can be scaled in a modular way, simplifying the process of testing and evaluating numerous machine learning models. In this example, 9 different machine learning models are hypertuned, trained and evaluated using the package and scaling in a modular way using kedro modular pipelines.
 
-```
-kedro run
-```
+</div>
 
-## How to test your Kedro project
+### **Testing and Code Coverage**
 
-Have a look at the file `src/tests/test_run.py` for instructions on how to write your tests. You can run your tests as follows:
+<div class="alert alert-info">
+<b></b>
 
-```
-kedro test
-```
+> The project undergoes testing, encompassing both unit and integration tests, resulting in a test coverage of over 90% in the package. Continuous Integration (CI) pipelines, orchestrated by GitHub Actions, are implemented to validate the package comprehensively. These pipelines incorporate integration tests to ensure the seamless functioning of the pipelines and perform code formatting checks to maintain code quality.
 
-To configure the coverage threshold, go to the `.coveragerc` file.
+</div>
 
-## Project dependencies
 
-To generate or update the dependency requirements for your project:
+### **About MLOps**
 
-```
-kedro build-reqs
-```
+#### __MLFlow Integration__
 
-This will `pip-compile` the contents of `src/requirements.txt` into a new file `src/requirements.lock`. You can see the output of the resolution by opening `src/requirements.lock`.
+- The project integrates a local implementation of MLFlow. MLFlow facilitates experiment tracking and model registry management. This integration allows for the logging of experiments, tracking of model performance, saving artifacts, metrics and models. This facilitate the final model productionalization.
 
-After this, if you'd like to update your project requirements, please update `src/requirements.txt` and re-run `kedro build-reqs`.
+#### __API Package__
 
-[Further information about project dependencies](https://docs.kedro.org/en/stable/kedro_project_setup/dependencies.html#project-specific-dependencies)
+- The project incorporates an API package, which has an inference endpoint (that uses Flask and Kedro). This endpoint enables the deployment of the top-performing model as a production-ready API. Users can access the model's predictions through this API, making it readily available for integration into other applications.
 
-## How to work with Kedro and notebooks
+#### __Docker Containerization__
 
-> Note: Using `kedro jupyter` or `kedro ipython` to run your notebook provides these variables in scope: `catalog`, `context`, `pipelines` and `session`.
->
-> Jupyter, JupyterLab, and IPython are already included in the project requirements by default, so once you have run `pip install -r src/requirements.txt` you will not need to take any extra steps before you use them.
-
-### Jupyter
-To use Jupyter notebooks in your Kedro project, you need to install Jupyter:
-
-```
-pip install jupyter
-```
-
-After installing Jupyter, you can start a local notebook server:
-
-```
-kedro jupyter notebook
-```
-
-### JupyterLab
-To use JupyterLab, you need to install it:
-
-```
-pip install jupyterlab
-```
-
-You can also start JupyterLab:
-
-```
-kedro jupyter lab
-```
-
-### IPython
-And if you want to run an IPython session:
-
-```
-kedro ipython
-```
-
-### How to convert notebook cells to nodes in a Kedro project
-You can move notebook code over into a Kedro project structure using a mixture of [cell tagging](https://jupyter-notebook.readthedocs.io/en/stable/changelog.html#release-5-0-0) and Kedro CLI commands.
-
-By adding the `node` tag to a cell and running the command below, the cell's source code will be copied over to a Python file within `src/<package_name>/nodes/`:
-
-```
-kedro jupyter convert <filepath_to_my_notebook>
-```
-> *Note:* The name of the Python file matches the name of the original notebook.
-
-Alternatively, you may want to transform all your notebooks in one go. Run the following command to convert all notebook files found in the project root directory and under any of its sub-folders:
-
-```
-kedro jupyter convert --all
-```
-
-### How to ignore notebook output cells in `git`
-To automatically strip out all output cell contents before committing to `git`, you can run `kedro activate-nbstripout`. This will add a hook in `.git/config` which will run `nbstripout` before anything is committed to `git`.
-
-> *Note:* Your output cells will be retained locally.
-
-## Package your Kedro project
-
-[Further information about building project documentation and packaging your project](https://docs.kedro.org/en/stable/tutorial/package_a_project.html)
+- To ensure the utmost reproducibility and portability, the project supplies a Dockerfile. This Dockerfile permits the encapsulation of the entire project, ensuring that the environment and dependencies remain consistent across different environments. This feature proves particularly valuable in production environments, where deploying the best model is pivotal for informed decision-making.
