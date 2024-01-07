@@ -119,6 +119,24 @@ decision_tree.model_artifact:
           class: 'trial.suggest_categorical("scaler__transformer", ["project.packages.modelling.transformers.scaler.NotScalerTransformer",])'
           kwargs: {}
 
+    # feature selector
+    feature_selector:
+      class: project.packages.modelling.feature_selection.feature_selector_pipeline.FeatureSelector
+      kwargs:
+        fs_params:
+          selectors: ["model_based"]
+          model_based:
+            bypass_features:
+              - passenger_sex_female
+            estimator:
+              class: xgboost.XGBClassifier
+              kwargs:
+                n_estimators: 'trial.suggest_int("fs_mb_xgboost__n_estimators", 10, 500, step=10)'
+                max_depth: 'trial.suggest_int("fs_mb_xgboost__max_depth", 2, 10)'
+                random_state: ${GLOBAL_SEED}
+            threshold: 'trial.suggest_float("fs_mb__threshold", 0.001, 0.1)'
+            prefit: False
+
     # model
     model:
       class: sklearn.tree.DecisionTreeClassifier
