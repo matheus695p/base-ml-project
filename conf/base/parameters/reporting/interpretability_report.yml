@@ -50,4 +50,4 @@ svm.interpretability_report:
 
 logistic_regression.interpretability_report:
   <<: *_interpretability_report
-  namespace: svm
+  namespace: logistic_regression

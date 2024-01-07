@@ -50,4 +50,4 @@ svm.model_performance_report:
 
 logistic_regression.model_performance_report:
   <<: *_model_performance_report
-  namespace: svm
+  namespace: logistic_regression

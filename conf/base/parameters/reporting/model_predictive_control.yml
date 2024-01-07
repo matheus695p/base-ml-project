@@ -50,4 +50,4 @@ svm.model_predictive_control_report:
 
 logistic_regression.model_predictive_control_report:
   <<: *_model_predictive_control
-  namespace: svm
+  namespace: logistic_regression

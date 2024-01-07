@@ -3,7 +3,7 @@ global_modelling_report:
   environment: ${env}
   template_path: notebooks/reporting/global_report.ipynb
   namespace: ""
-  report_name: hypertune_report
+  report_name: models_hypertune_report
   kernel: python3
   timeout: 90000
   remove_code: True

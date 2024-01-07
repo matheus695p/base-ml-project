@@ -50,4 +50,4 @@ svm.hypertune_report:
 
 logistic_regression.hypertune_report:
   <<: *_hypertune_report
-  namespace: svm
+  namespace: logistic_regression
