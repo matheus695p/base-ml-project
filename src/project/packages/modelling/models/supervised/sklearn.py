@@ -36,7 +36,6 @@ class BaseSklearnCompatibleModel(BaseEstimator, MlflowTransformations):
         is_fitted (bool): Indicates whether the model has been fitted.
         target (str): The target variable.
         features (List[str]): The list of feature names.
-        scoring_metrics (List[str]): The list of scoring metrics to use during hyperparameter tuning.
 
     """
 
@@ -46,7 +45,7 @@ class BaseSklearnCompatibleModel(BaseEstimator, MlflowTransformations):
         self.is_fitted = False
         self.target = params.get("target", None)
         self.features = params.get("features", None)
-        self.scoring_metrics = params.get("scoring_metrics", [])
+
 
     def get_params(self, deep: bool = True) -> tp.Dict[str, str]:
         """Get model parameters.

@@ -1,24 +1,4 @@
 svm.model_artifact:
-  scoring_metrics:
-    - accuracy
-    - balanced_accuracy
-    - f1
-    - f1_micro
-    - f1_macro
-    - f1_weighted
-    - precision
-    - precision_micro
-    - precision_macro
-    - precision_weighted
-    - recall
-    - recall_micro
-    - recall_macro
-    - recall_weighted
-    - roc_auc
-    - roc_auc_ovr
-    - roc_auc_ovo
-    - roc_auc_ovr_weighted
-    - roc_auc_ovo_weighted
 
   optuna:
     kwargs_study:
