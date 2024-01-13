@@ -17,6 +17,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 func=create_html_report,
                 inputs=[
                     "params:global_modelling_report",
+                    "feat_titanic_train",
                 ]
                 + model_interpretability_reports,
                 outputs=[

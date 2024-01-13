@@ -1,0 +1,53 @@
+# Use Python 3.10.* as the base image
+FROM python:3.10.13
+
+# Actual dir
+RUN pwd
+
+COPY src/requirements.txt /tmp/requirements.txt
+
+# Update the package list and install GDAL
+RUN apt-get update && \
+    # apt-get install -y gdal-bin python3-gdal && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    # Update the package list and install other dependencies
+    apt-get update && apt-get -y install \
+    && pip install --upgrade pip \
+    && pip install --no-cache-dir -r /tmp/requirements.txt && rm -f /tmp/requirements.txt \
+    && apt-get -y autoremove \
+    && apt-get clean autoclean \
+    && rm -fr /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
+
+# add kedro user
+ARG KEDRO_UID=999
+ARG KEDRO_GID=0
+RUN groupadd -f -g ${KEDRO_GID} kedro_group && \
+    useradd -d /home/kedro -s /bin/bash -g ${KEDRO_GID} -u ${KEDRO_UID} kedro
+
+# Set a working directory
+WORKDIR /home/kedro
+
+# permissions
+RUN chmod -R 777 .
+
+# Copy your project files into the container
+COPY --chown=${KEDRO_UID}:${KEDRO_GID} ./conf /home/kedro/conf
+COPY --chown=${KEDRO_UID}:${KEDRO_GID} ./data/ /home/kedro/data/
+COPY --chown=${KEDRO_UID}:${KEDRO_GID} ./docker /home/kedro/docker
+COPY --chown=${KEDRO_UID}:${KEDRO_GID} ./src /home/kedro/src
+COPY --chown=${KEDRO_UID}:${KEDRO_GID} ./notebooks/ /home/kedro/notebooks
+
+USER kedro
+
+
+# specify the Flask application to run
+ENV FLASK_APP=api
+# specify the application environment mode
+ENV FLASK_ENV=development
+
+# Specify the port on which app is listen
+EXPOSE 80
+
+# Initialize the database and start the application
+ENTRYPOINT ["/bin/bash", "-ci", "gunicorn --bind 0.0.0.0:80 'src.project.apis.model_serving:create_app()'"]

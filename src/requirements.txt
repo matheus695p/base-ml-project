@@ -35,3 +35,4 @@ shap==0.44.0
 jupyter-black==0.3.4
 seaborn==0.13.1
 numpy==1.23.1
+Flask-Caching==2.1.0

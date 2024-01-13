@@ -40,6 +40,7 @@ def _create_pipeline(namespace: str) -> Pipeline:
                 inputs=[
                     "params:model_performance_report",
                     "model_artifact",
+                    "feat_titanic_train",
                 ],
                 outputs=[
                     "model_performance_report",
@@ -53,6 +54,7 @@ def _create_pipeline(namespace: str) -> Pipeline:
                 inputs=[
                     "params:hypertune_report",
                     "model_performance_report",
+                    "feat_titanic_train",
                 ],
                 outputs=[
                     "hypertune_report",
@@ -66,6 +68,7 @@ def _create_pipeline(namespace: str) -> Pipeline:
                 inputs=[
                     "params:interpretability_report",
                     "hypertune_report",
+                    "feat_titanic_train",
                 ],
                 outputs=[
                     "interpretability_report",

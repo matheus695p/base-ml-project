@@ -37,6 +37,7 @@ def _create_pipeline(namespace: str) -> Pipeline:
                 inputs=[
                     "params:model_predictive_control_report",
                     "model_predictive_control_explorer",
+                    "origin_titanic_train",
                 ],
                 outputs=[
                     "model_predictive_control_report",

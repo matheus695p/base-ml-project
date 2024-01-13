@@ -4,7 +4,7 @@
 ###
 .DEFAULT_GOAL     := help_minimal
 
-ENV_NAME = ml_project
+ENV_NAME = titanic-dataset
 PYTHON_VERSION = 3.10.13
 
 
@@ -14,7 +14,7 @@ CONDA_ACTIVATE = source $$(conda info --base)/etc/profile.d/conda.sh ; conda act
 install:
 	conda create --name $(ENV_NAME) -y python=$(PYTHON_VERSION)
 	$(CONDA_ACTIVATE) $(ENV_NAME) && \
-	pip install -r requirements.txt && \
+	pip install -r src/requirements.txt && \
 	pip install pre-commit && \
 	pre-commit install
 	@echo "Environment '$(ENV_NAME)' successfully created"
@@ -32,15 +32,48 @@ _safety: ## check repo safety
 	@echo "Checking Safety"
 	@safety check
 
+
 ###################################
 # API deployment
 ###################################
-# run-api-dev:
-# 	flask src/project/api/model_serving/app.py run --port=5000 --debug
+deploy-model-service-api-dev:
+	flask --app src/project/apis/model_serving run --port=5000 --debug
+
+deploy-model-service-api-prd:
+	gunicorn --bind 0.0.0.0:80 'src.project.apis.model_serving:create_app()'
+
+test-api:
+	python src/project/apis/model_serving/ping_api.py
 
 
-run-api-dev:
-	python src/project/api/model_serving/app.py
+restart-folders:
+	rm -rf data/01_raw/raw
+	rm -rf data/02_intermediate
+	rm -rf data/03_primary
+	rm -rf data/04_feature
+	rm -rf data/05_model_input
+	rm -rf data/06_models
+	rm -rf data/07_model_output
+	rm -rf data/08_reporting
+	mkdir data/02_intermediate
+	mkdir data/03_primary
+	mkdir data/04_feature
+	mkdir data/05_model_input
+	mkdir data/06_models
+	mkdir data/07_model_output
+	mkdir data/08_reporting
+	touch data/02_intermediate/.gitkeep
+	touch data/03_primary/.gitkept
+	touch data/04_feature/.gitkept
+	touch data/05_model_input/.gitkept
+	touch data/06_models/.gitkept
+	touch data/07_model_output/.gitkept
+	touch data/08_reporting/.gitkept
 
-test-api-dev:
-	python src/project/api/model_serving/ping_api.py
+
+###################################
+## Docker build
+###################################
+docker-build:
+	docker buildx install
+	docker buildx build -t titanic:latest --platform linux/amd64 -f docker/Dockerfile.base .

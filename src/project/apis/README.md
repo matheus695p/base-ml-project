@@ -52,7 +52,6 @@ Request Format:
 ```json
 {
     "Body": {
-        "namespace": "model_namespace",
         "features": {
             "feature1": 0.5,
             "feature2": 0.8,
