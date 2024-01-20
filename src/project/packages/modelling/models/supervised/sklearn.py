@@ -46,7 +46,6 @@ class BaseSklearnCompatibleModel(BaseEstimator, MlflowTransformations):
         self.target = params.get("target", None)
         self.features = params.get("features", None)
 
-
     def get_params(self, deep: bool = True) -> tp.Dict[str, str]:
         """Get model parameters.
 
