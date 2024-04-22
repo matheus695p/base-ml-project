@@ -14,8 +14,6 @@ xgboost.model_artifact:
     sampler:
       class: optuna.samplers.TPESampler
       kwargs:
-        n_startup_trials: 0
-        constant_liar: True
         seed: ${GLOBAL_SEED}
 
     # pruner
