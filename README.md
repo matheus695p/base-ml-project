@@ -31,6 +31,7 @@ ML project using __Titanic Dataset__ as example.
 
 > The project's codebase adheres to Object-Oriented Programming (OOP) principles. It follows the scikit-learn Transformers and Estimators schema and object injection, facilitating modularity and extensibility. This design enables compatibility with any machine learning model that adheres to the scikit-learn schema. The project's codebase is thoughtfully organized to support seamless object injection.
 
+
 </div>
 
 [Code Packages](https://github.com/matheus695p/titanic-dataset/tree/main/src/project/packages/README.md)
