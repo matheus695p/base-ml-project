@@ -4,7 +4,7 @@
 ###
 .DEFAULT_GOAL     := help_minimal
 
-ENV_NAME = titanic-dataset
+ENV_NAME = titanic-dataset-test
 PYTHON_VERSION = 3.10.13
 
 
@@ -14,11 +14,11 @@ CONDA_ACTIVATE = source $$(conda info --base)/etc/profile.d/conda.sh ; conda act
 install:
 	conda create --name $(ENV_NAME) -y python=$(PYTHON_VERSION)
 	$(CONDA_ACTIVATE) $(ENV_NAME) && \
-	pip install -r src/requirements.txt && \
-	pip install pre-commit && \
+	pip install uv \
+	uv pip install -r src/requirements.txt && \
+	uv pip install pre-commit && \
 	pre-commit install
 	@echo "Environment '$(ENV_NAME)' successfully created"
-	make create-env-file
 
 _black: ## check code is black formatted
 	@echo "Checking black"
@@ -47,7 +47,6 @@ test-api:
 
 
 restart-folders:
-	rm -rf data/01_raw/raw
 	rm -rf data/02_intermediate
 	rm -rf data/03_primary
 	rm -rf data/04_feature

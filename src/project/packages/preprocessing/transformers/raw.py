@@ -10,14 +10,44 @@ logger = logging.getLogger(__name__)
 
 
 class RawDataProcessor(BaseEstimator, TransformerMixin):
+    """Process raw data for machine learning tasks.
+
+    Args:
+        params (dict): Parameters for data processing.
+
+    Attributes:
+        params (dict): Parameters for data processing.
+
+    """
+
     def __init__(self, params: tp.Dict) -> pd.DataFrame:
+        """Initialize RawDataProcessor."""
         self.params = params
 
     def fit(self, X: pd.DataFrame, y: pd.DataFrame = None) -> "RawDataProcessor":
+        """Fit the raw data processor.
+
+        Args:
+            X (pd.DataFrame): Input data DataFrame.
+            y (pd.DataFrame, optional): Target DataFrame.
+
+        Returns:
+            RawDataProcessor: Fitted data processor.
+
+        """
         self.is_fitted = True
         return self
 
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
+        """Transform the input data.
+
+        Args:
+            X (pd.DataFrame): Input data DataFrame.
+
+        Returns:
+            pd.DataFrame: Transformed DataFrame.
+
+        """
         X = self._validate_data_schema(X)
         X = self._create_new_data_schema(X)
         X = self._validate_data_types(X)
@@ -25,10 +55,32 @@ class RawDataProcessor(BaseEstimator, TransformerMixin):
         return X
 
     def fit_transform(self, X: pd.DataFrame, y: pd.DataFrame = None) -> pd.DataFrame:
+        """Fit and transform the input data.
+
+        Args:
+            X (pd.DataFrame): Input data DataFrame.
+            y (pd.DataFrame, optional): Target DataFrame.
+
+        Returns:
+            pd.DataFrame: Transformed DataFrame.
+
+        """
         self.fit(X, y)
         return self.transform(X)
 
     def _validate_data_schema(self, X: pd.DataFrame) -> pd.DataFrame:
+        """Validate the data schema.
+
+        Args:
+            X (pd.DataFrame): Input data DataFrame.
+
+        Raises:
+            KeyError: If there are missing columns.
+
+        Returns:
+            pd.DataFrame: DataFrame with validated schema.
+
+        """
         target_col = self.params.get("target", None)
         missing_cols = list(set(self.params["schemas"].keys()).difference(set(X.columns)))
         missing_cols = [col for col in missing_cols if col not in [target_col]]
@@ -37,6 +89,15 @@ class RawDataProcessor(BaseEstimator, TransformerMixin):
         return X
 
     def _create_new_data_schema(self, X: pd.DataFrame) -> pd.DataFrame:
+        """Create a new data schema.
+
+        Args:
+            X (pd.DataFrame): Input data DataFrame.
+
+        Returns:
+            pd.DataFrame: DataFrame with new data schema.
+
+        """
         renaming_dict = {
             key: self.params["schemas"][key]["name"] for key in self.params["schemas"].keys()
         }
@@ -44,6 +105,18 @@ class RawDataProcessor(BaseEstimator, TransformerMixin):
         return X
 
     def _validate_data_types(self, X: pd.DataFrame) -> pd.DataFrame:
+        """Validate the data types.
+
+        Args:
+            X (pd.DataFrame): Input data DataFrame.
+
+        Raises:
+            TypeError: If the data types do not match the expected schema.
+
+        Returns:
+            pd.DataFrame: DataFrame with validated data types.
+
+        """
         # data validation dict
         data_validation_dict = {
             self.params["schemas"][key]["name"]: self.params["schemas"][key]["dtype"]
@@ -86,6 +159,15 @@ class RawDataProcessor(BaseEstimator, TransformerMixin):
         return X
 
     def _index_dataframe(self, X: pd.DataFrame) -> pd.DataFrame:
+        """Index the DataFrame.
+
+        Args:
+            X (pd.DataFrame): Input data DataFrame.
+
+        Returns:
+            pd.DataFrame: DataFrame with indexed rows.
+
+        """
         index_column = self.params.get("index", None)
         if index_column is not None:
             X = X.set_index(index_column)

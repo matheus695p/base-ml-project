@@ -1,15 +1,15 @@
 """These contains functions for cleaning data in pandas."""
 
 import logging
-
+import typing as tp
 from unidecode import unidecode
 
 logger = logging.getLogger(__name__)
 
 
 def _replace_elements(
-    somestring,
-    elem_list=(
+    somestring: str,
+    elem_list: tp.Tuple = (
         ["á", "a"],
         ["é", "e"],
         ["í", "i"],

@@ -14,7 +14,7 @@ show_missing = true
 exclude_lines = ["pragma: no cover", "raise NotImplementedError"]
 
 [tool.ruff]
-line-length = 88
+line-length = 100
 show-fixes = true
 select = [
     "F",   # Pyflakes

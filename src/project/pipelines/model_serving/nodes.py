@@ -14,6 +14,17 @@ logger = logging.getLogger(__name__)
 def registry_best_model_to_mlflow(
     params: tp.Dict, report: str, *models: tp.List[Pipeline]
 ) -> Pipeline:
+    """Register the best model to MLflow.
+
+    Args:
+        params (dict): Parameters for model registry.
+        report (str): Report information.
+        *models (List[Pipeline]): List of models.
+
+    Returns:
+        Pipeline: The best model.
+
+    """
     models = list(models)
     model = get_best_model(params, models)
     best_model = registry_model(params, model)
@@ -22,7 +33,17 @@ def registry_best_model_to_mlflow(
 
 def get_compile_metric_dataset(
     name: str, cross_validation_metrics: tp.Dict[str, tp.Dict[str, str]]
-):
+) -> pd.DataFrame:
+    """Compile cross-validation metrics into a DataFrame.
+
+    Args:
+        name (str): Model name.
+        cross_validation_metrics (Dict[str, Dict[str, str]]): Cross-validation metrics.
+
+    Returns:
+        pd.DataFrame: DataFrame containing compiled metrics.
+
+    """
     metrics = []
     for metric, value in cross_validation_metrics.items():
         metrics.append([metric, value["value"]])
@@ -38,7 +59,16 @@ def get_compile_metric_dataset(
 
 
 def get_best_model(params: tp.Dict, models: tp.List[Pipeline]) -> Pipeline:
+    """Get the best model from a list of models.
 
+    Args:
+        params (dict): Parameters for model selection.
+        models (List[Pipeline]): List of models.
+
+    Returns:
+        Pipeline: The best model.
+
+    """
     # Specify the registered model name and version
     metric_cols = params["metric_cols"]
     models_dict = {}
@@ -64,7 +94,16 @@ def get_best_model(params: tp.Dict, models: tp.List[Pipeline]) -> Pipeline:
 
 
 def registry_model(params: tp.Dict, model: Pipeline) -> Pipeline:
+    """Registry a model to MLflow.
 
+    Args:
+        params (dict): Parameters for model registry.
+        model (Pipeline): The model to be registered.
+
+    Returns:
+        Pipeline: The registered model.
+
+    """
     model_name = params["model_name"]
     metric_cols = params["metric_cols"]
 

@@ -73,6 +73,7 @@ class ModelPredictiveControlExplorer(BaseEstimator):
         return self
 
     def predict(self, X: Matrix) -> Vector:
+        """Predict method NOT implemented because it's an optimizer."""
         return NotImplementedError("Method not implemented yet")
 
     def cast_values_df(self, df: pd.DataFrame) -> pd.DataFrame:

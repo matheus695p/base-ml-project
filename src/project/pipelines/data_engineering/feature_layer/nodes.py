@@ -12,7 +12,19 @@ from project.packages.preprocessing.transformers.feature import FeatureDataProce
 
 def feature_data_process(
     df_train: pd.DataFrame, df_test: pd.DataFrame, params: tp.Dict
-) -> pd.DataFrame:
+) -> tp.Dict[str, tp.Union[pd.DataFrame, "FeatureDataProcessor"]]:
+    """Process feature data for machine learning tasks.
+
+    Args:
+        df_train (pd.DataFrame): Training data DataFrame.
+        df_test (pd.DataFrame): Testing data DataFrame.
+        params (dict): Parameters for data processing.
+
+    Returns:
+        dict: A dictionary containing the processed training and testing data,
+        and the feature data preprocessor.
+
+    """
     preprocessor = FeatureDataProcessor(params)
     df_train = preprocessor.fit_transform(df_train)
     df_test = preprocessor.transform(df_test)
@@ -26,8 +38,19 @@ def feature_data_process(
 
 def clustering_feature_process(
     df_train: pd.DataFrame, df_test: pd.DataFrame, params: tp.Dict
-) -> pd.DataFrame:
+) -> tp.Dict[str, tp.Union[pd.DataFrame, "KMeansClusteringFeatures"]]:
+    """Process clustering features for machine learning tasks.
 
+    Args:
+        df_train (pd.DataFrame): Training data DataFrame.
+        df_test (pd.DataFrame): Testing data DataFrame.
+        params (dict): Parameters for clustering feature processing.
+
+    Returns:
+        dict: A dictionary containing the processed training and testing data,
+        and the clustering feature preprocessor.
+
+    """
     preprocessor = KMeansClusteringFeatures(
         model_params=params["model"],
         scaler_params=params["scaler"],
