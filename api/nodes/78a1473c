@@ -1,0 +1,14 @@
+{
+  "parameters": {
+    "logistic_regression.model_performance_report": {
+      "n_jobs": 6,
+      "environment": "base",
+      "template_path": "notebooks/reporting/model_performance_report.ipynb",
+      "namespace": "logistic_regression",
+      "report_name": "model_performance_report",
+      "kernel": "python3",
+      "timeout": 90000,
+      "remove_code": true
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "artifacts.mlflow_artifact_dataset.TextDataset.MlflowTextDataset",
+  "filepath": "/home/runner/work/base-ml-project/base-ml-project/data/08_reporting/global_optimization_report/global_optimization_report.html",
+  "run_command": "kedro run --to-outputs=global_optimization_report",
+  "preview": null,
+  "preview_type": null,
+  "stats": null
+}

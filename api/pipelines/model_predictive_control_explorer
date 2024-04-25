@@ -1,0 +1,1074 @@
+{
+  "nodes": [
+    {
+      "id": "1f24d99c",
+      "name": "xgboost.model_artifact",
+      "tags": [
+        "model_performance_report",
+        "model_serving"
+      ],
+      "pipelines": [
+        "model_predictive_control_explorer",
+        "data_science",
+        "__default__",
+        "model_serving"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "xgboost"
+      ],
+      "layer": "06_models",
+      "dataset_type": "artifacts.mlflow_artifact_dataset.MlflowModelSaverDataSet.MlflowMlflowModelSaverDataSet",
+      "stats": null
+    },
+    {
+      "id": "b58e8916",
+      "name": "logistic_regression.model_artifact",
+      "tags": [
+        "model_performance_report",
+        "model_serving"
+      ],
+      "pipelines": [
+        "model_predictive_control_explorer",
+        "data_science",
+        "__default__",
+        "model_serving"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "logistic_regression"
+      ],
+      "layer": "06_models",
+      "dataset_type": "artifacts.mlflow_artifact_dataset.MlflowModelSaverDataSet.MlflowMlflowModelSaverDataSet",
+      "stats": null
+    },
+    {
+      "id": "0ece6a64",
+      "name": "origin_titanic_train",
+      "tags": [
+        "ingestion",
+        "raw_layer",
+        "model_predictive_control_report"
+      ],
+      "pipelines": [
+        "data_engineering",
+        "raw_layer",
+        "model_predictive_control_explorer",
+        "data_science",
+        "data_ingestion"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": "01_raw",
+      "dataset_type": "pandas.csv_dataset.CSVDataset",
+      "stats": null
+    },
+    {
+      "id": "9a2a1271",
+      "name": "raw_preprocessor",
+      "tags": [
+        "ingestion",
+        "raw_layer"
+      ],
+      "pipelines": [
+        "data_engineering",
+        "raw_layer",
+        "model_predictive_control_explorer",
+        "data_science",
+        "data_ingestion"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": "05_model_input",
+      "dataset_type": "artifacts.mlflow_artifact_dataset.PickleDataset.MlflowPickleDataset",
+      "stats": null
+    },
+    {
+      "id": "9d171362",
+      "name": "int_preprocessor",
+      "tags": [
+        "ingestion",
+        "intermediate_layer"
+      ],
+      "pipelines": [
+        "data_engineering",
+        "model_predictive_control_explorer",
+        "data_science",
+        "data_ingestion",
+        "intermediate_layer"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": "05_model_input",
+      "dataset_type": "artifacts.mlflow_artifact_dataset.PickleDataset.MlflowPickleDataset",
+      "stats": null
+    },
+    {
+      "id": "3643974c",
+      "name": "prm_preprocessor",
+      "tags": [
+        "ingestion",
+        "primary_layer"
+      ],
+      "pipelines": [
+        "data_engineering",
+        "model_predictive_control_explorer",
+        "data_science",
+        "primary_layer",
+        "data_ingestion"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": "05_model_input",
+      "dataset_type": "artifacts.mlflow_artifact_dataset.PickleDataset.MlflowPickleDataset",
+      "stats": null
+    },
+    {
+      "id": "ed86e19e",
+      "name": "feat_preprocessor",
+      "tags": [
+        "feature_layer",
+        "feature_engineering"
+      ],
+      "pipelines": [
+        "data_engineering",
+        "model_predictive_control_explorer",
+        "feature_layer",
+        "data_science"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": "05_model_input",
+      "dataset_type": "artifacts.mlflow_artifact_dataset.PickleDataset.MlflowPickleDataset",
+      "stats": null
+    },
+    {
+      "id": "7a16a389",
+      "name": "cluster_preprocessor",
+      "tags": [
+        "feature_layer",
+        "feature_engineering"
+      ],
+      "pipelines": [
+        "data_engineering",
+        "model_predictive_control_explorer",
+        "feature_layer",
+        "data_science"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": "05_model_input",
+      "dataset_type": "artifacts.mlflow_artifact_dataset.PickleDataset.MlflowPickleDataset",
+      "stats": null
+    },
+    {
+      "id": "090b71e8",
+      "name": "model_predictive_control_explorer",
+      "tags": [],
+      "pipelines": [
+        "model_predictive_control_explorer",
+        "data_science"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "logistic_regression"
+      ],
+      "parameters": {
+        "logistic_regression.mpc": {
+          "direction": "maximize",
+          "n_trials": 200,
+          "constraints": {
+            "unnecessary_features": [
+              "Name",
+              "PassengerId",
+              "Ticket",
+              "Cabin"
+            ]
+          }
+        },
+        "raw_transform.schemas": {
+          "PassengerId": {
+            "dtype": "int64",
+            "name": "passenger_id"
+          },
+          "Survived": {
+            "dtype": "int64",
+            "name": "survived"
+          },
+          "Pclass": {
+            "dtype": "int64",
+            "name": "passenger_class"
+          },
+          "Name": {
+            "dtype": "object",
+            "name": "name"
+          },
+          "Sex": {
+            "dtype": "object",
+            "name": "passenger_sex"
+          },
+          "Age": {
+            "dtype": "float64",
+            "name": "passenger_age"
+          },
+          "Parch": {
+            "dtype": "int64",
+            "name": "passenger_parch"
+          },
+          "Ticket": {
+            "dtype": "object",
+            "name": "passenger_ticket"
+          },
+          "Fare": {
+            "dtype": "float64",
+            "name": "passenger_fare"
+          },
+          "Cabin": {
+            "dtype": "object",
+            "name": "passenger_cabin"
+          },
+          "Embarked": {
+            "dtype": "object",
+            "name": "passenger_embarked_port"
+          },
+          "SibSp": {
+            "dtype": "int64",
+            "name": "passenger_siblings"
+          }
+        }
+      }
+    },
+    {
+      "id": "4bdd5353",
+      "name": "params:logistic_regression.mpc",
+      "tags": [],
+      "pipelines": [
+        "model_predictive_control_explorer",
+        "data_science"
+      ],
+      "type": "parameters",
+      "modular_pipelines": [
+        "logistic_regression"
+      ],
+      "layer": null,
+      "dataset_type": null,
+      "stats": null
+    },
+    {
+      "id": "6411004d",
+      "name": "params:raw_transform.schemas",
+      "tags": [],
+      "pipelines": [
+        "model_predictive_control_explorer",
+        "data_science"
+      ],
+      "type": "parameters",
+      "modular_pipelines": [
+        "raw_transform"
+      ],
+      "layer": null,
+      "dataset_type": null,
+      "stats": null
+    },
+    {
+      "id": "46548150",
+      "name": "logistic_regression.model_predictive_control_explorer",
+      "tags": [
+        "model_predictive_control_report"
+      ],
+      "pipelines": [
+        "model_predictive_control_explorer",
+        "data_science"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "logistic_regression"
+      ],
+      "layer": "06_models",
+      "dataset_type": "artifacts.mlflow_artifact_dataset.MlflowModelSaverDataSet.MlflowMlflowModelSaverDataSet",
+      "stats": null
+    },
+    {
+      "id": "31d15146",
+      "name": "model_predictive_control_explorer",
+      "tags": [],
+      "pipelines": [
+        "model_predictive_control_explorer",
+        "data_science"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "xgboost"
+      ],
+      "parameters": {
+        "xgboost.mpc": {
+          "direction": "maximize",
+          "n_trials": 200,
+          "constraints": {
+            "unnecessary_features": [
+              "Name",
+              "PassengerId",
+              "Ticket",
+              "Cabin"
+            ]
+          }
+        },
+        "raw_transform.schemas": {
+          "PassengerId": {
+            "dtype": "int64",
+            "name": "passenger_id"
+          },
+          "Survived": {
+            "dtype": "int64",
+            "name": "survived"
+          },
+          "Pclass": {
+            "dtype": "int64",
+            "name": "passenger_class"
+          },
+          "Name": {
+            "dtype": "object",
+            "name": "name"
+          },
+          "Sex": {
+            "dtype": "object",
+            "name": "passenger_sex"
+          },
+          "Age": {
+            "dtype": "float64",
+            "name": "passenger_age"
+          },
+          "Parch": {
+            "dtype": "int64",
+            "name": "passenger_parch"
+          },
+          "Ticket": {
+            "dtype": "object",
+            "name": "passenger_ticket"
+          },
+          "Fare": {
+            "dtype": "float64",
+            "name": "passenger_fare"
+          },
+          "Cabin": {
+            "dtype": "object",
+            "name": "passenger_cabin"
+          },
+          "Embarked": {
+            "dtype": "object",
+            "name": "passenger_embarked_port"
+          },
+          "SibSp": {
+            "dtype": "int64",
+            "name": "passenger_siblings"
+          }
+        }
+      }
+    },
+    {
+      "id": "7820109e",
+      "name": "params:xgboost.mpc",
+      "tags": [],
+      "pipelines": [
+        "model_predictive_control_explorer",
+        "data_science"
+      ],
+      "type": "parameters",
+      "modular_pipelines": [
+        "xgboost"
+      ],
+      "layer": null,
+      "dataset_type": null,
+      "stats": null
+    },
+    {
+      "id": "44437b12",
+      "name": "xgboost.model_predictive_control_explorer",
+      "tags": [
+        "model_predictive_control_report"
+      ],
+      "pipelines": [
+        "model_predictive_control_explorer",
+        "data_science"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "xgboost"
+      ],
+      "layer": "06_models",
+      "dataset_type": "artifacts.mlflow_artifact_dataset.MlflowModelSaverDataSet.MlflowMlflowModelSaverDataSet",
+      "stats": null
+    },
+    {
+      "id": "7f9421f2",
+      "name": "model_predictive_control_report",
+      "tags": [
+        "model_predictive_control_report"
+      ],
+      "pipelines": [
+        "model_predictive_control_explorer",
+        "data_science"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "logistic_regression"
+      ],
+      "parameters": {
+        "logistic_regression.model_predictive_control_report": {
+          "n_jobs": 6,
+          "environment": "base",
+          "template_path": "notebooks/reporting/model_predictive_control_report.ipynb",
+          "namespace": "logistic_regression",
+          "report_name": "model_predictive_control_report",
+          "kernel": "python3",
+          "timeout": 90000,
+          "remove_code": true
+        }
+      }
+    },
+    {
+      "id": "77401d30",
+      "name": "params:logistic_regression.model_predictive_control_report",
+      "tags": [
+        "model_predictive_control_report"
+      ],
+      "pipelines": [
+        "model_predictive_control_explorer",
+        "data_science"
+      ],
+      "type": "parameters",
+      "modular_pipelines": [
+        "logistic_regression"
+      ],
+      "layer": null,
+      "dataset_type": null,
+      "stats": null
+    },
+    {
+      "id": "2aeafb4c",
+      "name": "logistic_regression.model_predictive_control_report",
+      "tags": [
+        "model_predictive_control_report"
+      ],
+      "pipelines": [
+        "model_predictive_control_explorer",
+        "data_science"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "logistic_regression"
+      ],
+      "layer": "08_reporting",
+      "dataset_type": "artifacts.mlflow_artifact_dataset.TextDataset.MlflowTextDataset",
+      "stats": null
+    },
+    {
+      "id": "44b782a2",
+      "name": "logistic_regression.model_predictive_control_error_report",
+      "tags": [
+        "model_predictive_control_report"
+      ],
+      "pipelines": [
+        "model_predictive_control_explorer",
+        "data_science"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "logistic_regression"
+      ],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": null
+    },
+    {
+      "id": "60e1c08d",
+      "name": "model_predictive_control_report",
+      "tags": [
+        "model_predictive_control_report"
+      ],
+      "pipelines": [
+        "model_predictive_control_explorer",
+        "data_science"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "xgboost"
+      ],
+      "parameters": {
+        "xgboost.model_predictive_control_report": {
+          "n_jobs": 6,
+          "environment": "base",
+          "template_path": "notebooks/reporting/model_predictive_control_report.ipynb",
+          "namespace": "xgboost",
+          "report_name": "model_predictive_control_report",
+          "kernel": "python3",
+          "timeout": 90000,
+          "remove_code": true
+        }
+      }
+    },
+    {
+      "id": "69838578",
+      "name": "params:xgboost.model_predictive_control_report",
+      "tags": [
+        "model_predictive_control_report"
+      ],
+      "pipelines": [
+        "model_predictive_control_explorer",
+        "data_science"
+      ],
+      "type": "parameters",
+      "modular_pipelines": [
+        "xgboost"
+      ],
+      "layer": null,
+      "dataset_type": null,
+      "stats": null
+    },
+    {
+      "id": "c44f3bac",
+      "name": "xgboost.model_predictive_control_report",
+      "tags": [
+        "model_predictive_control_report"
+      ],
+      "pipelines": [
+        "model_predictive_control_explorer",
+        "data_science"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "xgboost"
+      ],
+      "layer": "08_reporting",
+      "dataset_type": "artifacts.mlflow_artifact_dataset.TextDataset.MlflowTextDataset",
+      "stats": null
+    },
+    {
+      "id": "91079dcb",
+      "name": "xgboost.model_predictive_control_error_report",
+      "tags": [
+        "model_predictive_control_report"
+      ],
+      "pipelines": [
+        "model_predictive_control_explorer",
+        "data_science"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "xgboost"
+      ],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": null
+    },
+    {
+      "id": "logistic_regression",
+      "name": "logistic_regression",
+      "tags": [],
+      "pipelines": [
+        "model_predictive_control_explorer"
+      ],
+      "type": "modularPipeline",
+      "modular_pipelines": null,
+      "layer": null,
+      "dataset_type": null,
+      "stats": null
+    },
+    {
+      "id": "xgboost",
+      "name": "xgboost",
+      "tags": [],
+      "pipelines": [
+        "model_predictive_control_explorer"
+      ],
+      "type": "modularPipeline",
+      "modular_pipelines": null,
+      "layer": null,
+      "dataset_type": null,
+      "stats": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "9d171362",
+      "target": "xgboost"
+    },
+    {
+      "source": "3643974c",
+      "target": "31d15146"
+    },
+    {
+      "source": "9d171362",
+      "target": "090b71e8"
+    },
+    {
+      "source": "6411004d",
+      "target": "logistic_regression"
+    },
+    {
+      "source": "ed86e19e",
+      "target": "090b71e8"
+    },
+    {
+      "source": "1f24d99c",
+      "target": "31d15146"
+    },
+    {
+      "source": "9a2a1271",
+      "target": "31d15146"
+    },
+    {
+      "source": "7f9421f2",
+      "target": "2aeafb4c"
+    },
+    {
+      "source": "9d171362",
+      "target": "31d15146"
+    },
+    {
+      "source": "ed86e19e",
+      "target": "xgboost"
+    },
+    {
+      "source": "ed86e19e",
+      "target": "31d15146"
+    },
+    {
+      "source": "090b71e8",
+      "target": "46548150"
+    },
+    {
+      "source": "1f24d99c",
+      "target": "xgboost"
+    },
+    {
+      "source": "7a16a389",
+      "target": "xgboost"
+    },
+    {
+      "source": "7a16a389",
+      "target": "090b71e8"
+    },
+    {
+      "source": "3643974c",
+      "target": "090b71e8"
+    },
+    {
+      "source": "77401d30",
+      "target": "logistic_regression"
+    },
+    {
+      "source": "7a16a389",
+      "target": "31d15146"
+    },
+    {
+      "source": "0ece6a64",
+      "target": "60e1c08d"
+    },
+    {
+      "source": "6411004d",
+      "target": "090b71e8"
+    },
+    {
+      "source": "60e1c08d",
+      "target": "91079dcb"
+    },
+    {
+      "source": "4bdd5353",
+      "target": "logistic_regression"
+    },
+    {
+      "source": "6411004d",
+      "target": "xgboost"
+    },
+    {
+      "source": "6411004d",
+      "target": "31d15146"
+    },
+    {
+      "source": "xgboost",
+      "target": "91079dcb"
+    },
+    {
+      "source": "logistic_regression",
+      "target": "2aeafb4c"
+    },
+    {
+      "source": "4bdd5353",
+      "target": "090b71e8"
+    },
+    {
+      "source": "7f9421f2",
+      "target": "44b782a2"
+    },
+    {
+      "source": "31d15146",
+      "target": "44437b12"
+    },
+    {
+      "source": "77401d30",
+      "target": "7f9421f2"
+    },
+    {
+      "source": "0ece6a64",
+      "target": "logistic_regression"
+    },
+    {
+      "source": "69838578",
+      "target": "60e1c08d"
+    },
+    {
+      "source": "0ece6a64",
+      "target": "090b71e8"
+    },
+    {
+      "source": "0ece6a64",
+      "target": "xgboost"
+    },
+    {
+      "source": "0ece6a64",
+      "target": "31d15146"
+    },
+    {
+      "source": "xgboost",
+      "target": "c44f3bac"
+    },
+    {
+      "source": "b58e8916",
+      "target": "logistic_regression"
+    },
+    {
+      "source": "logistic_regression",
+      "target": "44b782a2"
+    },
+    {
+      "source": "3643974c",
+      "target": "logistic_regression"
+    },
+    {
+      "source": "0ece6a64",
+      "target": "7f9421f2"
+    },
+    {
+      "source": "9a2a1271",
+      "target": "logistic_regression"
+    },
+    {
+      "source": "44437b12",
+      "target": "60e1c08d"
+    },
+    {
+      "source": "b58e8916",
+      "target": "090b71e8"
+    },
+    {
+      "source": "60e1c08d",
+      "target": "c44f3bac"
+    },
+    {
+      "source": "ed86e19e",
+      "target": "logistic_regression"
+    },
+    {
+      "source": "9d171362",
+      "target": "logistic_regression"
+    },
+    {
+      "source": "7820109e",
+      "target": "xgboost"
+    },
+    {
+      "source": "3643974c",
+      "target": "xgboost"
+    },
+    {
+      "source": "7a16a389",
+      "target": "logistic_regression"
+    },
+    {
+      "source": "7820109e",
+      "target": "31d15146"
+    },
+    {
+      "source": "9a2a1271",
+      "target": "xgboost"
+    },
+    {
+      "source": "46548150",
+      "target": "7f9421f2"
+    },
+    {
+      "source": "9a2a1271",
+      "target": "090b71e8"
+    },
+    {
+      "source": "69838578",
+      "target": "xgboost"
+    }
+  ],
+  "layers": [
+    "01_raw",
+    "02_intermediate",
+    "03_primary",
+    "04_feature",
+    "05_model_input",
+    "07_model_output",
+    "06_models",
+    "08_reporting"
+  ],
+  "tags": [
+    {
+      "id": "feature_engineering",
+      "name": "feature_engineering"
+    },
+    {
+      "id": "feature_layer",
+      "name": "feature_layer"
+    },
+    {
+      "id": "global_optimization_report",
+      "name": "global_optimization_report"
+    },
+    {
+      "id": "hypertune_report",
+      "name": "hypertune_report"
+    },
+    {
+      "id": "ingestion",
+      "name": "ingestion"
+    },
+    {
+      "id": "intermediate_layer",
+      "name": "intermediate_layer"
+    },
+    {
+      "id": "interpretability_report",
+      "name": "interpretability_report"
+    },
+    {
+      "id": "model_performance_report",
+      "name": "model_performance_report"
+    },
+    {
+      "id": "model_predictive_control_report",
+      "name": "model_predictive_control_report"
+    },
+    {
+      "id": "model_serving",
+      "name": "model_serving"
+    },
+    {
+      "id": "primary_layer",
+      "name": "primary_layer"
+    },
+    {
+      "id": "raw_layer",
+      "name": "raw_layer"
+    },
+    {
+      "id": "reporting",
+      "name": "reporting"
+    }
+  ],
+  "pipelines": [
+    {
+      "id": "__default__",
+      "name": "__default__"
+    },
+    {
+      "id": "global_reporting",
+      "name": "global_reporting"
+    },
+    {
+      "id": "model_serving",
+      "name": "model_serving"
+    },
+    {
+      "id": "raw_layer",
+      "name": "raw_layer"
+    },
+    {
+      "id": "intermediate_layer",
+      "name": "intermediate_layer"
+    },
+    {
+      "id": "primary_layer",
+      "name": "primary_layer"
+    },
+    {
+      "id": "feature_layer",
+      "name": "feature_layer"
+    },
+    {
+      "id": "data_ingestion",
+      "name": "data_ingestion"
+    },
+    {
+      "id": "data_engineering",
+      "name": "data_engineering"
+    },
+    {
+      "id": "data_science",
+      "name": "data_science"
+    },
+    {
+      "id": "model_predictive_control_explorer",
+      "name": "model_predictive_control_explorer"
+    }
+  ],
+  "modular_pipelines": {
+    "__root__": {
+      "id": "__root__",
+      "name": "__root__",
+      "inputs": [],
+      "outputs": [],
+      "children": [
+        {
+          "id": "ed86e19e",
+          "type": "data"
+        },
+        {
+          "id": "7a16a389",
+          "type": "data"
+        },
+        {
+          "id": "0ece6a64",
+          "type": "data"
+        },
+        {
+          "id": "xgboost",
+          "type": "modularPipeline"
+        },
+        {
+          "id": "77401d30",
+          "type": "parameters"
+        },
+        {
+          "id": "69838578",
+          "type": "parameters"
+        },
+        {
+          "id": "4bdd5353",
+          "type": "parameters"
+        },
+        {
+          "id": "logistic_regression",
+          "type": "modularPipeline"
+        },
+        {
+          "id": "3643974c",
+          "type": "data"
+        },
+        {
+          "id": "9a2a1271",
+          "type": "data"
+        },
+        {
+          "id": "7820109e",
+          "type": "parameters"
+        },
+        {
+          "id": "6411004d",
+          "type": "parameters"
+        },
+        {
+          "id": "9d171362",
+          "type": "data"
+        }
+      ]
+    },
+    "logistic_regression": {
+      "id": "logistic_regression",
+      "name": "logistic_regression",
+      "inputs": [
+        "0ece6a64",
+        "9a2a1271",
+        "ed86e19e",
+        "4bdd5353",
+        "6411004d",
+        "7a16a389",
+        "3643974c",
+        "77401d30",
+        "9d171362",
+        "b58e8916"
+      ],
+      "outputs": [
+        "2aeafb4c",
+        "44b782a2"
+      ],
+      "children": [
+        {
+          "id": "b58e8916",
+          "type": "data"
+        },
+        {
+          "id": "7f9421f2",
+          "type": "task"
+        },
+        {
+          "id": "2aeafb4c",
+          "type": "data"
+        },
+        {
+          "id": "090b71e8",
+          "type": "task"
+        },
+        {
+          "id": "44b782a2",
+          "type": "data"
+        },
+        {
+          "id": "46548150",
+          "type": "data"
+        }
+      ]
+    },
+    "xgboost": {
+      "id": "xgboost",
+      "name": "xgboost",
+      "inputs": [
+        "0ece6a64",
+        "ed86e19e",
+        "1f24d99c",
+        "6411004d",
+        "69838578",
+        "7a16a389",
+        "3643974c",
+        "7820109e",
+        "9d171362",
+        "9a2a1271"
+      ],
+      "outputs": [
+        "91079dcb",
+        "c44f3bac"
+      ],
+      "children": [
+        {
+          "id": "60e1c08d",
+          "type": "task"
+        },
+        {
+          "id": "91079dcb",
+          "type": "data"
+        },
+        {
+          "id": "44437b12",
+          "type": "data"
+        },
+        {
+          "id": "c44f3bac",
+          "type": "data"
+        },
+        {
+          "id": "31d15146",
+          "type": "task"
+        },
+        {
+          "id": "1f24d99c",
+          "type": "data"
+        }
+      ]
+    }
+  },
+  "selected_pipeline": "model_predictive_control_explorer"
+}

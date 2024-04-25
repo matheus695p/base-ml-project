@@ -1,0 +1,34 @@
+{
+  "code": "def intermediate_data_process(\n    df_train: pd.DataFrame, df_test: pd.DataFrame, params: tp.Dict\n) -> tp.Dict[str, tp.Union[pd.DataFrame, \"IntermediateDataProcessor\"]]:\n    \"\"\"Process intermediate data for machine learning tasks.\n\n    Args:\n        df_train (pd.DataFrame): Training data DataFrame.\n        df_test (pd.DataFrame): Testing data DataFrame.\n        params (dict): Parameters for intermediate data processing.\n\n    Returns:\n        dict: A dictionary containing the processed training and testing data,\n        and the intermediate data preprocessor.\n\n    \"\"\"\n    preprocessor = IntermediateDataProcessor(params)\n    df_train = preprocessor.fit_transform(df_train)\n    df_test = preprocessor.transform(df_test)\n\n    return {\n        \"train\": df_train,\n        \"test\": df_test,\n        \"preprocessor\": preprocessor,\n    }\n",
+  "filepath": "base-ml-project/src/project/pipelines/data_engineering/intermediate_layer/nodes.py",
+  "parameters": {
+    "intermediate_transform": {
+      "target": "survived",
+      "outlier_params": {
+        "iqr_alpha": 2.5,
+        "q1_quantile": 0.25,
+        "q3_quantile": 0.75
+      },
+      "drop_columns": [
+        "name"
+      ],
+      "categorical_features": [
+        "passenger_sex",
+        "passenger_ticket",
+        "passenger_cabin",
+        "passenger_embarked_port"
+      ]
+    }
+  },
+  "run_command": "kedro run --to-nodes=intermediate_data_process",
+  "inputs": [
+    "raw_titanic_train",
+    "raw_titanic_test",
+    "params:intermediate_transform"
+  ],
+  "outputs": [
+    "int_titanic_train",
+    "int_titanic_test",
+    "int_preprocessor"
+  ]
+}

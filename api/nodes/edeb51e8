@@ -1,0 +1,147 @@
+{
+  "code": "def model_hypertune(df: pd.DataFrame, params: tp.Dict[str, tp.Any]) -> tp.Dict[str, tp.Any]:\n    \"\"\"\n    Hyperparameter tuning for a supervised learning model.\n\n    Args:\n        df (pd.DataFrame): The input DataFrame containing the dataset.\n        params (Dict[str, Any]): A dictionary of hyperparameters and configuration settings.\n            - 'features' (List[str]): A list of feature column names.\n            - 'target' (str): The name of the target column.\n            - Other hyperparameters and configuration settings specific to the model.\n\n    Returns:\n        Dict[str, Any]: A dictionary containing the results of hyperparameter tuning and related information.\n            - 'model_artifact': The trained model artifact.\n            - 'train_dataset': The training dataset used for hyperparameter tuning.\n            - Other hyperparameter tuning results and metrics.\n\n    This function performs hyperparameter tuning for a supervised learning model using the provided dataset\n    and hyperparameter configurations. It returns a dictionary containing the results of the tuning process\n    and the trained model.\n\n    Example usage:\n    ```python\n    hyperparameters = {\n        'features': ['feature1', 'feature2'],\n        'target': 'target_column',\n        # Add other hyperparameters and configurations here.\n    }\n    results = model_hypertune(dataset_df, hyperparameters)\n    ```\n    \"\"\"\n    # supervised learning definition\n    features = params[\"features\"]\n    target = params[\"target\"]\n\n    X = df[features].astype(float)\n    y = df[[target]].astype(float)\n    model = BinaryClassifierSklearnPipeline(params)\n    model = model.fit(X, y)\n    check_is_fitted(model.model)\n\n    results = model.hypertune_results\n    results[\"model_artifact\"] = model\n    results[\"train_dataset\"] = df\n    return results\n",
+  "filepath": "base-ml-project/src/project/pipelines/data_science/supervised/nodes.py",
+  "parameters": {
+    "logistic_regression.model_artifact": {
+      "optuna": {
+        "kwargs_study": {
+          "direction": "maximize",
+          "study_name": "logistic_regression",
+          "load_if_exists": false
+        },
+        "kwargs_optimize": {
+          "n_trials": 100
+        },
+        "sampler": {
+          "class": "optuna.samplers.TPESampler",
+          "kwargs": {
+            "n_startup_trials": 0,
+            "constant_liar": true,
+            "seed": 42
+          }
+        },
+        "pruner": {
+          "class": "optuna.pruners.SuccessiveHalvingPruner",
+          "kwargs": {}
+        }
+      },
+      "cv_strategy": {
+        "class": "sklearn.model_selection.StratifiedKFold",
+        "kwargs": {
+          "n_splits": 5,
+          "random_state": 42,
+          "shuffle": true
+        }
+      },
+      "cv_score": {
+        "scoring": "f1_weighted",
+        "class": "sklearn.model_selection.cross_val_predict",
+        "kwargs": {
+          "estimator": null,
+          "X": null,
+          "y": null,
+          "cv": null,
+          "n_jobs": -1,
+          "method": "predict"
+        }
+      },
+      "target": "survived",
+      "features": [
+        "passenger_class",
+        "passenger_age",
+        "passenger_siblings",
+        "passenger_parch",
+        "passenger_fare",
+        "passenger_ticket_number",
+        "passenger_ticket_unknown_base",
+        "passenger_cabin_number",
+        "passenger_number_of_family_onboard",
+        "passenger_is_single",
+        "passenger_has_childs",
+        "passenger_cabin_level_a",
+        "passenger_cabin_level_b",
+        "passenger_cabin_level_c",
+        "passenger_cabin_level_d",
+        "passenger_cabin_level_e",
+        "passenger_cabin_level_unknown",
+        "passenger_embarked_port_c",
+        "passenger_embarked_port_q",
+        "passenger_embarked_port_s",
+        "passenger_sex_female",
+        "passenger_cabin_cluster_feature",
+        "passenger_embarked_port_cluster_feature",
+        "passenger_ticket_number_cluster_feature",
+        "passenger_family_cluster_feature",
+        "passenger_social_status_cluster_feature"
+      ],
+      "pipeline": {
+        "imputer": {
+          "class": "project.packages.modelling.models.unsupervised.imputer.ColumnsPreserverImputer",
+          "kwargs": {
+            "imputer_params": {
+              "class": "sklearn.impute.KNNImputer",
+              "kwargs": {
+                "n_neighbors": "trial.suggest_int(\"knn_imputer__n_neighbors\", 2, 20, step=1)",
+                "weights": "trial.suggest_categorical(\"knn_imputer__weights\", [\"distance\", \"uniform\"])"
+              }
+            }
+          }
+        },
+        "scaler": {
+          "class": "project.packages.modelling.transformers.scaler.ColumnsPreserverScaler",
+          "kwargs": {
+            "scaler_params": {
+              "class": "trial.suggest_categorical(\"scaler__transformer\", [\"sklearn.preprocessing.MinMaxScaler\", \"sklearn.preprocessing.StandardScaler\",])",
+              "kwargs": {}
+            }
+          }
+        },
+        "feature_selector": {
+          "class": "project.packages.modelling.feature_selection.feature_selector_pipeline.FeatureSelector",
+          "kwargs": {
+            "fs_params": {
+              "selectors": [
+                "model_based"
+              ],
+              "model_based": {
+                "bypass_features": [
+                  "passenger_sex_female"
+                ],
+                "estimator": {
+                  "class": "xgboost.XGBClassifier",
+                  "kwargs": {
+                    "n_estimators": "trial.suggest_int(\"fs_mb_xgboost__n_estimators\", 10, 500, step=10)",
+                    "max_depth": "trial.suggest_int(\"fs_mb_xgboost__max_depth\", 2, 10)",
+                    "random_state": 42
+                  }
+                },
+                "threshold": "trial.suggest_float(\"fs_mb__threshold\", 0.001, 0.1)",
+                "prefit": false
+              }
+            }
+          }
+        },
+        "model": {
+          "class": "sklearn.linear_model.LogisticRegression",
+          "kwargs": {
+            "C": "trial.suggest_float(\"logistic_regression__C\", 0.001, 100)",
+            "penalty": "trial.suggest_categorical(\"logistic_regression__penalty\", [\"l2\",])",
+            "random_state": 42
+          }
+        }
+      }
+    }
+  },
+  "run_command": "kedro run --to-nodes=logistic_regression.hypertune_model",
+  "inputs": [
+    "feat_titanic_train",
+    "params:logistic_regression.model_artifact"
+  ],
+  "outputs": [
+    "logistic_regression.study",
+    "logistic_regression.best_trial_params",
+    "logistic_regression.cross_validation_metrics",
+    "logistic_regression.model_artifact",
+    "logistic_regression.train_dataset"
+  ]
+}

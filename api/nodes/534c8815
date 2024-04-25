@@ -1,0 +1,14 @@
+{
+  "parameters": {
+    "xgboost.interpretability_report": {
+      "n_jobs": 6,
+      "environment": "base",
+      "template_path": "notebooks/reporting/interpretability_report.ipynb",
+      "namespace": "xgboost",
+      "report_name": "interpretability_report",
+      "kernel": "python3",
+      "timeout": 90000,
+      "remove_code": true
+    }
+  }
+}

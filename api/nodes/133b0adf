@@ -1,0 +1,26 @@
+{
+  "code": "def create_html_report(\n    params: dict,\n    _wait_on: list[str] = None,\n    *args,\n):\n    \"\"\"Creates an html report from an ipynb template.\n\n    Args:\n        params: parameters for input models\n        _wait_on: any catalog entry to wait on - not used in method\n        *args (tp.Optional): add or not more arguments to the function\n\n    Raises:\n        ValueError for wrong inputs\n    \"\"\"\n    template_path = params[\"template_path\"]\n    namespace = params.get(\"namespace\", None)\n    environment = params.get(\"environment\", \"base\")\n\n    logger.info(f\"Running: {template_path}\")\n\n    processed, error = _run_template(\n        template_path=template_path,\n        namespace=namespace,\n        kernel=params.get(\"kernel\", \"python3\"),\n        timeout=params.get(\"timeout\", 600),\n        env=environment,\n    )\n\n    c = Config()\n    # we remove input and output prompts by default\n    c.HTMLExporter.exclude_input_prompt = True\n    c.HTMLExporter.exclude_output_prompt = True\n\n    if params.get(\"remove_code\", True):\n        c.HTMLExporter.exclude_input = True\n\n    html_exporter = HTMLExporter(c)\n    body, _ = html_exporter.from_notebook_node(processed)\n\n    return body, error\n",
+  "filepath": "base-ml-project/src/project/packages/reporting/html_report.py",
+  "parameters": {
+    "logistic_regression.hypertune_report": {
+      "n_jobs": 6,
+      "environment": "base",
+      "template_path": "notebooks/reporting/hypertune_report.ipynb",
+      "namespace": "logistic_regression",
+      "report_name": "hypertune_report",
+      "kernel": "python3",
+      "timeout": 90000,
+      "remove_code": true
+    }
+  },
+  "run_command": "kedro run --to-nodes=logistic_regression.hypertune_report",
+  "inputs": [
+    "params:logistic_regression.hypertune_report",
+    "logistic_regression.model_performance_report",
+    "feat_titanic_train"
+  ],
+  "outputs": [
+    "logistic_regression.hypertune_report",
+    "logistic_regression.hypertune_notebook_error_report"
+  ]
+}

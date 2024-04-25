@@ -1,0 +1,8 @@
+{
+  "type": "artifacts.mlflow_artifact_dataset.TextDataset.MlflowTextDataset",
+  "filepath": "/home/runner/work/base-ml-project/base-ml-project/data/08_reporting/model_performance_report/logistic_regression/model_performance_report_logistic_regression.html",
+  "run_command": "kedro run --to-outputs=logistic_regression.model_performance_report",
+  "preview": null,
+  "preview_type": null,
+  "stats": null
+}

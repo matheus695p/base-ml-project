@@ -1,0 +1,81 @@
+{
+  "code": "def clustering_feature_process(\n    df_train: pd.DataFrame, df_test: pd.DataFrame, params: tp.Dict\n) -> tp.Dict[str, tp.Union[pd.DataFrame, \"KMeansClusteringFeatures\"]]:\n    \"\"\"Process clustering features for machine learning tasks.\n\n    Args:\n        df_train (pd.DataFrame): Training data DataFrame.\n        df_test (pd.DataFrame): Testing data DataFrame.\n        params (dict): Parameters for clustering feature processing.\n\n    Returns:\n        dict: A dictionary containing the processed training and testing data,\n        and the clustering feature preprocessor.\n\n    \"\"\"\n    preprocessor = KMeansClusteringFeatures(\n        model_params=params[\"model\"],\n        scaler_params=params[\"scaler\"],\n        feature_params=params[\"features\"],\n        imputer_params=params[\"imputer\"],\n    )\n    df_train = preprocessor.fit_transform(df_train)\n    df_test = preprocessor.transform(df_test)\n\n    return {\n        \"train\": df_train,\n        \"test\": df_test,\n        \"preprocessor\": preprocessor,\n    }\n",
+  "filepath": "base-ml-project/src/project/pipelines/data_engineering/feature_layer/nodes.py",
+  "parameters": {
+    "feature_transform.clustering_features": {
+      "imputer": {
+        "class": "project.packages.modelling.models.unsupervised.imputer.ColumnsPreserverImputer",
+        "kwargs": {
+          "imputer_params": {
+            "class": "sklearn.impute.KNNImputer",
+            "kwargs": {
+              "n_neighbors": 10,
+              "weights": "distance"
+            }
+          }
+        }
+      },
+      "scaler": {
+        "class": "project.packages.modelling.transformers.scaler.ColumnsPreserverScaler",
+        "kwargs": {
+          "scaler_params": {
+            "class": "sklearn.preprocessing.MinMaxScaler",
+            "kwargs": {}
+          }
+        }
+      },
+      "model": {
+        "class": "project.packages.modelling.models.unsupervised.segmentation.KMeansElbowSelector",
+        "kwargs": {
+          "min_clusters": 1,
+          "max_clusters": 15
+        }
+      },
+      "features": {
+        "passenger_cabin_cluster_feature": [
+          "passenger_cabin_level_a",
+          "passenger_cabin_level_b",
+          "passenger_cabin_level_c",
+          "passenger_cabin_level_d",
+          "passenger_cabin_level_e",
+          "passenger_cabin_level_f",
+          "passenger_cabin_level_g",
+          "passenger_cabin_level_t",
+          "passenger_cabin_level_unknown"
+        ],
+        "passenger_embarked_port_cluster_feature": [
+          "passenger_embarked_port_c",
+          "passenger_embarked_port_q",
+          "passenger_embarked_port_s",
+          "passenger_embarked_port_unknown"
+        ],
+        "passenger_ticket_number_cluster_feature": [
+          "passenger_ticket_number",
+          "passenger_ticket_unknown_base"
+        ],
+        "passenger_family_cluster_feature": [
+          "passenger_siblings",
+          "passenger_parch",
+          "passenger_cabin_number",
+          "passenger_number_of_family_onboard"
+        ],
+        "passenger_social_status_cluster_feature": [
+          "passenger_class",
+          "passenger_age",
+          "passenger_sex_female"
+        ]
+      }
+    }
+  },
+  "run_command": "kedro run --to-nodes=feature_data_process",
+  "inputs": [
+    "pre_feat_titanic_train",
+    "pre_feat_titanic_test",
+    "params:feature_transform.clustering_features"
+  ],
+  "outputs": [
+    "feat_titanic_train",
+    "feat_titanic_test",
+    "cluster_preprocessor"
+  ]
+}

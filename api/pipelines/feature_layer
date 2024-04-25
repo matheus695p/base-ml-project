@@ -1,0 +1,582 @@
+{
+  "nodes": [
+    {
+      "id": "93e5d927",
+      "name": "feat_titanic_train",
+      "tags": [
+        "hypertune_report",
+        "interpretability_report",
+        "global_optimization_report",
+        "reporting",
+        "feature_engineering",
+        "feature_layer",
+        "model_performance_report"
+      ],
+      "pipelines": [
+        "data_engineering",
+        "data_science",
+        "global_reporting",
+        "feature_layer",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": "04_feature",
+      "dataset_type": "pandas.parquet_dataset.ParquetDataset",
+      "stats": null
+    },
+    {
+      "id": "20b3d2fe",
+      "name": "prm_titanic_train",
+      "tags": [
+        "ingestion",
+        "primary_layer",
+        "feature_engineering",
+        "feature_layer"
+      ],
+      "pipelines": [
+        "data_ingestion",
+        "feature_layer",
+        "primary_layer",
+        "data_engineering"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": "03_primary",
+      "dataset_type": "pandas.parquet_dataset.ParquetDataset",
+      "stats": null
+    },
+    {
+      "id": "7b85d8c0",
+      "name": "prm_titanic_test",
+      "tags": [
+        "ingestion",
+        "primary_layer",
+        "feature_engineering",
+        "feature_layer"
+      ],
+      "pipelines": [
+        "data_ingestion",
+        "feature_layer",
+        "primary_layer",
+        "data_engineering"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": "03_primary",
+      "dataset_type": "pandas.parquet_dataset.ParquetDataset",
+      "stats": null
+    },
+    {
+      "id": "d68ce453",
+      "name": "pre_feature_data_process",
+      "tags": [
+        "feature_layer",
+        "feature_engineering"
+      ],
+      "pipelines": [
+        "data_engineering",
+        "feature_layer"
+      ],
+      "type": "task",
+      "modular_pipelines": [],
+      "parameters": {
+        "feature_transform": {
+          "target": "survived",
+          "encoding_transform": {
+            "one_hot_encoder": [
+              "passenger_cabin_level",
+              "passenger_embarked_port",
+              "passenger_sex"
+            ],
+            "similarity_based_encoder": null
+          },
+          "clustering_features": {
+            "imputer": {
+              "class": "project.packages.modelling.models.unsupervised.imputer.ColumnsPreserverImputer",
+              "kwargs": {
+                "imputer_params": {
+                  "class": "sklearn.impute.KNNImputer",
+                  "kwargs": {
+                    "n_neighbors": 10,
+                    "weights": "distance"
+                  }
+                }
+              }
+            },
+            "scaler": {
+              "class": "project.packages.modelling.transformers.scaler.ColumnsPreserverScaler",
+              "kwargs": {
+                "scaler_params": {
+                  "class": "sklearn.preprocessing.MinMaxScaler",
+                  "kwargs": {}
+                }
+              }
+            },
+            "model": {
+              "class": "project.packages.modelling.models.unsupervised.segmentation.KMeansElbowSelector",
+              "kwargs": {
+                "min_clusters": 1,
+                "max_clusters": 15
+              }
+            },
+            "features": {
+              "passenger_cabin_cluster_feature": [
+                "passenger_cabin_level_a",
+                "passenger_cabin_level_b",
+                "passenger_cabin_level_c",
+                "passenger_cabin_level_d",
+                "passenger_cabin_level_e",
+                "passenger_cabin_level_f",
+                "passenger_cabin_level_g",
+                "passenger_cabin_level_t",
+                "passenger_cabin_level_unknown"
+              ],
+              "passenger_embarked_port_cluster_feature": [
+                "passenger_embarked_port_c",
+                "passenger_embarked_port_q",
+                "passenger_embarked_port_s",
+                "passenger_embarked_port_unknown"
+              ],
+              "passenger_ticket_number_cluster_feature": [
+                "passenger_ticket_number",
+                "passenger_ticket_unknown_base"
+              ],
+              "passenger_family_cluster_feature": [
+                "passenger_siblings",
+                "passenger_parch",
+                "passenger_cabin_number",
+                "passenger_number_of_family_onboard"
+              ],
+              "passenger_social_status_cluster_feature": [
+                "passenger_class",
+                "passenger_age",
+                "passenger_sex_female"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "a2c3f7d5",
+      "name": "params:feature_transform",
+      "tags": [
+        "feature_layer",
+        "feature_engineering"
+      ],
+      "pipelines": [
+        "data_engineering",
+        "feature_layer"
+      ],
+      "type": "parameters",
+      "modular_pipelines": [],
+      "layer": null,
+      "dataset_type": null,
+      "stats": null
+    },
+    {
+      "id": "d8b7fc8e",
+      "name": "pre_feat_titanic_train",
+      "tags": [
+        "feature_layer",
+        "feature_engineering"
+      ],
+      "pipelines": [
+        "data_engineering",
+        "feature_layer"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": null
+    },
+    {
+      "id": "e326e7bb",
+      "name": "pre_feat_titanic_test",
+      "tags": [
+        "feature_layer",
+        "feature_engineering"
+      ],
+      "pipelines": [
+        "data_engineering",
+        "feature_layer"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": null
+    },
+    {
+      "id": "ed86e19e",
+      "name": "feat_preprocessor",
+      "tags": [
+        "feature_layer",
+        "feature_engineering"
+      ],
+      "pipelines": [
+        "data_engineering",
+        "model_predictive_control_explorer",
+        "feature_layer",
+        "data_science"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": "05_model_input",
+      "dataset_type": "artifacts.mlflow_artifact_dataset.PickleDataset.MlflowPickleDataset",
+      "stats": null
+    },
+    {
+      "id": "46fdea26",
+      "name": "feature_data_process",
+      "tags": [
+        "feature_layer",
+        "feature_engineering"
+      ],
+      "pipelines": [
+        "data_engineering",
+        "feature_layer"
+      ],
+      "type": "task",
+      "modular_pipelines": [],
+      "parameters": {
+        "feature_transform.clustering_features": {
+          "imputer": {
+            "class": "project.packages.modelling.models.unsupervised.imputer.ColumnsPreserverImputer",
+            "kwargs": {
+              "imputer_params": {
+                "class": "sklearn.impute.KNNImputer",
+                "kwargs": {
+                  "n_neighbors": 10,
+                  "weights": "distance"
+                }
+              }
+            }
+          },
+          "scaler": {
+            "class": "project.packages.modelling.transformers.scaler.ColumnsPreserverScaler",
+            "kwargs": {
+              "scaler_params": {
+                "class": "sklearn.preprocessing.MinMaxScaler",
+                "kwargs": {}
+              }
+            }
+          },
+          "model": {
+            "class": "project.packages.modelling.models.unsupervised.segmentation.KMeansElbowSelector",
+            "kwargs": {
+              "min_clusters": 1,
+              "max_clusters": 15
+            }
+          },
+          "features": {
+            "passenger_cabin_cluster_feature": [
+              "passenger_cabin_level_a",
+              "passenger_cabin_level_b",
+              "passenger_cabin_level_c",
+              "passenger_cabin_level_d",
+              "passenger_cabin_level_e",
+              "passenger_cabin_level_f",
+              "passenger_cabin_level_g",
+              "passenger_cabin_level_t",
+              "passenger_cabin_level_unknown"
+            ],
+            "passenger_embarked_port_cluster_feature": [
+              "passenger_embarked_port_c",
+              "passenger_embarked_port_q",
+              "passenger_embarked_port_s",
+              "passenger_embarked_port_unknown"
+            ],
+            "passenger_ticket_number_cluster_feature": [
+              "passenger_ticket_number",
+              "passenger_ticket_unknown_base"
+            ],
+            "passenger_family_cluster_feature": [
+              "passenger_siblings",
+              "passenger_parch",
+              "passenger_cabin_number",
+              "passenger_number_of_family_onboard"
+            ],
+            "passenger_social_status_cluster_feature": [
+              "passenger_class",
+              "passenger_age",
+              "passenger_sex_female"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "4b37eeab",
+      "name": "params:feature_transform.clustering_features",
+      "tags": [
+        "feature_layer",
+        "feature_engineering"
+      ],
+      "pipelines": [
+        "data_engineering",
+        "feature_layer"
+      ],
+      "type": "parameters",
+      "modular_pipelines": [
+        "feature_transform"
+      ],
+      "layer": null,
+      "dataset_type": null,
+      "stats": null
+    },
+    {
+      "id": "757829c2",
+      "name": "feat_titanic_test",
+      "tags": [
+        "feature_layer",
+        "feature_engineering"
+      ],
+      "pipelines": [
+        "data_engineering",
+        "feature_layer"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": "04_feature",
+      "dataset_type": "pandas.parquet_dataset.ParquetDataset",
+      "stats": null
+    },
+    {
+      "id": "7a16a389",
+      "name": "cluster_preprocessor",
+      "tags": [
+        "feature_layer",
+        "feature_engineering"
+      ],
+      "pipelines": [
+        "data_engineering",
+        "model_predictive_control_explorer",
+        "feature_layer",
+        "data_science"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": "05_model_input",
+      "dataset_type": "artifacts.mlflow_artifact_dataset.PickleDataset.MlflowPickleDataset",
+      "stats": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "46fdea26",
+      "target": "757829c2"
+    },
+    {
+      "source": "46fdea26",
+      "target": "93e5d927"
+    },
+    {
+      "source": "d68ce453",
+      "target": "d8b7fc8e"
+    },
+    {
+      "source": "7b85d8c0",
+      "target": "d68ce453"
+    },
+    {
+      "source": "46fdea26",
+      "target": "7a16a389"
+    },
+    {
+      "source": "20b3d2fe",
+      "target": "d68ce453"
+    },
+    {
+      "source": "4b37eeab",
+      "target": "46fdea26"
+    },
+    {
+      "source": "d68ce453",
+      "target": "ed86e19e"
+    },
+    {
+      "source": "d68ce453",
+      "target": "e326e7bb"
+    },
+    {
+      "source": "e326e7bb",
+      "target": "46fdea26"
+    },
+    {
+      "source": "d8b7fc8e",
+      "target": "46fdea26"
+    },
+    {
+      "source": "a2c3f7d5",
+      "target": "d68ce453"
+    }
+  ],
+  "layers": [
+    "01_raw",
+    "02_intermediate",
+    "03_primary",
+    "06_models",
+    "07_model_output",
+    "08_reporting",
+    "04_feature",
+    "05_model_input"
+  ],
+  "tags": [
+    {
+      "id": "feature_engineering",
+      "name": "feature_engineering"
+    },
+    {
+      "id": "feature_layer",
+      "name": "feature_layer"
+    },
+    {
+      "id": "global_optimization_report",
+      "name": "global_optimization_report"
+    },
+    {
+      "id": "hypertune_report",
+      "name": "hypertune_report"
+    },
+    {
+      "id": "ingestion",
+      "name": "ingestion"
+    },
+    {
+      "id": "intermediate_layer",
+      "name": "intermediate_layer"
+    },
+    {
+      "id": "interpretability_report",
+      "name": "interpretability_report"
+    },
+    {
+      "id": "model_performance_report",
+      "name": "model_performance_report"
+    },
+    {
+      "id": "model_predictive_control_report",
+      "name": "model_predictive_control_report"
+    },
+    {
+      "id": "model_serving",
+      "name": "model_serving"
+    },
+    {
+      "id": "primary_layer",
+      "name": "primary_layer"
+    },
+    {
+      "id": "raw_layer",
+      "name": "raw_layer"
+    },
+    {
+      "id": "reporting",
+      "name": "reporting"
+    }
+  ],
+  "pipelines": [
+    {
+      "id": "__default__",
+      "name": "__default__"
+    },
+    {
+      "id": "global_reporting",
+      "name": "global_reporting"
+    },
+    {
+      "id": "model_serving",
+      "name": "model_serving"
+    },
+    {
+      "id": "raw_layer",
+      "name": "raw_layer"
+    },
+    {
+      "id": "intermediate_layer",
+      "name": "intermediate_layer"
+    },
+    {
+      "id": "primary_layer",
+      "name": "primary_layer"
+    },
+    {
+      "id": "feature_layer",
+      "name": "feature_layer"
+    },
+    {
+      "id": "data_ingestion",
+      "name": "data_ingestion"
+    },
+    {
+      "id": "data_engineering",
+      "name": "data_engineering"
+    },
+    {
+      "id": "data_science",
+      "name": "data_science"
+    },
+    {
+      "id": "model_predictive_control_explorer",
+      "name": "model_predictive_control_explorer"
+    }
+  ],
+  "modular_pipelines": {
+    "__root__": {
+      "id": "__root__",
+      "name": "__root__",
+      "inputs": [],
+      "outputs": [],
+      "children": [
+        {
+          "id": "ed86e19e",
+          "type": "data"
+        },
+        {
+          "id": "7b85d8c0",
+          "type": "data"
+        },
+        {
+          "id": "a2c3f7d5",
+          "type": "parameters"
+        },
+        {
+          "id": "20b3d2fe",
+          "type": "data"
+        },
+        {
+          "id": "46fdea26",
+          "type": "task"
+        },
+        {
+          "id": "93e5d927",
+          "type": "data"
+        },
+        {
+          "id": "7a16a389",
+          "type": "data"
+        },
+        {
+          "id": "e326e7bb",
+          "type": "data"
+        },
+        {
+          "id": "d68ce453",
+          "type": "task"
+        },
+        {
+          "id": "d8b7fc8e",
+          "type": "data"
+        },
+        {
+          "id": "757829c2",
+          "type": "data"
+        }
+      ]
+    }
+  },
+  "selected_pipeline": "feature_layer"
+}

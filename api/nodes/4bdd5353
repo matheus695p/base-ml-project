@@ -1,0 +1,16 @@
+{
+  "parameters": {
+    "logistic_regression.mpc": {
+      "direction": "maximize",
+      "n_trials": 200,
+      "constraints": {
+        "unnecessary_features": [
+          "Name",
+          "PassengerId",
+          "Ticket",
+          "Cabin"
+        ]
+      }
+    }
+  }
+}

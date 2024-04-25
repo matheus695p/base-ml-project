@@ -1,0 +1,14 @@
+{
+  "parameters": {
+    "global_modelling_report": {
+      "n_jobs": 6,
+      "environment": "base",
+      "template_path": "notebooks/reporting/global_report.ipynb",
+      "namespace": "",
+      "report_name": "models_hypertune_report",
+      "kernel": "python3",
+      "timeout": 90000,
+      "remove_code": true
+    }
+  }
+}

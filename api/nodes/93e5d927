@@ -1,0 +1,8 @@
+{
+  "type": "pandas.parquet_dataset.ParquetDataset",
+  "filepath": "/home/runner/work/base-ml-project/base-ml-project/data/04_feature/titanic_train.parquet",
+  "run_command": null,
+  "preview": null,
+  "preview_type": null,
+  "stats": null
+}

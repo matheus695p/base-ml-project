@@ -1,0 +1,42 @@
+{
+  "code": "def registry_best_model_to_mlflow(\n    params: tp.Dict, report: str, *models: tp.List[Pipeline]\n) -> Pipeline:\n    \"\"\"Register the best model to MLflow.\n\n    Args:\n        params (dict): Parameters for model registry.\n        report (str): Report information.\n        *models (List[Pipeline]): List of models.\n\n    Returns:\n        Pipeline: The best model.\n\n    \"\"\"\n    models = list(models)\n    model = get_best_model(params, models)\n    best_model = registry_model(params, model)\n    return best_model\n",
+  "filepath": "base-ml-project/src/project/pipelines/model_serving/nodes.py",
+  "parameters": {
+    "model_serving": {
+      "model_name": "prd",
+      "metric_cols": [
+        "metrics.precision",
+        "metrics.recall_weighted",
+        "metrics.f1",
+        "metrics.precision_micro",
+        "metrics.f1_weighted",
+        "metrics.roc_auc",
+        "metrics.f1_macro",
+        "metrics.roc_auc_ovo_weighted",
+        "metrics.precision_weighted",
+        "metrics.balanced_accuracy",
+        "metrics.recall_macro",
+        "metrics.recall",
+        "metrics.accuracy",
+        "metrics.roc_auc_ovr_weighted",
+        "metrics.f1_micro",
+        "metrics.roc_auc_ovr",
+        "metrics.roc_auc_ovo",
+        "metrics.recall_micro",
+        "metrics.precision_macro"
+      ]
+    }
+  },
+  "run_command": "kedro run --to-nodes=model_serving",
+  "inputs": [
+    "params:model_serving",
+    "global_optimization_report",
+    "xgboost.model_artifact",
+    "logistic_regression.model_artifact",
+    "xgboost.model_artifact",
+    "logistic_regression.model_artifact"
+  ],
+  "outputs": [
+    "production_model"
+  ]
+}

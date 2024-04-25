@@ -1,0 +1,14 @@
+{
+  "parameters": {
+    "xgboost.model_predictive_control_report": {
+      "n_jobs": 6,
+      "environment": "base",
+      "template_path": "notebooks/reporting/model_predictive_control_report.ipynb",
+      "namespace": "xgboost",
+      "report_name": "model_predictive_control_report",
+      "kernel": "python3",
+      "timeout": 90000,
+      "remove_code": true
+    }
+  }
+}

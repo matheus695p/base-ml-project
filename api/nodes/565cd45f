@@ -1,0 +1,8 @@
+{
+  "type": "artifacts.mlflow_artifact_dataset.TextDataset.MlflowTextDataset",
+  "filepath": "/home/runner/work/base-ml-project/base-ml-project/data/08_reporting/interpretability_report/logistic_regression/interpretability_report_logistic_regression.html",
+  "run_command": null,
+  "preview": null,
+  "preview_type": null,
+  "stats": null
+}

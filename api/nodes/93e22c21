@@ -1,0 +1,8 @@
+{
+  "type": "artifacts.mlflow_artifact_dataset.TextDataset.MlflowTextDataset",
+  "filepath": "/home/runner/work/base-ml-project/base-ml-project/data/08_reporting/interpretability_report/xgboost/interpretability_report_xgboost.html",
+  "run_command": null,
+  "preview": null,
+  "preview_type": null,
+  "stats": null
+}

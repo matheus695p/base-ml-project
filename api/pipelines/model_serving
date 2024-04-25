@@ -1,0 +1,357 @@
+{
+  "nodes": [
+    {
+      "id": "6dfa3c93",
+      "name": "global_optimization_report",
+      "tags": [
+        "global_optimization_report",
+        "reporting",
+        "model_serving"
+      ],
+      "pipelines": [
+        "data_science",
+        "model_serving",
+        "__default__",
+        "global_reporting"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": "08_reporting",
+      "dataset_type": "artifacts.mlflow_artifact_dataset.TextDataset.MlflowTextDataset",
+      "stats": null
+    },
+    {
+      "id": "b2776f52",
+      "name": "model_serving",
+      "tags": [
+        "model_serving"
+      ],
+      "pipelines": [
+        "data_science",
+        "__default__",
+        "model_serving"
+      ],
+      "type": "task",
+      "modular_pipelines": [],
+      "parameters": {
+        "model_serving": {
+          "model_name": "prd",
+          "metric_cols": [
+            "metrics.precision",
+            "metrics.recall_weighted",
+            "metrics.f1",
+            "metrics.precision_micro",
+            "metrics.f1_weighted",
+            "metrics.roc_auc",
+            "metrics.f1_macro",
+            "metrics.roc_auc_ovo_weighted",
+            "metrics.precision_weighted",
+            "metrics.balanced_accuracy",
+            "metrics.recall_macro",
+            "metrics.recall",
+            "metrics.accuracy",
+            "metrics.roc_auc_ovr_weighted",
+            "metrics.f1_micro",
+            "metrics.roc_auc_ovr",
+            "metrics.roc_auc_ovo",
+            "metrics.recall_micro",
+            "metrics.precision_macro"
+          ]
+        }
+      }
+    },
+    {
+      "id": "dd85a4cc",
+      "name": "params:model_serving",
+      "tags": [
+        "model_serving"
+      ],
+      "pipelines": [
+        "data_science",
+        "__default__",
+        "model_serving"
+      ],
+      "type": "parameters",
+      "modular_pipelines": [],
+      "layer": null,
+      "dataset_type": null,
+      "stats": null
+    },
+    {
+      "id": "1f24d99c",
+      "name": "xgboost.model_artifact",
+      "tags": [
+        "model_performance_report",
+        "model_serving"
+      ],
+      "pipelines": [
+        "model_predictive_control_explorer",
+        "data_science",
+        "__default__",
+        "model_serving"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "xgboost"
+      ],
+      "layer": "06_models",
+      "dataset_type": "artifacts.mlflow_artifact_dataset.MlflowModelSaverDataSet.MlflowMlflowModelSaverDataSet",
+      "stats": null
+    },
+    {
+      "id": "b58e8916",
+      "name": "logistic_regression.model_artifact",
+      "tags": [
+        "model_performance_report",
+        "model_serving"
+      ],
+      "pipelines": [
+        "model_predictive_control_explorer",
+        "data_science",
+        "__default__",
+        "model_serving"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "logistic_regression"
+      ],
+      "layer": "06_models",
+      "dataset_type": "artifacts.mlflow_artifact_dataset.MlflowModelSaverDataSet.MlflowMlflowModelSaverDataSet",
+      "stats": null
+    },
+    {
+      "id": "1aa02b26",
+      "name": "production_model",
+      "tags": [
+        "model_serving"
+      ],
+      "pipelines": [
+        "data_science",
+        "__default__",
+        "model_serving"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": null
+    },
+    {
+      "id": "logistic_regression",
+      "name": "logistic_regression",
+      "tags": [],
+      "pipelines": [
+        "model_serving"
+      ],
+      "type": "modularPipeline",
+      "modular_pipelines": null,
+      "layer": null,
+      "dataset_type": null,
+      "stats": null
+    },
+    {
+      "id": "xgboost",
+      "name": "xgboost",
+      "tags": [],
+      "pipelines": [
+        "model_serving"
+      ],
+      "type": "modularPipeline",
+      "modular_pipelines": null,
+      "layer": null,
+      "dataset_type": null,
+      "stats": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "dd85a4cc",
+      "target": "b2776f52"
+    },
+    {
+      "source": "1f24d99c",
+      "target": "b2776f52"
+    },
+    {
+      "source": "b2776f52",
+      "target": "1aa02b26"
+    },
+    {
+      "source": "6dfa3c93",
+      "target": "b2776f52"
+    },
+    {
+      "source": "b58e8916",
+      "target": "b2776f52"
+    }
+  ],
+  "layers": [
+    "01_raw",
+    "02_intermediate",
+    "03_primary",
+    "04_feature",
+    "05_model_input",
+    "06_models",
+    "07_model_output",
+    "08_reporting"
+  ],
+  "tags": [
+    {
+      "id": "feature_engineering",
+      "name": "feature_engineering"
+    },
+    {
+      "id": "feature_layer",
+      "name": "feature_layer"
+    },
+    {
+      "id": "global_optimization_report",
+      "name": "global_optimization_report"
+    },
+    {
+      "id": "hypertune_report",
+      "name": "hypertune_report"
+    },
+    {
+      "id": "ingestion",
+      "name": "ingestion"
+    },
+    {
+      "id": "intermediate_layer",
+      "name": "intermediate_layer"
+    },
+    {
+      "id": "interpretability_report",
+      "name": "interpretability_report"
+    },
+    {
+      "id": "model_performance_report",
+      "name": "model_performance_report"
+    },
+    {
+      "id": "model_predictive_control_report",
+      "name": "model_predictive_control_report"
+    },
+    {
+      "id": "model_serving",
+      "name": "model_serving"
+    },
+    {
+      "id": "primary_layer",
+      "name": "primary_layer"
+    },
+    {
+      "id": "raw_layer",
+      "name": "raw_layer"
+    },
+    {
+      "id": "reporting",
+      "name": "reporting"
+    }
+  ],
+  "pipelines": [
+    {
+      "id": "__default__",
+      "name": "__default__"
+    },
+    {
+      "id": "global_reporting",
+      "name": "global_reporting"
+    },
+    {
+      "id": "model_serving",
+      "name": "model_serving"
+    },
+    {
+      "id": "raw_layer",
+      "name": "raw_layer"
+    },
+    {
+      "id": "intermediate_layer",
+      "name": "intermediate_layer"
+    },
+    {
+      "id": "primary_layer",
+      "name": "primary_layer"
+    },
+    {
+      "id": "feature_layer",
+      "name": "feature_layer"
+    },
+    {
+      "id": "data_ingestion",
+      "name": "data_ingestion"
+    },
+    {
+      "id": "data_engineering",
+      "name": "data_engineering"
+    },
+    {
+      "id": "data_science",
+      "name": "data_science"
+    },
+    {
+      "id": "model_predictive_control_explorer",
+      "name": "model_predictive_control_explorer"
+    }
+  ],
+  "modular_pipelines": {
+    "__root__": {
+      "id": "__root__",
+      "name": "__root__",
+      "inputs": [],
+      "outputs": [],
+      "children": [
+        {
+          "id": "6dfa3c93",
+          "type": "data"
+        },
+        {
+          "id": "xgboost",
+          "type": "modularPipeline"
+        },
+        {
+          "id": "1aa02b26",
+          "type": "data"
+        },
+        {
+          "id": "logistic_regression",
+          "type": "modularPipeline"
+        },
+        {
+          "id": "b2776f52",
+          "type": "task"
+        },
+        {
+          "id": "dd85a4cc",
+          "type": "parameters"
+        }
+      ]
+    },
+    "logistic_regression": {
+      "id": "logistic_regression",
+      "name": "logistic_regression",
+      "inputs": [],
+      "outputs": [],
+      "children": [
+        {
+          "id": "b58e8916",
+          "type": "data"
+        }
+      ]
+    },
+    "xgboost": {
+      "id": "xgboost",
+      "name": "xgboost",
+      "inputs": [],
+      "outputs": [],
+      "children": [
+        {
+          "id": "1f24d99c",
+          "type": "data"
+        }
+      ]
+    }
+  },
+  "selected_pipeline": "model_serving"
+}

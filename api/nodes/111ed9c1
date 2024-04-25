@@ -1,0 +1,8 @@
+{
+  "type": "artifacts.mlflow_artifact_dataset.ParquetDataset.MlflowParquetDataset",
+  "filepath": "/home/runner/work/base-ml-project/base-ml-project/data/05_model_input/train_dataset/xgboost/train_dataset.parquet",
+  "run_command": "kedro run --to-outputs=xgboost.train_dataset",
+  "preview": null,
+  "preview_type": null,
+  "stats": null
+}

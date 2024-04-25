@@ -1,0 +1,8 @@
+{
+  "type": "artifacts.mlflow_artifact_dataset.MlflowModelSaverDataSet.MlflowMlflowModelSaverDataSet",
+  "filepath": "/home/runner/work/base-ml-project/base-ml-project/data/06_models/models/logistic_regression",
+  "run_command": null,
+  "preview": null,
+  "preview_type": null,
+  "stats": null
+}

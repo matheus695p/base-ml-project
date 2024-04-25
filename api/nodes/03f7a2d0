@@ -1,0 +1,8 @@
+{
+  "type": "models.mlflow_model_saver_dataset.MlflowModelSaverDataSet",
+  "filepath": "/home/runner/work/base-ml-project/base-ml-project/data/07_model_output/hypertune/logistic_regression/best_trial_params",
+  "run_command": "kedro run --to-outputs=logistic_regression.best_trial_params",
+  "preview": null,
+  "preview_type": null,
+  "stats": null
+}

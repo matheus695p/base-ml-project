@@ -1,0 +1,323 @@
+{
+  "nodes": [
+    {
+      "id": "96fd8880",
+      "name": "int_titanic_train",
+      "tags": [
+        "ingestion",
+        "primary_layer",
+        "intermediate_layer"
+      ],
+      "pipelines": [
+        "data_ingestion",
+        "primary_layer",
+        "intermediate_layer",
+        "data_engineering"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": "02_intermediate",
+      "dataset_type": "pandas.parquet_dataset.ParquetDataset",
+      "stats": null
+    },
+    {
+      "id": "66dc7a2f",
+      "name": "int_titanic_test",
+      "tags": [
+        "ingestion",
+        "primary_layer",
+        "intermediate_layer"
+      ],
+      "pipelines": [
+        "data_ingestion",
+        "primary_layer",
+        "intermediate_layer",
+        "data_engineering"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": "02_intermediate",
+      "dataset_type": "pandas.parquet_dataset.ParquetDataset",
+      "stats": null
+    },
+    {
+      "id": "463fc874",
+      "name": "primary_data_process",
+      "tags": [
+        "ingestion",
+        "primary_layer"
+      ],
+      "pipelines": [
+        "data_ingestion",
+        "primary_layer",
+        "data_engineering"
+      ],
+      "type": "task",
+      "modular_pipelines": [],
+      "parameters": {
+        "primary_transform": {
+          "target": "supervised",
+          "categorical_columns_fillna": {
+            "passenger_cabin": "unknown",
+            "passenger_embarked_port": "unknown"
+          }
+        }
+      }
+    },
+    {
+      "id": "10ba2930",
+      "name": "params:primary_transform",
+      "tags": [
+        "ingestion",
+        "primary_layer"
+      ],
+      "pipelines": [
+        "data_ingestion",
+        "primary_layer",
+        "data_engineering"
+      ],
+      "type": "parameters",
+      "modular_pipelines": [],
+      "layer": null,
+      "dataset_type": null,
+      "stats": null
+    },
+    {
+      "id": "20b3d2fe",
+      "name": "prm_titanic_train",
+      "tags": [
+        "ingestion",
+        "primary_layer",
+        "feature_engineering",
+        "feature_layer"
+      ],
+      "pipelines": [
+        "data_ingestion",
+        "feature_layer",
+        "primary_layer",
+        "data_engineering"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": "03_primary",
+      "dataset_type": "pandas.parquet_dataset.ParquetDataset",
+      "stats": null
+    },
+    {
+      "id": "7b85d8c0",
+      "name": "prm_titanic_test",
+      "tags": [
+        "ingestion",
+        "primary_layer",
+        "feature_engineering",
+        "feature_layer"
+      ],
+      "pipelines": [
+        "data_ingestion",
+        "feature_layer",
+        "primary_layer",
+        "data_engineering"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": "03_primary",
+      "dataset_type": "pandas.parquet_dataset.ParquetDataset",
+      "stats": null
+    },
+    {
+      "id": "3643974c",
+      "name": "prm_preprocessor",
+      "tags": [
+        "ingestion",
+        "primary_layer"
+      ],
+      "pipelines": [
+        "data_engineering",
+        "model_predictive_control_explorer",
+        "data_science",
+        "primary_layer",
+        "data_ingestion"
+      ],
+      "type": "data",
+      "modular_pipelines": [],
+      "layer": "05_model_input",
+      "dataset_type": "artifacts.mlflow_artifact_dataset.PickleDataset.MlflowPickleDataset",
+      "stats": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "66dc7a2f",
+      "target": "463fc874"
+    },
+    {
+      "source": "463fc874",
+      "target": "7b85d8c0"
+    },
+    {
+      "source": "10ba2930",
+      "target": "463fc874"
+    },
+    {
+      "source": "463fc874",
+      "target": "20b3d2fe"
+    },
+    {
+      "source": "463fc874",
+      "target": "3643974c"
+    },
+    {
+      "source": "96fd8880",
+      "target": "463fc874"
+    }
+  ],
+  "layers": [
+    "01_raw",
+    "02_intermediate",
+    "04_feature",
+    "06_models",
+    "07_model_output",
+    "08_reporting",
+    "03_primary",
+    "05_model_input"
+  ],
+  "tags": [
+    {
+      "id": "feature_engineering",
+      "name": "feature_engineering"
+    },
+    {
+      "id": "feature_layer",
+      "name": "feature_layer"
+    },
+    {
+      "id": "global_optimization_report",
+      "name": "global_optimization_report"
+    },
+    {
+      "id": "hypertune_report",
+      "name": "hypertune_report"
+    },
+    {
+      "id": "ingestion",
+      "name": "ingestion"
+    },
+    {
+      "id": "intermediate_layer",
+      "name": "intermediate_layer"
+    },
+    {
+      "id": "interpretability_report",
+      "name": "interpretability_report"
+    },
+    {
+      "id": "model_performance_report",
+      "name": "model_performance_report"
+    },
+    {
+      "id": "model_predictive_control_report",
+      "name": "model_predictive_control_report"
+    },
+    {
+      "id": "model_serving",
+      "name": "model_serving"
+    },
+    {
+      "id": "primary_layer",
+      "name": "primary_layer"
+    },
+    {
+      "id": "raw_layer",
+      "name": "raw_layer"
+    },
+    {
+      "id": "reporting",
+      "name": "reporting"
+    }
+  ],
+  "pipelines": [
+    {
+      "id": "__default__",
+      "name": "__default__"
+    },
+    {
+      "id": "global_reporting",
+      "name": "global_reporting"
+    },
+    {
+      "id": "model_serving",
+      "name": "model_serving"
+    },
+    {
+      "id": "raw_layer",
+      "name": "raw_layer"
+    },
+    {
+      "id": "intermediate_layer",
+      "name": "intermediate_layer"
+    },
+    {
+      "id": "primary_layer",
+      "name": "primary_layer"
+    },
+    {
+      "id": "feature_layer",
+      "name": "feature_layer"
+    },
+    {
+      "id": "data_ingestion",
+      "name": "data_ingestion"
+    },
+    {
+      "id": "data_engineering",
+      "name": "data_engineering"
+    },
+    {
+      "id": "data_science",
+      "name": "data_science"
+    },
+    {
+      "id": "model_predictive_control_explorer",
+      "name": "model_predictive_control_explorer"
+    }
+  ],
+  "modular_pipelines": {
+    "__root__": {
+      "id": "__root__",
+      "name": "__root__",
+      "inputs": [],
+      "outputs": [],
+      "children": [
+        {
+          "id": "7b85d8c0",
+          "type": "data"
+        },
+        {
+          "id": "20b3d2fe",
+          "type": "data"
+        },
+        {
+          "id": "66dc7a2f",
+          "type": "data"
+        },
+        {
+          "id": "463fc874",
+          "type": "task"
+        },
+        {
+          "id": "3643974c",
+          "type": "data"
+        },
+        {
+          "id": "10ba2930",
+          "type": "parameters"
+        },
+        {
+          "id": "96fd8880",
+          "type": "data"
+        }
+      ]
+    }
+  },
+  "selected_pipeline": "primary_layer"
+}

@@ -1,0 +1,24 @@
+{
+  "code": "def primary_data_process(\n    df_train: pd.DataFrame, df_test: pd.DataFrame, params: tp.Dict\n) -> tp.Dict[str, tp.Union[pd.DataFrame, \"PrimaryDataProcessor\"]]:\n    \"\"\"Process primary data for machine learning tasks.\n\n    Args:\n        df_train (pd.DataFrame): Training data DataFrame.\n        df_test (pd.DataFrame): Testing data DataFrame.\n        params (dict): Parameters for primary data processing.\n\n    Returns:\n        dict: A dictionary containing the processed training and testing data,\n        and the primary data preprocessor.\n\n    \"\"\"\n    preprocessor = PrimaryDataProcessor(params)\n    df_train = preprocessor.fit_transform(df_train)\n    df_test = preprocessor.transform(df_test)\n\n    return {\n        \"train\": df_train,\n        \"test\": df_test,\n        \"preprocessor\": preprocessor,\n    }\n",
+  "filepath": "base-ml-project/src/project/pipelines/data_engineering/primary_layer/nodes.py",
+  "parameters": {
+    "primary_transform": {
+      "target": "supervised",
+      "categorical_columns_fillna": {
+        "passenger_cabin": "unknown",
+        "passenger_embarked_port": "unknown"
+      }
+    }
+  },
+  "run_command": "kedro run --to-nodes=primary_data_process",
+  "inputs": [
+    "int_titanic_train",
+    "int_titanic_test",
+    "params:primary_transform"
+  ],
+  "outputs": [
+    "prm_titanic_train",
+    "prm_titanic_test",
+    "prm_preprocessor"
+  ]
+}

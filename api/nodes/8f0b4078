@@ -1,0 +1,71 @@
+{
+  "code": "def raw_data_process(\n    df_train: pd.DataFrame, df_test: pd.DataFrame, params: tp.Dict\n) -> tp.Dict[str, tp.Union[pd.DataFrame, \"RawDataProcessor\"]]:\n    \"\"\"Process raw data for machine learning tasks.\n\n    Args:\n        df_train (pd.DataFrame): Training data DataFrame.\n        df_test (pd.DataFrame): Testing data DataFrame.\n        params (dict): Parameters for raw data processing.\n\n    Returns:\n        dict: A dictionary containing the processed training and testing data,\n        and the raw data preprocessor.\n\n    \"\"\"\n    preprocessor = RawDataProcessor(params)\n    df_train = preprocessor.fit_transform(df_train)\n    df_test = preprocessor.transform(df_test)\n\n    return {\n        \"train\": df_train,\n        \"test\": df_test,\n        \"preprocessor\": preprocessor,\n    }\n",
+  "filepath": "base-ml-project/src/project/pipelines/data_engineering/raw_layer/nodes.py",
+  "parameters": {
+    "raw_transform": {
+      "target": "Survived",
+      "index": "passenger_id",
+      "schemas": {
+        "PassengerId": {
+          "dtype": "int64",
+          "name": "passenger_id"
+        },
+        "Survived": {
+          "dtype": "int64",
+          "name": "survived"
+        },
+        "Pclass": {
+          "dtype": "int64",
+          "name": "passenger_class"
+        },
+        "Name": {
+          "dtype": "object",
+          "name": "name"
+        },
+        "Sex": {
+          "dtype": "object",
+          "name": "passenger_sex"
+        },
+        "Age": {
+          "dtype": "float64",
+          "name": "passenger_age"
+        },
+        "Parch": {
+          "dtype": "int64",
+          "name": "passenger_parch"
+        },
+        "Ticket": {
+          "dtype": "object",
+          "name": "passenger_ticket"
+        },
+        "Fare": {
+          "dtype": "float64",
+          "name": "passenger_fare"
+        },
+        "Cabin": {
+          "dtype": "object",
+          "name": "passenger_cabin"
+        },
+        "Embarked": {
+          "dtype": "object",
+          "name": "passenger_embarked_port"
+        },
+        "SibSp": {
+          "dtype": "int64",
+          "name": "passenger_siblings"
+        }
+      }
+    }
+  },
+  "run_command": "kedro run --to-nodes=raw_data_process",
+  "inputs": [
+    "origin_titanic_train",
+    "origin_titanic_test",
+    "params:raw_transform"
+  ],
+  "outputs": [
+    "raw_titanic_train",
+    "raw_titanic_test",
+    "raw_preprocessor"
+  ]
+}

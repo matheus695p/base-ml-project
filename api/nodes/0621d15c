@@ -1,0 +1,14 @@
+{
+  "parameters": {
+    "xgboost.model_performance_report": {
+      "n_jobs": 6,
+      "environment": "base",
+      "template_path": "notebooks/reporting/model_performance_report.ipynb",
+      "namespace": "xgboost",
+      "report_name": "model_performance_report",
+      "kernel": "python3",
+      "timeout": 90000,
+      "remove_code": true
+    }
+  }
+}

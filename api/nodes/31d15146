@@ -1,0 +1,83 @@
+{
+  "code": "def model_predictive_control_exploration(\n    df: pd.DataFrame, model, params: tp.Dict, data_schemas: tp.Dict, *preprocessors\n) -> \"ModelPredictiveControlExplorer\":\n    \"\"\"Explore model predictive control.\n\n    Args:\n        df (pd.DataFrame): Data DataFrame.\n        model: Model object.\n        params (dict): Parameters for the exploration.\n        data_schemas (dict): Data schemas.\n        *preprocessors: Preprocessor objects.\n\n    Returns:\n        ModelPredictiveControlExplorer: Model exploration object.\n\n    \"\"\"\n    preprocessors = list(preprocessors)\n    model_explorer = ModelPredictiveControlExplorer(\n        model=model,\n        preprocessors=preprocessors,\n        params=params,\n        data_schemas=data_schemas,\n    )\n    model_explorer.fit(df)\n    return model_explorer\n",
+  "filepath": "base-ml-project/src/project/pipelines/data_science/model_predictive_control/nodes.py",
+  "parameters": {
+    "xgboost.mpc": {
+      "direction": "maximize",
+      "n_trials": 200,
+      "constraints": {
+        "unnecessary_features": [
+          "Name",
+          "PassengerId",
+          "Ticket",
+          "Cabin"
+        ]
+      }
+    },
+    "raw_transform.schemas": {
+      "PassengerId": {
+        "dtype": "int64",
+        "name": "passenger_id"
+      },
+      "Survived": {
+        "dtype": "int64",
+        "name": "survived"
+      },
+      "Pclass": {
+        "dtype": "int64",
+        "name": "passenger_class"
+      },
+      "Name": {
+        "dtype": "object",
+        "name": "name"
+      },
+      "Sex": {
+        "dtype": "object",
+        "name": "passenger_sex"
+      },
+      "Age": {
+        "dtype": "float64",
+        "name": "passenger_age"
+      },
+      "Parch": {
+        "dtype": "int64",
+        "name": "passenger_parch"
+      },
+      "Ticket": {
+        "dtype": "object",
+        "name": "passenger_ticket"
+      },
+      "Fare": {
+        "dtype": "float64",
+        "name": "passenger_fare"
+      },
+      "Cabin": {
+        "dtype": "object",
+        "name": "passenger_cabin"
+      },
+      "Embarked": {
+        "dtype": "object",
+        "name": "passenger_embarked_port"
+      },
+      "SibSp": {
+        "dtype": "int64",
+        "name": "passenger_siblings"
+      }
+    }
+  },
+  "run_command": "kedro run --to-nodes=xgboost.model_predictive_control_explorer",
+  "inputs": [
+    "origin_titanic_train",
+    "xgboost.model_artifact",
+    "params:xgboost.mpc",
+    "params:raw_transform.schemas",
+    "raw_preprocessor",
+    "int_preprocessor",
+    "prm_preprocessor",
+    "feat_preprocessor",
+    "cluster_preprocessor"
+  ],
+  "outputs": [
+    "xgboost.model_predictive_control_explorer"
+  ]
+}

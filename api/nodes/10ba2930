@@ -1,0 +1,11 @@
+{
+  "parameters": {
+    "primary_transform": {
+      "target": "supervised",
+      "categorical_columns_fillna": {
+        "passenger_cabin": "unknown",
+        "passenger_embarked_port": "unknown"
+      }
+    }
+  }
+}
