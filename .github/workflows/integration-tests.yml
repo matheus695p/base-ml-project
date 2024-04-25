@@ -24,4 +24,4 @@ jobs:
       - name: Run Data Engineering Pipelines
         run: kedro run --pipeline data_engineering
       - name: Run Data Science Pipeline for just a DT
-        run: kedro run --pipeline data_science --namespace decision_tree
+        run: kedro run --pipeline data_science --namespace logistic_regression

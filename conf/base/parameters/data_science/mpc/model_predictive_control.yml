@@ -1,6 +1,6 @@
 _mpc: &_mpc
   direction: maximize
-  n_trials: 600
+  n_trials: 200
   constraints:
     unnecessary_features:
       - Name
