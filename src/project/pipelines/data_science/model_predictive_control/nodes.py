@@ -1,3 +1,4 @@
+import pandas as pd
 import typing as tp
 from project.packages.modelling.models.model_predictive_control.explorer import (
     ModelPredictiveControlExplorer,
