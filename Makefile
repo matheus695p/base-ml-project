@@ -76,3 +76,14 @@ restart-folders:
 docker-build:
 	docker buildx install
 	docker buildx build -t titanic:latest --platform linux/amd64 -f docker/Dockerfile.base .
+
+
+commands:
+	@kedro run --pipeline raw_layer
+	@kedro run --pipeline intermediate_layer
+	@kedro run --pipeline primary_layer
+	@kedro run --pipeline feature_layer
+	@kedro run --pipeline data_ingestion
+	@kedro run --pipeline data_engineering
+	@kedro run --pipeline data_science
+	@kedro run --pipeline model_serving
