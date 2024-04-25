@@ -151,6 +151,9 @@ In order to visualize each of the package pipelines, we can run the following co
 kedro viz run
 ```
 
+Check the github pages on ![kedro viz web page](https://matheus695p.github.io/base-ml-project)
+
+
 ![DE pipeline visualization](https://github.com/matheus695p/titanic-dataset/blob/main/docs/images/de.png)
 
 ![DS pipeline visualization](https://github.com/matheus695p/titanic-dataset/blob/main/docs/images/ds.png)
