@@ -14,7 +14,7 @@ CONDA_ACTIVATE = source $$(conda info --base)/etc/profile.d/conda.sh ; conda act
 install:
 	conda create --name $(ENV_NAME) -y python=$(PYTHON_VERSION)
 	$(CONDA_ACTIVATE) $(ENV_NAME) && \
-	pip install uv \
+	pip install uv && \
 	uv pip install -r src/requirements.txt && \
 	uv pip install pre-commit && \
 	pre-commit install
@@ -87,3 +87,13 @@ commands:
 	@kedro run --pipeline data_engineering
 	@kedro run --pipeline data_science
 	@kedro run --pipeline model_serving
+
+###################################
+# Fix tables problem with mac
+###################################
+# pip install cython
+# brew install hdf5
+# brew install c-blosc
+# export HDF5_DIR=/usr/local/
+# export BLOSC_DIR=/usr/local/
+# pip install tables
