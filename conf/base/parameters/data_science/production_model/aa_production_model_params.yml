@@ -1,6 +1,6 @@
 model_serving:
   # Specify the registered model name and version
-  model_name: production_model
+  model_name: prd
   metric_cols:
     - metrics.precision
     - metrics.recall_weighted

@@ -121,12 +121,12 @@ global_optimization_report:
   artifact_path: global_model_optimization_report
 
 
-production_model:
+prd:
     type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
     data_set:
         type: kedro_mlflow.io.models.MlflowModelSaverDataSet
         flavor: mlflow.sklearn
-        filepath: ${base_path}/06_models/production_model
+        filepath: ${base_path}/06_models/prd
     layer: 06_models
     # versioned: true
-    artifact_path: production_model
+    artifact_path: prd
